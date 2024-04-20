@@ -1,0 +1,39 @@
+#!/bin/bash
+# Bash login shells start by reading:
+#   /etc/profile > ~/.bash_profile > ~./bash_login > ~/.profile
+# In that order. This only applies to login shells like SSH, emulatos, or `su`.
+#
+# Settings here are for important, one-time things when Bash starts up.
+# 
+# To stay organized, I included:
+#   - environment variables
+#   - program paths
+#
+
+export BASH_SILENCE_DEPRECATION_WARNING=1
+
+if [ -f ~/.bashrc ]; then # If using interactively
+    . ~/.bashrc
+fi
+
+# Causes bash to append to history instead of overwriting it so if you start a new terminal, you have old session history
+shopt -s histappend
+PROMPT_COMMAND='history -a'
+
+# Programs
+export PATH=/Applications/CMake.app/Contents/bin:${PATH}
+
+# Homembrew Programs
+if [[ -e $(which brew) ]]; then
+    eval "$($(brew --prefix)/bin/brew shellenv)"
+    export PATH="$(brew --prefix)/opt/gnu-sed/libexec/gnubin:${PATH}" # GNU `sed`
+    [ -f $(brew --prefix)/etc/profile.d/autojump.sh ] && . $(brew --prefix)/etc/profile.d/autojump.sh
+    [ -f $(brew --prefix)/etc/bash_completion ] && . $(brew --prefix)/etc/bash_completion
+    # Ignore case on auto-completion
+    if [[ $iatest -gt 0 ]]; then bind "set completion-ignore-case on"; fi
+    # Show auto-completion list automatically, without double tab
+    if [[ $iatest -gt 0 ]]; then bind "set show-all-if-ambiguous On"; fi
+    eval "$(fzf --bash)"                    # 
+    eval "$(zoxide init bash --cmd cd)"     #
+    eval "$(starship init bash)"
+fi

@@ -1,0 +1,43 @@
+#!/bin/bash
+# aliases and functions
+
+# Alias
+##############
+
+#alias ls="ls --color"
+alias ls="ls --color"               # List with color
+alias la="ls -a"                    # List dot directory/file
+alias lt="ls -lt"                   # List long format (lowercase all) & sort by time
+
+alias ..="cd ../"                   # Back one directory
+alias ...="cd ../../"               # Back two dirctories
+alias ....="cd ../../../"           # Back three directies
+
+# Conda
+if [ -d ~/Programs/miniforge3 ]; then
+    CONDA_DIR="~/Programs/miniforge3/bin/conda"
+elif [ -d ~/.Programs/miniforge3 ]; then
+    CONDA_DIR="~/.Programs/miniforge3/bin/conda"
+else
+    echo "Can't find conda..."
+    exit 0
+fi
+alias mfa="eval \"\$(${CONDA_DIR} shell.bash hook)\"; conda activate"
+alias mfd="conda deactivate"
+alias mf="conda"
+
+alias chimera="/Applications/Chimera.app/Contents/MacOs/chimera"
+alias chimerax="/Applications/ChimeraX-1.6.1.app/Contents/MacOS/ChimeraX"
+alias iqmol="/Applications/IQmol.app/Contents/MacOS/IQmol"
+alias rna="java -jar ~/Programs/rnartist/rnartistcore-0.4.6-SNAPSHOT-jar-with-dependencies.jar"
+alias vina="/Applications/vina_1.2.5_mac_x86_64"
+alias vmd="/Applications/VMD-1.9.4.app/Contents/MacOS/startup.command"
+
+# lobos 
+alias jblobos="export LOBOS_JNB_PORT_NUM=8989; ssh -L localhost:\${LOBOS_JNB_PORT_NUM}}:localhost:\${LOBOS_JNB_PORT_NUM} lobos"
+alias scplobos="scp -r \"ssh -p 1701\""
+alias rsynclobos="rsync -av \"ssh -p 1701\""
+
+# Functions
+# ###############################
+

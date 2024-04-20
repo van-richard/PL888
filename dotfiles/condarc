@@ -1,0 +1,6 @@
+channels:
+  - conda-forge
+  - default
+default_threads: 4
+
+changeps1: false
