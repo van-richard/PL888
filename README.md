@@ -1,7 +1,3 @@
-# templates 
+#tem__PLATES__ 
 
-A template space, for:
-
-    * dot files
-        * `bash`, `conda`, `tmux`, `vi/vim`, etc.
-    * Amber MD input files
+A kitchen cabinet full of ways I broke my MacBook. 

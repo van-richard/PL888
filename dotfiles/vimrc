@@ -1,23 +1,5 @@
-" The default plugin directory will be as follows:
-" "   - Vim (Linux/macOS): '~/.vim/plugged'
-" "   - Vim (Windows): '~/vimfiles/plugged'
-" "   - Neovim (Linux/macOS/Windows): stdpath('data') . '/plugged'
-" " You can specify a custom plugin directory by passing it as the argument
-" "   - e.g. `call plug#begin('~/.vim/plugged')`
-" "   - Avoid using standard Vim directory names like 'plugin'
-call plug#begin('~/.vim/plugged') " Reload .vimrc then :PlugInstall
-Plug 'neoclide/coc.nvim', {'branch': 'release'}
-call plug#end()
+" vim config with tmux and autocomplete
 
-
-"" tmux
-let g:tmux_navigator_no_mappings = 1
-
-noremap <silent> {Left-Mapping} :<C-U>TmuxNavigateLeft<cr>
-noremap <silent> {Down-Mapping} :<C-U>TmuxNavigateDown<cr>
-noremap <silent> {Up-Mapping} :<C-U>TmuxNavigateUp<cr>
-noremap <silent> {Right-Mapping} :<C-U>TmuxNavigateRight<cr>
-noremap <silent> {Previous-Mapping} :<C-U>TmuxNavigatePrevious<cr>
 " line numbers
 set number
 
@@ -42,7 +24,7 @@ set nohlsearch
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 " start at last positoin
-au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
+" "au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
 
 
 " text/tab/index
@@ -90,5 +72,38 @@ set novisualbell
 set t_vb=
 set tm=500
 if has("gui_macvim")
-        autocmd GUIEnter * set vb t_vb=
+        autocmd GUIEnter * set vb t_vb
 endif
+
+
+"""""""""""""""""""""""""""""""
+" vim autocomplete 
+" https://github.com/neoclide/coc.nvim
+" 
+call plug#begin('~/.vim/plugged') " Reload .vimrc then :PlugInstall
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
+call plug#end()
+
+" tab autocompletion mapping (:CocInstall coc-snippets, coc-json)
+inoremap <silent><expr> <TAB>
+            \ coc#pum#visible() ? coc#_select_confirm() :
+            \ coc#expandableOrJumpable() ?
+            \ "\<C-r>=coc#rpc#request('doKeymap', ['snippets-expand-jump',''])\<CR>" :
+            \ CheckBackspace() ? "\<TAB>" :
+            \ coc#refresh()
+
+function! CheckBackspace() abort
+    let col = col('.') - 1
+    return !col || getline('.')[col - 1]  =~# '\s'
+endfunction
+
+let g:coc_snippet_next = '<tab>'
+
+"" tmux
+let g:tmux_navigator_no_mappings = 1
+
+noremap <silent> {Left-Mapping} :<C-U>TmuxNavigateLeft<cr>
+noremap <silent> {Down-Mapping} :<C-U>TmuxNavigateDown<cr>
+noremap <silent> {Up-Mapping} :<C-U>TmuxNavigateUp<cr>
+noremap <silent> {Right-Mapping} :<C-U>TmuxNavigateRight<cr>
+noremap <silent> {Previous-Mapping} :<C-U>TmuxNavigatePrevious<cr>
