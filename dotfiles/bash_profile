@@ -24,8 +24,8 @@ PROMPT_COMMAND='history -a'
 export PATH=/Applications/CMake.app/Contents/bin:${PATH}
 
 # Homembrew Programs
+eval "$(/opt/homebrew/bin/brew shellenv)"
 if [[ -e $(which brew) ]]; then
-    eval "$($(brew --prefix)/bin/brew shellenv)"
     export PATH="$(brew --prefix)/opt/gnu-sed/libexec/gnubin:${PATH}" # GNU `sed`
     [ -f $(brew --prefix)/etc/profile.d/autojump.sh ] && . $(brew --prefix)/etc/profile.d/autojump.sh
     [ -f $(brew --prefix)/etc/bash_completion ] && . $(brew --prefix)/etc/bash_completion
@@ -37,3 +37,6 @@ if [[ -e $(which brew) ]]; then
     eval "$(zoxide init bash --cmd cd)"     #
     eval "$(starship init bash)"
 fi
+
+
+#./.tmux.auto

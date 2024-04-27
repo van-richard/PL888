@@ -3,6 +3,9 @@
 
 # Alias
 ##############
+#
+alias ubersicht=""Übersicht""
+
 
 #alias ls="ls --color"
 alias ls="ls --color"               # List with color
@@ -35,8 +38,8 @@ alias vmd="/Applications/VMD-1.9.4.app/Contents/MacOS/startup.command"
 
 # lobos 
 alias jblobos="export LOBOS_JNB_PORT_NUM=8989; ssh -L localhost:\${LOBOS_JNB_PORT_NUM}}:localhost:\${LOBOS_JNB_PORT_NUM} lobos"
-alias scplobos="scp -r \"ssh -p 1701\""
-alias rsynclobos="rsync -av \"ssh -p 1701\""
+alias scplobos="scp -rpq -P 1701"
+alias rsynclobos="rsync -a -e -v \'ssh -p 1701\'"
 
 # Functions
 # ###############################

@@ -2,12 +2,18 @@
 
 LoginNode=$(echo $(hostname))
 
-if [[ "${LoginNode}" != "login01.cluster" ]]; then
-    exit 1
-fi
+# if [[ "${LoginNode}" != "login01.cluster" ]]; then
+#     exit 1
+# fi
 
 # Get a list of existing tmux sessions:
 TMUX_SESSIONS=$(tmux ls | awk -F: '{print $1}')
+
+if [  $(realpath .) -eq $(echo $HOME) ]; then
+    if [[ $(tmux ls | grep "attached" | wc -l ) -eq 1 ]]; then
+        exit 1
+    fi
+fi
 
 # If there are no existing sessions:
 if [[ -z $TMUX_SESSIONS ]]; then
