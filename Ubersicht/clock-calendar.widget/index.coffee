@@ -1,40 +1,3 @@
-# # CLOCK
-# showTime = ->
-#   time = new Date
-#   hour = time.getHours()
-#   min = time.getMinutes()
-#   sec = time.getSeconds()
-#   am_pm = 'AM'
-#   if hour > 12
-#     hour -= 12
-#     am_pm = 'PM'
-#   if hour == 0
-#     hr = 12
-#     am_pm = 'AM'
-#   hour = if hour < 10 then '0' + hour else hour
-#   min = if min < 10 then '0' + min else min
-#   sec = if sec < 10 then '0' + sec else sec
-#   currentTime = '<span class="hour-min">' + hour + ':' + min + '</span>' + '<div class="clock-inf"><span class="sec">' + sec + '</span>' + '<span class="am-pm">' + am_pm + '</span></div>'
-#   document.getElementById('clock').innerHTML = currentTime
-#   return
-
-# CLOCK
-# Updated to 24 hour clock
-setInterval showTime, 1000
-showTime = ->
-  time = new Date
-  hour = time.getHours()
-  min = time.getMinutes()
-  sec = time.getSeconds()
-
-  hour = if hour < 10 then '0' + hour else hour
-  min = if min < 10 then '0' + min else min
-  sec = if sec < 10 then '0' + sec else sec
-  currentTime = '<span class="hour-min">' + hour + ':' + min + ':' + sec + '</span>'
-  document.getElementById('clock').innerHTML = currentTime
-  return
-setInterval showTime, 1000
-
 # CALENDAR
 sundayFirstCalendar = 'cal -h && date "+%-m %-d %y"'
 mondayFirstCalendar =  'cal -h | awk \'{ print " "$0; getline; print "Mo Tu We Th Fr Sa Su"; \
@@ -42,7 +5,6 @@ getline; if (substr($0,1,2) == " 1") print "                    1 "; \
 do { prevline=$0; if (getline == 0) exit; print " " \
 substr(prevline,4,17) " " substr($0,1,2) " "; } while (1) }\' && date "+%-m %-d %y"'
 command: sundayFirstCalendar
-
 #Set this to true to enable previous and next month dates, or false to disable
 otherMonths: true 
 refreshFrequency: 3600000
@@ -52,28 +14,18 @@ refreshFrequency: 3600000
     #    display: grid
     # font-size: 8em
     # gap: 15px
+  # .hour-min 
+    # font-size: 7em
 style: """
-  top: 10px
-  left: 30px
+  top: 100px
   color: #fff
-  
-  #clock
-    font-weight: 50 
-    opacity: 0.8
-    font-family: system-ui
-    display: flex
-    align-items: center
-    gap: 0px
-    right: 0px
-    position: relative
-
-  .hour-min 
-    font-size: 7em
+  padding 10px
+  border 1px solid #fff
 
   table
     border-collapse: collapse
     table-layout: fixed
-    margin-left: 0
+    margin-left: 5
 
   td
     text-align: center
@@ -107,7 +59,6 @@ style: """
 """
 
 render: -> """
-  <div id="clock"></div>
   <table>
     <thead>
     </thead>

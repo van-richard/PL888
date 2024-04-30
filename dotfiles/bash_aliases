@@ -41,6 +41,5 @@ alias jblobos="export LOBOS_JNB_PORT_NUM=8989; ssh -L localhost:\${LOBOS_JNB_POR
 alias scplobos="scp -rpq -P 1701"
 alias rsynclobos="rsync -a -e -v \'ssh -p 1701\'"
 
-# Functions
-# ###############################
 
+alias widget="/Applications/Übersicht.app/Contents/MacOS/Übersicht"
