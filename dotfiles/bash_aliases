@@ -42,4 +42,4 @@ alias scplobos="scp -rpq -P 1701"
 alias rsynclobos="rsync -a -e -v \'ssh -p 1701\'"
 
 
-alias widget="/Applications/Übersicht.app/Contents/MacOS/Übersicht"
+alias ub="nohup /Applications/Übersicht.app/Contents/MacOS/Übersicht &"

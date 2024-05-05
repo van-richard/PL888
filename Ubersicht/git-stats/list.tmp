@@ -1,0 +1,342 @@
+tmp file
+
+	{
+	"repository": "ccats/literature",
+	"branch": "master",
+	"status": "clean",
+	"n_commits": "0",
+	"icon": "clean",
+	"color": "#ffffff",
+	"modified": "",
+	"untracked": ""
+	}
+
+	{
+	"repository": "github/amburrr",
+	"branch": "dev",
+	"status": "clean",
+	"n_commits": "0",
+	"icon": "clean",
+	"color": "#ffffff",
+	"modified": "",
+	"untracked": ""
+	}
+
+	{
+	"repository": "github/CodingNotes",
+	"branch": "main",
+	"status": "ahead",
+	"n_commits": "1",
+	"icon": "ahead",
+	"color": "#8fce00",
+	"modified": "",
+	"untracked": ""
+	}
+
+	{
+	"repository": "github/literature",
+	"branch": "main",
+	"status": "clean",
+	"n_commits": "0",
+	"icon": "clean",
+	"color": "#ffffff",
+	"modified": "",
+	"untracked": ""
+	}
+
+	{
+	"repository": "github/plates",
+	"branch": "dev",
+	"status": "clean",
+	"n_commits": "0",
+	"icon": "clean",
+	"color": "#ffffff",
+	"modified": "",
+	"untracked": ""
+	}
+
+	{
+	"repository": "github/van-richard.github.io",
+	"branch": "main",
+	"status": "clean",
+	"n_commits": "0",
+	"icon": "clean",
+	"color": "#ffffff",
+	"modified": "",
+	"untracked": ""
+	}
+
+	{
+
+	"repository": "github/amburrr",
+	{
+	"branch": "dev",
+	"repository": "github/amburrr",
+	"status": "clean",
+	"branch": "dev",
+	"n_commits": "0",
+	"status": "clean",
+	"icon": "clean",
+	"n_commits": "0",
+	"color": "#ffffff",
+	"icon": "clean",
+	"modified": "",
+	"color": "#ffffff",
+	"untracked": ""
+	"modified": "",
+	}
+	"untracked": ""
+	}
+
+	{
+	"repository": "github/CodingNotes",
+	"branch": "main",
+	"status": "ahead",
+	"n_commits": "1",
+	"icon": "ahead",
+	"color": "#8fce00",
+	"modified": "",
+	"untracked": ""
+	}
+
+	{
+	"repository": "github/CodingNotes",
+	"branch": "main",
+	"status": "ahead",
+	"n_commits": "1",
+	"icon": "ahead",
+	"color": "#8fce00",
+	"modified": "",
+	"untracked": ""
+	}
+
+	{
+	"repository": "github/literature",
+	"branch": "main",
+	"status": "clean",
+	"n_commits": "0",
+	"icon": "clean",
+	"color": "#ffffff",
+	"modified": "",
+	"untracked": ""
+	}
+
+	{
+	"repository": "github/literature",
+	"branch": "main",
+	"status": "clean",
+	"n_commits": "0",
+	"icon": "clean",
+	"color": "#ffffff",
+	"modified": "",
+	"untracked": ""
+	}
+
+	{
+	"repository": "github/plates",
+	"branch": "dev",
+	"status": "clean",
+	"n_commits": "0",
+	"icon": "clean",
+	"color": "#ffffff",
+	"modified": "",
+	"untracked": ""
+	}
+
+	{
+	"repository": "github/plates",
+	"branch": "dev",
+	"status": "clean",
+	"n_commits": "0",
+	"icon": "clean",
+	"color": "#ffffff",
+	"modified": "",
+	"untracked": ""
+	}
+
+
+	{
+	{
+	"repository": "github/van-richard.github.io",
+	"repository": "github/van-richard.github.io",
+	"branch": "main",
+	"branch": "main",
+	"status": "clean",
+	"status": "clean",
+	"n_commits": "0",
+	"n_commits": "0",
+	"icon": "clean",
+	"icon": "clean",
+	"color": "#ffffff",
+	"color": "#ffffff",
+	"modified": "",
+	"modified": "",
+	"untracked": ""
+	"untracked": ""
+	}
+	}
+
+	{
+	"repository": "github/amburrr",
+	"branch": "dev",
+	"status": "clean",
+	"n_commits": "0",
+	"icon": "clean",
+	"color": "#ffffff",
+	"modified": "",
+	"untracked": ""
+	}
+
+	{
+	"repository": "github/CodingNotes",
+	"branch": "main",
+	"status": "ahead",
+	"n_commits": "1",
+	"icon": "ahead",
+	"color": "#8fce00",
+	"modified": "",
+	"untracked": ""
+	}
+
+	{
+	"repository": "github/literature",
+	"branch": "main",
+	"status": "clean",
+	"n_commits": "0",
+	"icon": "clean",
+	"color": "#ffffff",
+	"modified": "",
+	"untracked": ""
+	}
+
+	{
+	"repository": "github/plates",
+	"branch": "dev",
+	"status": "clean",
+	"n_commits": "0",
+	"icon": "clean",
+	"color": "#ffffff",
+	"modified": "",
+	"untracked": ""
+	}
+
+	{
+	"repository": "github/van-richard.github.io",
+	"branch": "main",
+	"status": "clean",
+	"n_commits": "0",
+	"icon": "clean",
+	"color": "#ffffff",
+	"modified": "",
+	"untracked": ""
+	}
+
+	{
+	"repository": "github/amburrr",
+	"branch": "dev",
+	"status": "clean",
+	"n_commits": "0",
+	"icon": "clean",
+	"color": "#ffffff",
+	"modified": "",
+	"untracked": ""
+	}
+
+	{
+	"repository": "github/CodingNotes",
+	"branch": "main",
+	"status": "ahead",
+	"n_commits": "1",
+	"icon": "ahead",
+	"color": "#8fce00",
+	"modified": "",
+	"untracked": ""
+	}
+
+	{
+	"repository": "github/literature",
+	"branch": "main",
+	"status": "clean",
+	"n_commits": "0",
+	"icon": "clean",
+	"color": "#ffffff",
+	"modified": "",
+	"untracked": ""
+	}
+
+	{
+	"repository": "github/plates",
+	"branch": "dev",
+	"status": "clean",
+	"n_commits": "0",
+	"icon": "clean",
+	"color": "#ffffff",
+	"modified": "",
+	"untracked": ""
+	}
+
+	{
+	"repository": "github/van-richard.github.io",
+	"branch": "main",
+	"status": "clean",
+	"n_commits": "0",
+	"icon": "clean",
+	"color": "#ffffff",
+	"modified": "",
+	"untracked": ""
+	}
+
+	{
+	"repository": "github/amburrr",
+	"branch": "dev",
+	"status": "clean",
+	"n_commits": "0",
+	"icon": "clean",
+	"color": "#ffffff",
+	"modified": "",
+	"untracked": ""
+	}
+
+	{
+	"repository": "github/CodingNotes",
+	"branch": "main",
+	"status": "ahead",
+	"n_commits": "1",
+	"icon": "ahead",
+	"color": "#8fce00",
+	"modified": "",
+	"untracked": ""
+	}
+
+	{
+	"repository": "github/literature",
+	"branch": "main",
+	"status": "clean",
+	"n_commits": "0",
+	"icon": "clean",
+	"color": "#ffffff",
+	"modified": "",
+	"untracked": ""
+	}
+
+	{
+	"repository": "github/plates",
+	"branch": "dev",
+	"status": "clean",
+	"n_commits": "0",
+	"icon": "clean",
+	"color": "#ffffff",
+	"modified": "",
+	"untracked": ""
+	}
+
+	{
+	"repository": "github/van-richard.github.io",
+	"branch": "main",
+	"status": "clean",
+	"n_commits": "0",
+	"icon": "clean",
+	"color": "#ffffff",
+	"modified": "",
+	"untracked": ""
+	}
