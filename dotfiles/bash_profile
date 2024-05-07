@@ -20,9 +20,6 @@ fi
 shopt -s histappend
 PROMPT_COMMAND='history -a'
 
-# Programs
-export PATH=/Applications/CMake.app/Contents/bin:${PATH}
-
 # Homembrew Programs
 eval "$(/opt/homebrew/bin/brew shellenv)"
 if [[ -e $(which brew) ]]; then
@@ -39,4 +36,3 @@ if [[ -e $(which brew) ]]; then
 fi
 
 
-#./.tmux.auto

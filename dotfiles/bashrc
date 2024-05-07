@@ -1,20 +1,18 @@
 #!/bin/bash
 #######################################################
-# SOURCED ALIAS'S AND SCRIPTS BY zachbrowne.me
+# SOURCED ALIAS'S AND SCRIPTS 
 #######################################################
 
-if [ -f /etc/bashrc ]; then # Source global definitions
-    . /etc/bashrc
-fi
+# Source global definitions
+if [ -f /etc/bashrc ]; then source /etc/bashrc; fi
 
-if [ -f ~/.bash_aliases ]; then # Source bash aliases
-    source ~/.bash_aliases
-fi
+# Source bash aliases
+if [ -f ~/.bash_aliases ]; then source ~/.bash_aliases; fi
+
 
 #######################################################
 # EXPORTS
 #######################################################
-
 
 # Causes bash to append to history instead of overwriting it so if you start a new terminal, you have old session history
 shopt -s histappend
@@ -42,7 +40,3 @@ export LESS_TERMCAP_so=$'\E[01;44;33m'
 export LESS_TERMCAP_ue=$'\E[0m'
 export LESS_TERMCAP_us=$'\E[01;32m'
 
-
-# tmux 
-export PATH=$HOME/.config/tmux/bin:$PATH
-export MANPATH=$HOME/.config/tmux/share/man:$MANPATH
