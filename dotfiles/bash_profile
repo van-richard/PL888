@@ -1,7 +1,6 @@
 #!/bin/bash
 # Bash login shells start by reading:
-#   /etc/profile > ~/.bash_profile > ~./bash_login > ~/.profile
-# In that order. This only applies to login shells like SSH, emulatos, or `su`.
+
 #
 # Settings here are for important, one-time things when Bash starts up.
 # 
@@ -22,6 +21,7 @@ PROMPT_COMMAND='history -a'
 
 # Homembrew Programs
 eval "$(/opt/homebrew/bin/brew shellenv)"
+
 if [[ -e $(which brew) ]]; then
     export PATH="$(brew --prefix)/opt/gnu-sed/libexec/gnubin:${PATH}" # GNU `sed`
     [ -f $(brew --prefix)/etc/profile.d/autojump.sh ] && . $(brew --prefix)/etc/profile.d/autojump.sh
@@ -31,8 +31,8 @@ if [[ -e $(which brew) ]]; then
     # Show auto-completion list automatically, without double tab
     if [[ $iatest -gt 0 ]]; then bind "set show-all-if-ambiguous On"; fi
     eval "$(fzf --bash)"                    # 
-    eval "$(zoxide init bash --cmd cd)"     #
+    eval "$(zoxide init bash --cmd cd)"
     eval "$(starship init bash)"
 fi
 
-
+export FZF_DEFAULT_OPTS='--height 40% --layout=reverse --border'

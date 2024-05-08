@@ -8,7 +8,7 @@ alias ubersicht=""Übersicht""
 
 
 #alias ls="ls --color"
-alias ls="ls --color"               # List with color
+#alias ls="ls --color"               # List with color
 alias la="ls -a"                    # List dot directory/file
 alias lt="ls -lt"                   # List long format (lowercase all) & sort by time
 

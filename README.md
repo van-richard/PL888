@@ -8,3 +8,9 @@ A kitchen cabinet brimming with configurations that broke my MacBook.
 - [x] ubersicht (custom MacOS widgets)
 - [x] vi/vim (vimrc, neovim, autocomplete)
 - [x] VMD configuration (vmdrc)
+
+
+
+[zoxide - a better `cd`](https://github.com/ajeetdsouza/zoxide)
+
+[fzf - CLI search ](https://github.com/junegunn/fzf)
