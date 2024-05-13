@@ -1,0 +1,58 @@
+A NVT simulation for common production-level simulations
+ &cntrl
+    imin=5,        ! Post process
+    maxcyc=1,      ! Single point energy
+
+    ! Boundary conditions
+    ntb=1,         ! Periodic boundaries for constant volume
+    ntp=0,         ! No pressure control
+
+    ! Potential energy control
+    cut=10.0,      ! nonbonded cutoff, in Angstroms
+
+    ! Control how often information is printed
+    ntpr=1,        ! Print energies every 1 step
+    ntwx=1,        ! Print coordinates every 1 step to the trajectory
+    ntwr=5000,     ! Print a restart file every 5K steps (can be less frequent)
+!   ntwv=-1,       ! Uncomment to also print velocities to trajectory
+!   ntwf=-1,       ! Uncomment to also print forces to trajectory
+    ntxo=2,        ! Write NetCDF format
+    ioutfm=1,      ! Write NetCDF format (always do this!)
+
+    ! Set water atom/residue names for SETTLE recognition
+    watnam='WAT',  ! Water residues are named WAT
+    owtnm='O',     ! Water oxygens are named O
+
+    ! QM/MM
+    ifqnt=1,       ! Turn on QM/MM
+ /
+
+ &ewald
+    dsum_tol=0.000001,
+ /
+
+ &qmmm
+    ! QM atoms
+    qmmask='(:839,838,862&!@N,H,HA,CA,C,O)|(:1498&@26639-26645)|(:1497&!@26606-26612)|:1368,1629,1631,1632'
+
+    ! QM settings
+    qm_theory='EXTERN',
+    qmcharge=0,
+
+    ! Shake
+    qmshake=0,     ! Use Shake for QM atoms
+
+    ! Potential energy control
+    qmcut=999.0,   ! Cutoff for QM/MM electrostatic interactions
+    qm_ewald=0,    ! QM/MM with periodic boundaries
+    qm_pme=0,      ! Use PME for QM-MM electrostatic interactions
+    qmmm_switch=0, ! Switching for QM-MM
+    writepdb=0,    ! Check QM atoms
+ /
+
+ &qmhub
+  config="qmhub2.ini",
+  basedir="/scratch/van/cas9/hnh/b3lyp-pm3-sinr2/__WIN__/qmhub",
+  comm=0,
+ /
+
