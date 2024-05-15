@@ -25,7 +25,7 @@ eval "$(/opt/homebrew/bin/brew shellenv)"
 if [[ -e $(which brew) ]]; then
     export PATH="$(brew --prefix)/opt/gnu-sed/libexec/gnubin:${PATH}" # GNU `sed`
     [ -f $(brew --prefix)/etc/profile.d/autojump.sh ] && . $(brew --prefix)/etc/profile.d/autojump.sh
-    [ -f $(brew --prefix)/etc/bash_completion ] && . $(brew --prefix)/etc/bash_completion
+#    [ -f $(brew --prefix)/etc/bash_completion ] && . $(brew --prefix)/etc/bash_completion
     # Ignore case on auto-completion
     if [[ $iatest -gt 0 ]]; then bind "set completion-ignore-case on"; fi
     # Show auto-completion list automatically, without double tab
@@ -35,4 +35,5 @@ if [[ -e $(which brew) ]]; then
     eval "$(starship init bash)"
 fi
 
+#[[ -r "/opt/homebrew/etc/profile.d/bash_completion.sh" ]] && . "/opt/homebrew/etc/profile.d/bash_completion.sh"
 
