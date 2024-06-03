@@ -1,8 +1,24 @@
 #!/bin/bash
 
-pstep="prod00"
-istep="prod01"
 init="step3_pbcsetup"
+
+if [ -z $1 ]; then
+    echo "Need $pstep value"
+    exit 1
+else
+    printf -v p "%02d" $1
+fi
+
+if [ -z $2 ]; then
+    echo "Need $istep value"
+    exit 1
+else
+    printf -v i "%02d" $2
+fi
+
+pstep="prod${p}"
+istep="prod${i}"
+echo "$pstep $istep"
 
 sbatch <<_EOF
 #!/bin/bash
@@ -18,7 +34,7 @@ sbatch <<_EOF
 
 date
 
-module load AmberGPU
+module load amber/23-gpu
 pmemd="pmemd.cuda"
 
 \$pmemd -i prod2.mdin \

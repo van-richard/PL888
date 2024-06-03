@@ -1,0 +1,33 @@
+#!/bin/bash
+#
+# Insanely simple script to quickly check if the CVs are wonky
+# Takes 1 arguemnt which is the rep number (0 = step6.00, 1 = step6.01...)
+#
+# haven't argparse this yet, so change the window if you use it 
+#   "seq -w 0 41"
+
+# Check if an argument is provided
+if [[ ! -z ${1} ]]; then
+    num=${1}
+else
+    echo "Need an argument!"
+    exit 1
+fi
+
+# Set the variable for the *.cv file
+cv="step6.0${num}"
+
+# Print header for the output table
+printf "Checking ${cv}\nWindow\tSteps\tR1-R2\tR1\tR2\n"
+
+# Iterate through windows and print information
+seq -w 0 41 | while read i; do
+    if [ -f ${i}/${cv}_equilibration.cv ]; then
+        # Print window information
+        printf "${i}\t$(tail -n 1 ${i}/${cv}_equilibration.cv | column -t)\n"
+    else
+        # Indicate if the file is not found
+        printf "${i}\tNo File!\tSimulation probably has not started..\n"
+    fi
+done
+

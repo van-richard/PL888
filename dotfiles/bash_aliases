@@ -4,7 +4,7 @@
 # Alias
 ##############
 #
-alias ubersicht="Übersicht"
+alias ubersicht=""Übersicht""
 
 
 #alias ls="ls --color"

@@ -1,0 +1,6 @@
+parm step3_pbcsetup.parm7
+trajin step6.00_equilibration.nc
+
+trajout step6_all.nc
+run
+

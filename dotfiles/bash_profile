@@ -21,16 +21,23 @@ PROMPT_COMMAND='history -a'
 
 # Homembrew Programs
 eval "$(/opt/homebrew/bin/brew shellenv)"
-export PATH="$(brew --prefix)/opt/gnu-sed/libexec/gnubin:${PATH}" # GNU `sed`
 
+if [[ -e $(which brew) ]]; then
+    export PATH="$(brew --prefix)/opt/gnu-sed/libexec/gnubin:${PATH}" # GNU `sed`
+    [ -f $(brew --prefix)/etc/profile.d/autojump.sh ] && . $(brew --prefix)/etc/profile.d/autojump.sh
+#    [ -f $(brew --prefix)/etc/bash_completion ] && . $(brew --prefix)/etc/bash_completion
+    # Ignore case on auto-completion
+    if [[ $iatest -gt 0 ]]; then bind "set completion-ignore-case on"; fi
+    # Show auto-completion list automatically, without double tab
+    if [[ $iatest -gt 0 ]]; then bind "set show-all-if-ambiguous On"; fi
+    eval "$(fzf --bash)"                    # 
+    eval "$(zoxide init bash --cmd cd)"
+    eval "$(starship init bash)"
+fi
 
-[ -f $(brew --prefix)/etc/profile.d/autojump.sh ] && . $(brew --prefix)/etc/profile.d/autojump.sh
-[ -f $(brew --prefix)/etc/bash_completion ] && . $(brew --prefix)/etc/bash_completion
-# Ignore case on auto-completion
-if [[ $iatest -gt 0 ]]; then bind "set completion-ignore-case on"; fi
-# Show auto-completion list automatically, without double tab
-if [[ $iatest -gt 0 ]]; then bind "set show-all-if-ambiguous On"; fi
-eval "$(fzf --bash)"                   
-eval "$(zoxide init bash --cmd cd)"
-eval "$(starship init bash)"
+<<<<<<< HEAD
+export FZF_DEFAULT_OPTS='--height 40% --layout=reverse --border'
+=======
+#[[ -r "/opt/homebrew/etc/profile.d/bash_completion.sh" ]] && . "/opt/homebrew/etc/profile.d/bash_completion.sh"
 
+>>>>>>> dev
