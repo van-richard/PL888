@@ -1,0 +1,97 @@
+--- Variables
+local Miniforge = tostring(pathJoin("/home", "van", "miniforge3"))
+local Version = "24.4.0"
+
+--- Check if $USER is on login node
+if (os.getenv"SLURM_NODENAME" == false) then
+    LmodBreak("\n" ..
+        "\tPlease load this module on an interactive session !!!" ..
+        "\n")
+end
+
+--- This loads my miniforge conda, which ~should~ work with your existing conda. Need to work on better approach to check for existing conda and add shared conda env, etc.
+conda_sh = pathJoin(Miniforge, "etc", "profile.d", "conda.sh")
+cmd = "source "..conda_sh.."; conda activate "
+execute{cmd=cmd, modeA={"load"}}
+--- Check for $USER Conda
+---if (os.getenv("CONDA_EXE") == nil) then
+--- elseif ... then
+--- else 
+---end
+
+if (os.getenv("CONDA_EXE") == "/home/van/miniforge3/bin/conda") then
+	cmd = "conda deactivate; " ..
+	"unset -f CONDA_EXE; " ..
+	"unset -f CONDA_PYTHON_EXE; " ..
+	"unset -f _CE_CONDA; " ..
+	"unset -f _CE_M; " ..
+	"unset -f __conda_activate; " ..
+	"unset -f __conda_reactivate; " .. 
+	"unset -f __conda_hashr; " ..
+	"unset -f CONDA_SHLVL;" .. 
+	"unset -f _CONDA_EXE; " .. 
+	"unset -f _CONDA_ROOT; " .. 
+	"unset -f conda"
+	execute{cmd=cmd, modeA={"unload"}}
+end
+
+--- Description of software (`module whatis [module name]`)
+whatis('A base environment for simple python tasks and running JupyterLab.\n\
+In a Jupyerlab session, switching conda environments can be done on the fly with the help of "nb_conda_kernels."\n\
+The package, "nb_conda_kernels", was installed to the base environment, and "ipython" in others.')
+
+--- Examples: How to use package (`module help [module name]`)
+help([[]])
+
+family("conda")
+setenv("CONDA_EXE","/home/van/miniforge3/bin/conda")
+setenv("CONDA_PYTHON_EXE","/home/van/miniforge3/bin/python")
+setenv("CONDA_SHLVL","0")
+prepend_path("PATH","/home/van/miniforge3/condabin")
+setenv("_CE_CONDA","")
+setenv("_CE_M","")
+set_shell_function("__conda_activate"," \
+    if [ -n \"${CONDA_PS1_BACKUP:+x}\" ]; then\
+        PS1=\"$CONDA_PS1_BACKUP\";\
+        \\unset CONDA_PS1_BACKUP;\
+    fi;\
+    \\local ask_conda;\
+    ask_conda=\"$(PS1=\"${PS1:-}\" __conda_exe shell.posix \"$@\")\" || \\return;\
+    \\eval \"$ask_conda\";\
+    __conda_hashr\
+","")
+set_shell_function("__conda_exe"," \
+    ( \"$CONDA_EXE\" $_CE_M $_CE_CONDA \"$@\" )\
+","")
+set_shell_function("__conda_hashr"," \
+    if [ -n \"${ZSH_VERSION:+x}\" ]; then\
+        \\rehash;\
+    else\
+        if [ -n \"${POSH_VERSION:+x}\" ]; then\
+            :;\
+        else\
+            \\hash -r;\
+        fi;\
+    fi\
+","")
+set_shell_function("__conda_reactivate"," \
+    \\local ask_conda;\
+    ask_conda=\"$(PS1=\"${PS1:-}\" __conda_exe shell.posix reactivate)\" || \\return;\
+    \\eval \"$ask_conda\";\
+    __conda_hashr\
+","")
+set_shell_function("conda"," \
+    \\local cmd=\"${1-__missing__}\";\
+    case \"$cmd\" in \
+        activate | deactivate)\
+            __conda_activate \"$@\"\
+        ;;\
+        install | update | upgrade | remove | uninstall)\
+            __conda_exe \"$@\" || \\return;\
+            __conda_reactivate\
+        ;;\
+        *)\
+            __conda_exe \"$@\"\
+        ;;\
+    esac\
+","")
