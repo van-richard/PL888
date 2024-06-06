@@ -1,6 +1,5 @@
 #!/bin/bash
 #SBATCH --partition=batch
-##SBATCH --partition=bigmem
 #SBATCH --nodes=1
 #SBATCH --ntasks=16
 #SBATCH --mem=50G
@@ -27,10 +26,8 @@ localhost:${port}  (prefix w/ https:// if using password)
 "
 
 # load modules  here
-shopt -s expand_aliases
-source ~/.bash_aliases
-myconda
-#panconda
+eval "$(/home/van/miniforge3/bin/conda shell.bash hook)"
+conda activate 
 
 # Run Jupyter
 jupyter lab --no-browser --port=${port} --ip=${node}

@@ -34,10 +34,3 @@ if [[ -e $(which brew) ]]; then
     eval "$(zoxide init bash --cmd cd)"
     eval "$(starship init bash)"
 fi
-
-<<<<<<< HEAD
-export FZF_DEFAULT_OPTS='--height 40% --layout=reverse --border'
-=======
-#[[ -r "/opt/homebrew/etc/profile.d/bash_completion.sh" ]] && . "/opt/homebrew/etc/profile.d/bash_completion.sh"
-
->>>>>>> dev

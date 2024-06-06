@@ -45,9 +45,9 @@ proc reset_viz {molid} {
     mol showrep 0 0 0 
 
     # Create Rep 1
-    mol addrep 0
-    mol modselect 1 0 protein
-    mol modstyle 1 0 NewCartoon
+#     mol addrep 0
+#     mol modselect 1 0
+#     mol modstyle 1 0 NewCartoon
 
     # Create Rep 2
 #    mol addrep 0 
