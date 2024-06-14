@@ -4,28 +4,14 @@
 # Alias
 ##############
 #
-alias ubersicht=""Übersicht""
-
-
-#alias ls="ls --color"
-#alias ls="ls --color"               # List with color
 alias la="ls -a"                    # List dot directory/file
 alias lt="ls -lt"                   # List long format (lowercase all) & sort by time
-
 alias ..="cd ../"                   # Back one directory
 alias ...="cd ../../"               # Back two dirctories
 alias ....="cd ../../../"           # Back three directies
 
 # Conda
-if [ -d ~/Programs/miniforge3 ]; then
-    CONDA_DIR="~/Programs/miniforge3/bin/conda"
-elif [ -d ~/.Programs/miniforge3 ]; then
-    CONDA_DIR="~/.Programs/miniforge3/bin/conda"
-else
-    echo "Can't find conda..."
-    exit 0
-fi
-alias mfa="eval \"\$(${CONDA_DIR} shell.bash hook)\"; conda activate"
+alias mfa="source ~/PRograms/miniforge3/etc/profile.d/conda.sh; conda activate"
 alias mfd="conda deactivate"
 alias mf="conda"
 
