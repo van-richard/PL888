@@ -1,5 +1,0 @@
-#!/bin/bash
-
-# formatted squeue
-
-squeue --format="%.10i %.6P %.12j %.5u %.10M %.8T %.3D %.3A %R" --user=$1

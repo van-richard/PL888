@@ -3,11 +3,11 @@ import pytraj as pt
 import matplotlib.pyplot as plt
 
 # Topology file
-pname="../step3_pbcsetup"
+pname="step3_pbcsetup"
 pformat="parm7"
 
 # Trajectory file 
-tname='../prod'
+tname='prod'
 tformat='nc'
 
 # Atom mask selection
@@ -37,4 +37,5 @@ plt.plot(xdata, ydata)
 plt.xlabel('Residue Number')
 plt.ylabel('RMSF (Å)')
 
-plt.savefig('img/%s' % figname, dpi=300)
+plt.savefig('img/{figname}', dpi=300)
+

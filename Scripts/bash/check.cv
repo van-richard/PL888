@@ -1,0 +1,13 @@
+#!/bin/bash
+
+seq -w 0 41 | while read i; do
+echo $i | tr "\n" "\t"
+seq 0 6 | while read j; do
+if [ -f ${i}/step6.0${j}_equilibration.cv ]; then
+wc -l ${i}/step6.0${j}*cv | awk '{print $1}' | tr "\n" "\t"
+else
+echo "0" | tr "\n" "\t"
+fi
+done
+echo " "
+done
