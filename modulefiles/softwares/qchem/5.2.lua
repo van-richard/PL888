@@ -13,7 +13,7 @@ load(TargetMPI)
 setenv(        "QC", pathJoin(Base, "trunk2"))
 setenv(     "QCAUX", pathJoin(Base, "qcaux"))
 setenv("QCPLATFORM", "LINUX_Ix86_64")
-setenv( "QCSCRATCH", pathJoin("/tmp", os.getenv("USER")))
+setenv( "QCSCRATCH", pathJoin("scratch", os.getenv("USER")))
 setenv(    "RUNCPP", pathJoin("lib", "cpp"))
 
 --- from qchem.setup.sh
@@ -34,10 +34,10 @@ set_alias("progman", "cd $QC/progman")
 set_alias( "scfman", "cd $QC/scfman")
 set_alias( "setman", "cd $QC/setman")
 
+cmd = "unset QC; unset QCAUX; unset QCPLATFORM; unset QCSCRATCH; unset RUNCPP" 
+execute{cmd=cmd, modeA={"unload"}}
 
 if (mode() == {'unload'}) then
-    cmd = "unset QC; unset QCAUX; unset QCPLATFORM; unset QCSCRATCH; unset RUNCPP" 
-    execute{cmd=cmd, modeA={"unload"}}
     remove_path("PATH", pathJoin(Base, "trunk2/bin"        ))
     remove_path("PATH", pathJoin(Base, "trunk2/bin/perl"   ))
     remove_path("PATH", pathJoin(Base, "trunk2/bin/mpi"    ))

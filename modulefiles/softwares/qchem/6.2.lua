@@ -10,8 +10,8 @@ load(TargetCompiler)
 --- From setqc.sh
 setenv(        "QC", pathJoin(Base))
 setenv(     "QCAUX", pathJoin("/home", "chance", "software", "qcaux"))
-setenv("QCPLATFORM", pathJoin(os.getenv("QC"), "bin/qcplatform"))
-setenv( "QCSCRATCH", pathJoin("/tmp", os.getenv("USER")))
+setenv("QCPLATFORM", "LINUX_Ix86_64")
+setenv( "QCSCRATCH", pathJoin("scratch", os.getenv("USER")))
 setenv(    "RUNCPP", pathJoin("lib", "cpp"))
 
 --- from qchem.setup.sh
@@ -27,13 +27,14 @@ set_alias( "drvman", "cd $QC/drvman")
 set_alias( "libgen", "cd $QC/libgen")
 set_alias( "libint", "cd $QC/libint")
 set_alias( "liblas", "cd $QC/liblas")
+set_alias( "oepman", "cd $QC/oepman")
 set_alias("progman", "cd $QC/progman")
 set_alias( "scfman", "cd $QC/scfman")
 set_alias( "setman", "cd $QC/setman")
 
+cmd = "unset QC; unset QCAUX; unset QCPLATFORM; unset QCSCRATCH; unset RUNCPP" 
+execute{cmd=cmd, modeA={"unload"}}
 if (mode() == {'unload'}) then
-    cmd = "unset QC; unset QCAUX; unset QCPLATFORM; unset QCSCRATCH; unset RUNCPP" 
-    execute{cmd=cmd, modeA={"unload"}}
     remove_path("PATH", pathJoin(Base, "bin"        ))
     remove_path("PATH", pathJoin(Base, "bin/perl"   ))
     remove_path("PATH", pathJoin(Base, "bin/mpi"    ))

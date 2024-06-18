@@ -16,4 +16,3 @@ cmd = "conda deactivate; "..
 execute{cmd=cmd, modeA={"unload"}}
 
 family('conda')
-extensions("python/3.10.14, jupyterlab/4.2.0")
