@@ -1,0 +1,34 @@
+#!/bin/bash
+
+printf "\nExample SLURM script for running jupyter lab\n\n"
+
+cat <<_EOF
+#!/bin/bash
+#SBATCH --partition=batch
+#SBATCH --ntasks=32
+#SBATCH --output=%j.out
+#SBATCH --error=%j.err
+#SBATCH --time=18:00:00
+#SBATCH --job-name=jupyter
+
+node=$(hostname -s)
+user=$(whoami)
+cluster="pete"
+port=8988
+
+# print tunneling instructions jupyter-log
+echo -e "
+Command to create ssh tunnel:
+ssh -N -L ${port}:${node}:${port} ${user}@${cluster}.hpc.okstate.edu
+
+Use a Browser on your local machine to go to:
+localhost:${port}  (prefix w/ https:// if using password)
+"
+
+cd $HOME
+
+eval "$(/home/van/miniforge3/bin/conda shell.bash hook)"
+conda activate 
+
+jupyter lab --no-browser --port=${port} --ip=${node}
+_EOF

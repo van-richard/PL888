@@ -1,0 +1,60 @@
+" line numbers
+set number
+
+" syntax highlight
+syntax on
+
+" ignore case in search
+set ignorecase
+set smartcase
+set incsearch
+set lazyredraw
+set magic
+set showmatch
+set mat=2
+
+" Disable highlight when <leader><cr> is pressed
+" "map <silent> <leader><cr> :noh<cr>
+set nohlsearch
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"""" file management       
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+" text/tab/index
+set expandtab           " use spaces
+set shiftwidth=4        " 1 tab = 4 spaces
+set tabstop=4
+set softtabstop=4       " 
+set lbr
+set tw=500              " line break @ 500 characters
+set ai " auto indent 
+set si " smart indent
+set wrap " wrap lines
+
+" filetype plugins
+filetype plugin indent on
+
+" correct backspace
+set backspace=eol,start,indent
+set whichwrap+=<,>,h,l
+
+" auto update
+set autoread
+
+" spell check
+map <leader>ss :setlocal spell!<cr>
+
+" files/backup/undo
+set noswapfile
+" set nobackup
+set nowb
+
+" turn off sound
+set noerrorbells
+set novisualbell
+set t_vb=
+set tm=500
+if has("gui_macvim")
+        autocmd GUIEnter * set vb t_vb=
+endif

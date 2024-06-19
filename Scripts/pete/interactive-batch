@@ -1,0 +1,11 @@
+#!/bin/bash
+
+PARTITION="batch"
+NODES=1
+NTASK=32
+MEM="20G"
+TIME="12:00:00"
+JOBNAME="int"
+
+srun --pty -p ${PARTITION} -N ${NODES} -n ${NTASK} --mem=$MEM -t ${TIME} -j ${JOBNAME} /bin/bash
+

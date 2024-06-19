@@ -1,0 +1,15 @@
+#!/bin/bash
+
+CONDA="/home/van/miniforge3"
+
+${CONDA}/bin/conda run -n base eval "$(${CONDA}/bin/fzf --bash)"
+
+if [ ! z $1 ]; then
+    ${CONDA}/bin/fzf
+else
+    ${CONDA}/bin/fzf $1
+fi
+
+# Set up fzf key bindings and fuzzy completion
+#eval "$(fzf --bash)"
+

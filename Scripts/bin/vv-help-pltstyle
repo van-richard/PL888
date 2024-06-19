@@ -1,0 +1,31 @@
+#!/bin/bash
+
+printf "\nSave custom matplotlib settings to *.mplstyle\n"
+printf "\nExample:"
+
+cat <<_EOF
+# figure
+figure.constrained_layout.use : True
+figure.constrained_layout.wspace : 0.08
+figure.constrained_layout.hspace : 0.08
+figure.titlesize : 14
+figure.dpi : 300
+
+# font
+font.size  : 12
+
+# ticks
+xtick.labelsize : 11
+ytick.labelsize : 11
+
+# legend
+legend.fontsize : 10
+
+# axes
+axes.grid: True
+axes.alpha: 0.4
+axes.linestyle: '--'
+_EOF
+
+printf "\n\nIn python: plt.style.use('$(realpath .)/myfigure.mplstyle')\n\n"
+

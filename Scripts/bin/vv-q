@@ -1,0 +1,12 @@
+#!/bin/bash
+
+# formatted squeue
+
+if [ -z $1 ]; then
+    user=${USER}
+else
+    user=${1}
+fi
+
+squeue --format="%.10i %.6P %.12j %.5u %.10M %.8T %.3D %.3A %R" --user=${user}
+
