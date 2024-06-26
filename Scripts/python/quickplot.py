@@ -1,7 +1,8 @@
-#!/usr/bin/env python
 import os                                               
-import matplotlib.pyplot as plt                         
+import sys
 import numpy as np
+import matplotlib.pyplot as plt                         
+plt.style.use('myfigure.mplstyle')
 
 
 def quickplot(xdata, ydata, xlabel, ylabel, name=None):
