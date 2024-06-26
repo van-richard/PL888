@@ -1,0 +1,19 @@
+#!/bin/bash
+
+# formatted squeue
+# check sqeueu repetitively
+
+if [ -z $1 ]; then
+    user=${USER}
+else
+    user=${1}
+fi
+
+if [ -z $2 ]; then
+    n_seconds=1
+else
+    n_seconds=$2
+fi
+
+squeue --format="%.10i %.6P %.12j %.5u %.10M %.8T %.3D %.3A %R" --user=${user} --iterate ${n_seconds}
+

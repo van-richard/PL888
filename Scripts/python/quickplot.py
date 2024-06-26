@@ -1,8 +1,13 @@
 import os                                               
 import sys
+from glob import glob
 import numpy as np
+
+sys.path.append('/home/van/Scripts/bin')
+from topandas import mbar2df
+
 import matplotlib.pyplot as plt                         
-plt.style.use('myfigure.mplstyle')
+
 plt.rcParams['figure.constrained_layout.use'] = True
 plt.rcParams['figure.figsize'] = (5, 3.33)
 plt.rcParams['figure.dpi'] = 200
@@ -103,4 +108,5 @@ def quickmbar(outdir, ref=None):
     plt.savefig(f'{outdir}/pmf-sliding.png')
     
     # Save table
-    save_dataframe(outdir=f'{outdir}', time=time, dg=dg)
+    mbar2df(outdir=f'{outdir}', time=time, dg=dg)
+
