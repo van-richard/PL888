@@ -3,8 +3,14 @@ import sys
 import argparse
 from glob import glob
 
-def cwd():
-    return os.getcwd()
+def whereami():
+    current_wdir = os.path.abspath(os.getcwd())
+    project_path = os.path.dirname(current_wdir)
+    print('Current directory: {current_wdir}')
+    print('Project directory: {project_path}')
+    return current_wdir, project_path
+
+
 
 def mkdir(dirname):
     os.makedirs(dirname, exist_ok=True)

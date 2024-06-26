@@ -1,5 +1,6 @@
 #!/scratch/van/shared_envs/mbar/bin/python
-import os, sys
+import os
+import sys
 from glob import glob
 import numpy as np
 import pandas as pd
@@ -9,75 +10,55 @@ from sklearn.utils import resample
 import pymbar
 from pymbar.mbar_pmf import mbar_pmf
 
-import matplotlib.pyplot as plt
-plt.rcParams['figure.constrained_layout.use'] = True
-plt.rcParams['figure.figsize'] = (5, 3.33)
-plt.rcParams['figure.dpi'] = 200
-plt.rcParams['axes.labelsize'] = 12
-plt.rcParams['axes.linewidth'] = 1
-plt.rcParams['axes.grid'] = True
-plt.rcParams['grid.linestyle'] = '--'
-plt.rcParams['grid.alpha'] = 0.4
-plt.rcParams['axes.xmargin'] = 0.1
-plt.rcParams['axes.ymargin'] = 0.25
+import readcv
+from quickplot import quickmbar
+
+def parse_arguments():
+    parser = argparse.ArgumentParser()
+    parser.add_argument('-s', '--stepfile', type=str, default='step6')
+    parser.add_argument('-r', '--roll', type=int, default='5')
+    parser.add_argument('-f', '--freefile', type=str, default='freefile_mbar')
+    parser.add_argument('-dt', '--timestep', type=float, default='0.001')
+    parser.add_argument('-sf', '--savefreq', type=int, default='10')
+    parser.add_argument('--ref', type=str, help='reference freefile')
+    parser.add_argument('--output', type=str, default='results')
+    return parser.parse_args()
+
+# sys.path.append('/Users/van/Scripts/bin')
+# from organize import whereami
+def whereami():
+    current_wdir = os.path.abspath(os.getcwd())
+    project_path = os.path.dirname(current_wdir)
+    print(f'Current directory: {current_wdir}')
+    print(f'Project directory: {project_path}')
+    return current_wdir, project_path
 
 
+def find_subdirectories(path):
+    return next(os.walk(path))[1]
 
-project_dir = "/scratch/samitha/mt2-b3lyp"
-
-
-
-# Simulation Parameters
-n_windows = 42           # Total number of umbrella windows
-cv_min = -1.95          # Restraint in first window
-cv_max = 2.15           # Restraint in last window
-force_constant = 300.0   # Multiply 'rk2'/'rk3' by 2 (in cv.rst this is rk2=150.0)
-
-
-def find_subdirs():
-    return next(os.walk(f'{path}'))[1]
-
-def find_simdirs():
-    simdirs= []
-    dirnames = find_subdirs()
-    for dirname in dirnames:
-        if len(dirname) == 2 and dirname.isdight():
-            simdirs.append(dirname)
-    return sorted(simdirs)
-
-def read_cv():
-    contents = []
-    with open('f{:
-    
-
-# Reference restraint values
-val0_k = np.linspace(cv_min, cv_max, n_windows)
-
-# Restraint force values ('rk2'/'rk3')
-K_k = np.ones(n_windows) * force_constant        
-
-# Number of bins 
-nbins = n_windows - 1
+def list_windows():
+    windows = []
+    cwd, pd = whereami()
+    subdirs = find_subdirectories(cwd)
+    for subdir in subdirs:
+        if len(subdir) == 2 and subdir.isdigit():
+            windows.append(subdir)
+    return sorted(windows)
 
 
-# In[43]:
-
-
-def load_cvs_from(project_dir):
-    """
-    Load the CV values from the equilibration files. Change 'usecols=1' if necessary
-    """
-    fnames = sorted(glob(f'{project_dir}/step6.0?_equilibration.cv'))
-    return [np.loadtxt(f, usecols=1)[::] for f in fnames[:]]
-    
-
-def concatenate_arrays(array, start=0, stop=None):
+def concatenate_arrays(start=0, stop=None):
     """
     Concatenate arrays and return a slice of the concatenated array.
     """
-    return np.concatenate(array)[start:stop]
-        
-        
+    val_kn=[]
+    for window in list_windowS():
+        path = f'{window}/{args.stepfile}'
+        fnames = sorted(glob(path))
+        array = [np.loadtxt(f, usecols=1)[::] for f in fnames[:]]
+        val_kn.append(np.concatenate(array)[start:stop])
+    return val_kn
+
 def length_of_arrays(arrays):
     """
     Count number CV values and find the window with least CVs. This will be the cutoff for windows that are a few steps ahead 
@@ -97,7 +78,7 @@ def subsample_data(val_kn):
 
 
 
-def run_mbar(val_kn, outdir="results", filename="freefile_mbar", frame_number=None):
+def run_mbar(val_kn, frame_number=None):
     """
     Estimate the free energy profile using MBAR.
 
@@ -107,24 +88,37 @@ def run_mbar(val_kn, outdir="results", filename="freefile_mbar", frame_number=No
     frame_number (integer or None)   : Frame number of start frame in sliding uncertainty calculation
     """
 
-    # Print subsampled correleted data, check for number of states !!!
-    subsample_data(val_kn)
-
     # Compute MBAR
     mbar = mbar_pmf(val_kn, val0_k, K_k, force_constant)
     bin_centers, f_i, df_i, reweighting_entropy = mbar.get_pmf(cv_min, cv_max, nbins)
     bin_centers, f_i, df_i, reweighting_entropy = mbar.get_pmf(cv_min, cv_max, nbins, uncertainties='from-specified', pmf_reference=f_i[:20].argmin())
-    
+
     if frame_number is None:
         # Save freefile_mbar from all step6 trajectories 
-        np.savetxt(f'{outdir}/{filename}', np.column_stack((bin_centers, f_i, df_i)))
+        np.savetxt(f'{args.outdir}/{args.freefile}', np.column_stack((bin_centers, f_i, df_i)))
     else:
         # Save freefile_mbar[Start frame Number] from sliding uncertainty
-        np.savetxt(f'{outdir}/{filename}{frame_number}', np.column_stack((bin_centers, f_i, df_i)))
-        
+        np.savetxt(f'{args.outdir}/{args.freefile}{frame_number}', np.column_stack((bin_centers, f_i, df_i)))
+        return bin_centers, f_i, df_i, reweighting_entropy
 
 
-def estimate_free_energy(windows, slide_by=5, dt=0.001, save_freq=10):
+
+def main():
+    args = parser_input()
+    # estimate_free_energy(n_windows, slide_by=5)
+    n_windows = len(list_windows())
+    cv_min = readcv.get_cv_value(list_windows()[0])
+    cv_max = readcv.get_cv_value(list_windows()[-1])
+    force_constant = readcv.get_force_constant() * 2.0
+
+    # Reference restraint values
+    val0_k = np.linspace(cv_min, cv_max, n_windows)
+
+    # Restraint force values ('rk2'/'rk3')
+    K_k = np.ones(n_windows) * force_constant        
+
+    # Number of bins 
+    nbins = n_windows - 1
     """
     Two approaches:
         1. All trajectories (for each window) are concatenate and used to estimate the free energy profile
@@ -141,116 +135,28 @@ def estimate_free_energy(windows, slide_by=5, dt=0.001, save_freq=10):
 
     if slide_by == 0:
         # Option 1
-        out = output_directory()
+        val_kn = concatenate_arrays()
+        bc, fi, dfi, re = run_mbar(val_kn, outdir=f'{args.output}')
 
-        val_kn = []
-        for window in range(windows):
-            arrays = load_cvs_from(window)
-            val_kn.append(np.concatenate(arrays))
-        run_mbar(val_kn, outdir=f'{out}')
-
-        plot_mbar(outdir=f'{out}')
+        plot_mbar(outdir=f'{args.output}')
 
     else:
         # Option 2 
-        out = output_directory()
-
         # Convert ps to step, adjust for number of CV values in *.cv
         slide = int(slide_by / dt / save_freq) 
-       
+
        # Get smallest number of CV values for analysis
         max_length=length_of_arrays([np.concatenate(load_cvs_from(w)) for w in range(windows)])
 
         for j in range(0, max_length, slide):
-            val_kn = []
-            for w in range(windows):
-                arrays = load_cvs_from(w)
-                val_kn.append(concatenate_arrays(arrays, start=j, stop=j+slide))
-            run_mbar(val_kn, outdir=f'{out}', frame_number='%04d' % j)
+            val_kn = concatenate_arrays(start=j, step=j+slide)
+            bc, fi, dfi, re = run_mbar(val_kn, frame_number='%04d' % j)
 
-        plot_mbar(outdir=f'{out}')
-        
+        plot_mbar(outdir=f'{args.output}')
 
 
-# In[44]:
 
 
-def output_directory(dirname="results"):
-    """
-    Create a new directory to save the results. Index directories by number of runs.
-    """
-    number = len(glob(f'{dirname}*'))
-    output_dirname = f'{dirname}{number}'
-    os.makedirs(output_dirname, exist_ok=True)
-    return output_dirname
-
-
-def save_dataframe(outdir, time, dg):
-    """
-    Save rolling window to CSV file
-    """
-    df = pd.DataFrame(
-        {'Time (ps)': np.array(time),
-         'Free Energy Barrier (kcal/mol)': np.array(dg),
-         })
-    df.to_csv(f'{outdir}/pmf-dataframe.csv')
-    # df.to_latex(f'{outdir}/pmf-dataframe.tex', column_format='ccc',index=False)
-
-
-def plot_mbar(outdir, ref=None):
-    """
-    Plot free energy profiles
-
-    Need to correct 'time' variable... legend etc.
-    """
-    
-    fnames = sorted(glob(f'{outdir}/*'))
-
-    if ref is not None:
-        arr = ref + fnames
-    else:
-        arr = fnames
-
-
-    time = []
-    dg = []
-    colors = []
-    for i in range(len(arr)):
-        initial = np.loadtxt(arr[i])
-
-        # name = arr[i].split('_')[2]
-        # t0 = name.split('-')[0]
-        # ti = name.split('-')[1]
-        # lab = str('%s - %s ps' % (t0, ti))
-        time.append(i) 
-        fe = float(initial[:,1].max() - initial[:10,1].min())
-        er = float(initial[initial[:,1].argmax()][2])
-        dg.append(str('%.1f ± %.1f' % (fe,er)))
-
-        plt.errorbar(initial[:,0], initial[:,1] - initial[:10,1].min(), yerr=initial[:,2])
-        # colors.append(np.array(plt.color_sequences)[i])
-
-    # plt.legend(ncol=1, bbox_to_anchor = (1.3, 0.6), loc='center right', frameon=False, alignment='left')
-    plt.xlabel("d1 - d2 (Å)")
-    plt.ylabel("Potential of Mean Force (kcal/mol)")
-    plt.savefig(f'{outdir}/pmf-sliding.png')
-    
-    # Save table
-    save_dataframe(outdir=f'{outdir}', time=time, dg=dg)
-
-
-# In[46]:
-
-
-# Plot using all CV values
-
-estimate_free_energy(n_windows, slide_by=0)
-
-
-# In[ ]:
-
-
-# Plot using 5 ps segments
-
-estimate_free_energy(n_windows, slide_by=5)
+if __name__ == '__main__':
+    main()
 
