@@ -1,13 +1,16 @@
 import os
+import sys
+import argparse
 import pytraj as pt
 import matplotlib.pyplot as plt
+import numpy as np
 
 # Topology file
 pname="step3_pbcsetup"
 pformat="parm7"
 
 # Trajectory file 
-tname='prod'
+tname='prod00'
 tformat='nc'
 
 # Atom mask selection

@@ -1,0 +1,34 @@
+#!/scratch/van/shared_envs/ambertools23/bin/python
+import sys
+from glob import glob
+import numpy as np
+import pytraj as pt
+
+from organize import parse_input, mkdir, count_name
+from to-pandas import to_series
+from to-pytraj import calc_rmsd
+from quickplot import quickplot
+
+
+def main():
+    args = parse_input()
+    trajectory = sorted(glob(f'{args.nc}*.nc'))
+    parm = f'{args.parm}.parm7'
+
+    traj = pt.iterload(trajectory, top=parm)
+    data = calc_rmsd(traj, mask=f'{args.mask}')
+    
+    results = to_series(data, name='rmsd')
+
+    xdata = np.arange(0, len(data))
+    ydata = data
+
+    xlabel="Time (ns)"
+    ylabel="RMSD (Å)"
+    mkdir('img')
+    name = count_name('rmsd')
+    quickplot(xdata, ydata, xlabel, ylabel, name)
+
+
+if __name__ == '__main__':
+    main()

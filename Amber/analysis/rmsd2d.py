@@ -1,28 +1,12 @@
 #!/usr/bin/env python
 import os
-import pytraj as pt
-import matplotlib.pyplot as plt
+import sys
+from organize import mkdir
+from ana import load_trajectory
+
+mkdir('img')
 
 
-# In[2]:
-
-
-# Topology file
-pname="../step3_pbcsetup"
-pformat="parm7"
-
-# Trajectory file 
-tname='../prod*'
-tformat='nc'
-
-# Atom mask selection
-atommask='@CA'
-
-parm = f'{pname}.{pformat}'
-cord = f'{tname}.{tformat}'
-
-os.makedirs('img', exist_ok=True)
-os.makedirs('raw_data', exist_ok=True)
 
 # Load trajectory
 traj = pt.iterload(cord, top=parm)

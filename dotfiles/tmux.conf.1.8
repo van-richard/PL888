@@ -1,0 +1,55 @@
+# tmux config (v 3.4)
+#set-option -sa terminal-overrides ",xterm*:Tc"
+#set -g default-terminal "tmux-256color"
+
+#unbind r
+#bind r source-file ~/.tmux.conf
+bind r source-file ~/.tmux.conf \; display-message "Reloaded !!!" # one-liner
+
+# prefix - C=control - M=alt
+unbind C-b
+set -g prefix M-s 
+bind-key M-s send-prefix
+
+# split panes key
+unbind '"'
+unbind '%'
+#bind '|' split-window -h -c "#{pane_current_path}"  # Horizontal split
+#bind '-' split-window -v -c "#{pane_current_path}"  # Vertical split
+bind '|' split-window -h 
+bind '-' split-window -v 
+bind -r '>' swap-window -d -t '-1'
+bind -r '<' swap-window -d -t '+1' 
+bind 'C-p' previous-window                          # Switch window (right)
+bind 'C-a' next-window                              # Switch window (left)
+
+set -g mouse-resize-pane on
+set -g mouse-select-pane on
+set -g pane-active-border-fg green
+set -g mouse-select-window on
+# Toggle mouse on
+bind-key M \
+    set-window-option -g mode-mouse on \;\
+    set-option -g mouse-resize-pane on \;\
+    set-option -g mouse-select-pane on \;\
+    set-option -g mouse-select-window on \;\
+    display-message 'Mouse: ON'
+
+# Toggle mouse off
+bind-key m \
+    set-window-option -g mode-mouse off \;\
+    set-option -g mouse-resize-pane off \;\
+    set-option -g mouse-select-pane off \;\
+    set-option -g mouse-select-window off \;\
+    display-message 'Mouse: OFF'
+
+set -s escape-time 0                                # vim mode switch delay
+set -g display-time 4000                            # Display duration
+set -g base-index 1
+setw -g pane-base-index 1
+setw -g aggressive-resize on                        # Manage multi-display
+set-window-option -g allow-rename off                      # Rename windows
+set-window-option -g renumber-windows on
+set-window-option -g mode-keys vi                   # turn on default vim mode
+
+set -g status-position top

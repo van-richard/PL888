@@ -1,0 +1,18 @@
+
+Command to create ssh tunnel:
+ssh -N -L 8988:himem04:8988 van@pete.hpc.okstate.edu
+
+Use a Browser on your local machine to go to:
+localhost:8988  (prefix w/ https:// if using password)
+
+CONDA_PREFIX=/scratch/van/shared_envs/mbar
+CONDA_PREFIX=/scratch/van/shared_envs/mbar
+CONDA_PREFIX=/scratch/van/shared_envs/mbar
+CONDA_PREFIX=/scratch/van/shared_envs/mbar
+CONDA_PREFIX=/scratch/van/shared_envs/mbar
+CONDA_PREFIX=/home/van/.Programs/miniforge3
+CONDA_PREFIX=/home/van/.Programs/miniforge3
+CONDA_PREFIX=/scratch/van/shared_envs/mbar
+CONDA_PREFIX=/scratch/van/shared_envs/mbar
+CONDA_PREFIX=/scratch/van/shared_envs/mbar
+CONDA_PREFIX=/scratch/van/shared_envs/mbar
