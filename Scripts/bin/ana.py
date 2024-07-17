@@ -1,1 +1,0 @@
-../python/ana.py

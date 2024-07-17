@@ -11,51 +11,40 @@ from sklearn.utils import resample
 import pymbar
 from pymbar.mbar_pmf import mbar_pmf
 
-sys.path.append('/home/van/Scripts/bin')
+sys.path.append('/home/van/Scripts/mbar')
 import readcv
 from organize import whereami, count_name
+
+sys.path.append('/home/van/Scripts/plot')
 from quickplot import quickmbar
 
 def parse_input():
     parser = argparse.ArgumentParser()
-    parser.add_argument('-s', '--stepfile', type=str, default='step6')
-    parser.add_argument('-sb', '--slideby', type=int, default='0')
-    #parser.add_argument('-sb', '--slideby', type=int, default='5')
-    parser.add_argument('-f', '--freefile', type=str, default='freefile_mbar')
+    parser.add_argument('-s', '--step', type=str, default='step6')
+    parser.add_argument('-idx', '--index', type=str, default='0\?')
+    parser.add_argument('-st', '--slide', type=int, default='0')
+    parser.add_argument('-strt', '--start', type=int, default='0')
+    parser.add_argument('-end', '--end', type=int, default='0')
     parser.add_argument('-dt', '--timestep', type=float, default='0.001')
     parser.add_argument('-sf', '--savefreq', type=int, default='10')
-    parser.add_argument('--ref', type=str, help='reference freefile')
+    parser.add_argument('-ref', '--reference',  type=str, help='reference freefile')
     parser.add_argument('--output', type=str, default='results')
     return parser.parse_args()
 
 
-def find_subdirectories(path):
-    return next(os.walk(path))[1]
-
-def list_windows():
-    windows = []
-    cwd, pd = whereami()
-    subdirs = find_subdirectories(cwd)
-    for subdir in subdirs:
-        if len(subdir) == 2 and subdir.isdigit():
-            windows.append(subdir)
-    return sorted(windows)
-
-
-def concatenate_arrays(start=0, stop=None):
-    args = parse_input()
+def concatenate_arrays(windows, fname, start, end):
     """
     Concatenate arrays and return a slice of the concatenated array.
     """
     val_kn=[]
-    for window in list_windows():
-        path = f'{window}/{args.stepfile}*cv'
+    for window in windows:
+        path = f'{window}/{fname}'
         fnames = sorted(glob(path))
         array = [np.loadtxt(f, usecols=1)[::] for f in fnames[:]]
-        if args.slideby == 0:
+        if end == 0:
             val_kn.append(np.concatenate(array)[:])
         else:
-            val_kn.append(np.concatenate(array)[start:stop])
+            val_kn.append(np.concatenate(array)[start:end])
     return val_kn
 
 def length_of_arrays(arrays):

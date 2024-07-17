@@ -1,4 +1,11 @@
 #!/bin/bash
+
+read -p "Enter source: " SRC
+read -p "Enter destination: " DEST
+read -p "Continue? (Y/N): " confirm && [[ $confirm == [yY] || $confirm == [yY][eE][sS] ]] || exit 1
+
+sbatch <<_EOF
+#!/bin/bash
 #SBATCH -p express
 #SBATCH -t 00:30:00
 #SBATCH -n 32
@@ -12,8 +19,6 @@ date
 
 module load parallel
 
-SRC="/scratch/van/cas9/torchmd"
-DEST="/projects/ok001/van/cas9/torchmd"
 
 find $SRC -maxdepth 2 -type d | \
     parallel -j $SLURM_NTASKS -X \

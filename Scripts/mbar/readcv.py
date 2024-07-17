@@ -6,12 +6,17 @@ import argparse
 def parse_inputs():
     parser = argparse.ArgumentParser()
     parser.add_argument('-p', '--path', type=str)
-    parser.add_argument('-w', '--window', type=str, required=True)
+    parser.add_argument('-w', '--window', type=str)
     return parser.parse_args()
 
-def parse_cvrst(filename):
+def parse_cvrst(window):
+    args = parse_inputs()
     rsts_list = []
-    with open(filename, 'r') as file:
+    if args.window is not None:
+        path=f'{args.window}/cv.rst'
+    else:
+        path=f'{window}/cv.rst'
+    with open(f'{path}', 'r') as file:
         block = []
         for line in file:
             line = line.strip()
@@ -40,17 +45,17 @@ def get_params():
         filename = f'{args.window}/cv.rst'
         print(filename)
     else:
-        filename=path
-    return parse_cvrst(filename)[0]
+        filename='cv.rst'
+    return parse_cvrst()[0]
 
-def get_force_constant(window, filename):
-    params = parse_cvrst(filename)[0]
+def get_force_constant(window="00"):
+    params = parse_cvrst(window)[0]
     if params['rk2'] == params['rk3']:
         force_constant = float(params['rk2'])
     return force_constant
 
-def get_cv_value(window, filename):
-    params = parse_cvrst(filename)[0]
+def get_cv_value(window):
+    params = parse_cvrst(window)[0]
     if params['r2'] == params['r3']:
         cv_value = float(params['r2'])
     return cv_value
