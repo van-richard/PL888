@@ -1,26 +1,23 @@
 #!/bin/bash
 # aliases and functions
 
-# Alias
-##############
-#
-alias la="ls -a"                    # List dot directory/file
-alias lt="ls -lt"                   # List long format (lowercase all) & sort by time
-alias ..="cd ../"                   # Back one directory
-alias ...="cd ../../"               # Back two dirctories
-alias ....="cd ../../../"           # Back three directies
+alias la="ls -la"
+alias lt="ls -lt" 
+alias lta="ls -lta"
+alias ltd="ls -ltd"
+
+alias ..="cd ../"                   
+alias ...="cd ../../"               
+alias ....="cd ../../../"           
+alias .....="cd ../../../../"           
+
+alias vi="vim"
+
 
 # Conda
-alias mfa="source ~/PRograms/miniforge3/etc/profile.d/conda.sh; conda activate"
+alias mfa="source ~/Programs/miniforge3/etc/profile.d/conda.sh; conda activate"
 alias mfd="conda deactivate"
 alias mf="conda"
-
-alias chimera="/Applications/Chimera.app/Contents/MacOs/chimera"
-alias chimerax="/Applications/ChimeraX-1.6.1.app/Contents/MacOS/ChimeraX"
-alias iqmol="/Applications/IQmol.app/Contents/MacOS/IQmol"
-alias rna="java -jar ~/Programs/rnartist/rnartistcore-0.4.6-SNAPSHOT-jar-with-dependencies.jar"
-alias vina="/Applications/vina_1.2.5_mac_x86_64"
-alias vmd="/Applications/VMD-1.9.4.app/Contents/MacOS/startup.command"
 
 # lobos 
 alias jblobos="export LOBOS_JNB_PORT_NUM=8989; ssh -L localhost:\${LOBOS_JNB_PORT_NUM}}:localhost:\${LOBOS_JNB_PORT_NUM} lobos"

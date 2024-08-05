@@ -45,15 +45,24 @@ proc reset_viz {molid} {
     mol showrep 0 0 0 
 
     # Create Rep 1
-#     mol addrep 0
-#     mol modselect 1 0
-#     mol modstyle 1 0 NewCartoon
+    mol addrep 0
+    mol modselect 1 0 all not water
+    mol modstyle 1 0 NewCartoon
 
     # Create Rep 2
-#    mol addrep 0 
-#    mol modselect 2 0 nucleic
- #   mol modstyle 2 0 CPK
- #   mol modcolor 2 0 Type
+    mol addrep 0 
+    mol modselect 2 0 protein
+    mol modstyle 2 0 NewCartoon
+    
+    mol addrep 0 
+    mol modselect 3 0 nucleic
+    mol modstyle 3 0 NewCartoon
+    mol modcolor 3 0 Type
+
+    mol addrep 0
+    mol modselect 4 0 hetero and not water
+    mol modstyle 4 0 CPK
+    mol modstyle 4 0 Type
     }
 }
 proc reset_viz_proxy {args} {
