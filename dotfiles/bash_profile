@@ -19,7 +19,3 @@ export PATH="$(brew --prefix)/opt/gnu-sed/libexec/gnubin:${PATH}" # GNU `sed`
 if [ -f $(brew --prefix)/etc/profile.d/autojump.sh ]; then
     source $(brew --prefix)/etc/profile.d/autojump.sh
 fi
-
-eval "$(fzf --bash)"
-eval "$(zoxide init bash --cmd cd)"
-eval "$(starship init bash)"

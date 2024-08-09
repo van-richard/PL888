@@ -1,6 +1,15 @@
+# conda config file
+# load my conda, run this on interactive node:
+# 
+#   eval "$(/home/van/.Programs/miniforge3/bin/conda shell.bash hook))"; conda activate
+#
+
 channels:
   - conda-forge
 
 default_threads: 8
-changeps1: true
-channel_priority: strict
+notify_outdated_conda: false
+auto_update_base: false
+auto_update_conda: false
+auto_activate_base: true
+change_ps1: true
