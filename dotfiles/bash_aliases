@@ -1,10 +1,14 @@
 #!/bin/bash
 # aliases and functions
 
+alias l="ls -CF"
 alias la="ls -la"
+alias ll="ls -alF"
 alias lt="ls -lt" 
 alias lta="ls -lta"
 alias ltd="ls -ltd"
+alias lth="ls -lt | head"
+alias ltt="ls -lt | tail"
 
 alias ..="cd ../"                   
 alias ...="cd ../../"               
@@ -12,7 +16,8 @@ alias ....="cd ../../../"
 alias .....="cd ../../../../"           
 
 alias vi="vim"
-
+alias pbcopy="xclip -selection clipboard"
+alias pbpaste="xclip -seletion clipboard -o"
 
 # Conda
 alias mfa="source ~/Programs/miniforge3/etc/profile.d/conda.sh; conda activate"
@@ -24,13 +29,6 @@ alias jblobos="export LOBOS_JNB_PORT_NUM=8989; ssh -L localhost:\${LOBOS_JNB_POR
 alias scplobos="scp -rpq -P 1701"
 alias rsynclobos="rsync -a -e -v \'ssh -p 1701\'"
 
-# some more ls aliases
-alias ll='ls -alF'
-alias la='ls -A'
-alias l='ls -CF'
-
-alias pbcopy='xclip -selection clipboard'
-alias pbpaste='xclip -seletion clipboard -o'
 
 # Add an "alert" alias for long running commands.  Use like so:
 #   sleep 10; alert
