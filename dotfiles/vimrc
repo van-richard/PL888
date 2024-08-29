@@ -70,11 +70,26 @@ if has("gui_macvim")
 endif
 
 
+
 """""""""""""""""""""""""""""""
 " vim autocomplete 
 " https://github.com/neoclide/coc.nvim
+"
+" 1. install vim>9.0 
+"
+" sudo add-apt-repository ppa:jonathonf/vim
+" sudo apt update
+" sudo apt install vim
+"
+" 2. install nodejs>16 (with homebrew
+"
+" brew install node@20
+" node -v
+" npm -v
 " 
-call plug#begin('~/.vim/plugged') " Reload .vimrc then :PlugInstall
+" 
+" To install/update, start vim  and run :PlugInstall or :PlugUpdate
+call plug#begin()
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 call plug#end()
 
