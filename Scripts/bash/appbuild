@@ -1,0 +1,16 @@
+#!/bin/bash
+
+if [ -z "${1}" ]; then
+    APP="app"
+    echo "Assume apptainer definition file name: ${APP}.def"
+else
+    if [ $(echo ${1} | tr '.' '\t' | wc -w) -ge 2 ]; then
+        APP=$(echo $1 | awk -F '.' '{print $1}')
+    else
+        APP="${1}"
+    fi
+    echo "Using apptainer definition file name: ${APP}.def"
+fi
+
+
+apptainer build ${APP}.sif ${APP}.def
