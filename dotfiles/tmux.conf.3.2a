@@ -1,0 +1,74 @@
+# tmux 3.2a configuration file
+
+#set -g default-terminal "tmux-256color"
+unbind r
+bind r source-file ~/.tmux.conf; display-message "Reloaded !!!" # one-liner
+
+# prefix - C=control - M=alt
+unbind C-b
+set -g prefix C-s 
+bind-key C-s send-prefix
+
+# split panes key
+unbind '"'; bind '|' split-window -h -c "#{pane_current_path}"  # Horizontal split
+unbind '%'; bind '-' split-window -v -c "#{pane_current_path}"  # Vertical split
+bind -r '>' swap-window -d -t '-1'
+bind -r '<' swap-window -d -t '+1' 
+#bind 'C-p' previous-window                          # Switch window (right)
+#bind 'C-a' next-window                              # Switch window (left)
+
+set -g mouse on
+set -s escape-time 0                                # vim mode switch delay
+set -g display-time 4000                            # Display duration
+set -g base-index 1
+setw -g pane-base-index 1
+setw -g aggressive-resize on                        # Manage multi-display
+set-option -g allow-rename off                      # Rename windows
+set-option -g renumber-windows on
+set -g pane-border-status "top"                       # pane title
+set -g pane-border-format '#{=|-12| =＾● ⋏ ●＾= ...''s|$SSH_TTY|~|:pane_current_path}'
+set -g status-position top
+set -g status-bg white
+set-window-option -g mode-keys vi                   # turn on default vim mode
+
+# TPM !
+set -g @plugin 'tmux-plugins/tpm'                   # https://github.com/tmux-plugins/list?tab=readme-ov-file
+#set -g @plugin 'tmux-plugins/tmux-sensible'         # https://github.com/tmux-plugins/tmux-sensible
+set -g @plugin 'sainnhe/tmux-fzf'                   # https://github.com/sainnhe/tmux-fzf
+#set -g @plugin 'wfxr/tmux-fzf-url'
+#set -g @fzf-url-bind 'x'
+#@set -g @fzf-url-open "firefox"
+set -g @plugin 'tmux-plugins/tmux-yank'
+set -g @yank_selection 'primary' # or 'secondary' or 'clipboard'
+set -g @yank_selection_mouse 'clipboard' # or 'primary' or 'secondary' # mouse mode
+set -g @plugin 'tmux-plugins/tmux-open'
+set -g @open 'o'
+  
+  
+# smart pane switching with awareness of vim splits
+bind h select-pane -L
+bind j select-pane -D
+bind k select-pane -U
+bind l select-pane -R
+
+#  set -g @plugin 'christoomey/vim-tmux-navigator'     # vim + tmux (https://github.com/christoomey/vim-tmux-navigator?tab=readme-ov-file#custom-key-bindings)
+#  #if-shell -b '[ "$(echo "$tmux_version < 3.0" | bc)" = 1 ]' \
+#      "bind-key -n 'C-\\' if-shell \"$is_vim\" 'send-keys C-\\'  'select-pane -l'"
+#  #if-shell -b '[ "$(echo "$tmux_version >= 3.0" | bc)" = 1 ]' \
+#      "bind-key -n 'C-\\' if-shell \"$is_vim\" 'send-keys C-\\\\'  'select-pane -l'"
+#  bind-key -T copy-mode-vi 'C-h' select-pane -L
+#  bind-key -T copy-mode-vi 'C-j' select-pane -D
+#  bind-key -T copy-mode-vi 'C-k' select-pane -U
+#  bind-key -T copy-mode-vi 'C-l' select-pane -R
+#  bind-key -T copy-mode-vi 'C-\' select-pane -l
+#  
+
+set -g @plugin 'tmux-plugins/tmux-resurrect'        # https://github.com/tmux-plugins/tmux-resurrect
+set -g @ressurect-capture-pane-contents 'on'
+set -g @resurrect-strategy-vim 'session'
+set -g @plugin 'tmux-plugins/tmux-continuum'        # https://github.com/tmux-plugins/tmux-continuum
+set -g @coninuum-restore 'on'
+set -g @coninuum-boot 'on'
+
+# Initialize TMUX plugin manager (keep this line at the very bottom of tmux.conf)
+run '~/.tmux/plugins/tpm/tpm'
