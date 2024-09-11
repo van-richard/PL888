@@ -1,0 +1,20 @@
+#!/bin/bash
+
+USERNAME=${1}
+INPUT=${2}
+
+if [ ! -z "{USERNAME}" ]; then
+    echo " "
+    echo "Missing option \$USERNAME"
+    echo "ex: chperm van test"
+    echo " "
+    exit 0
+elif [ ! -z "${INPUT}" ]; then
+    echo " "
+    echo "Missing option \$INPUT (/path/to/file or /path/to/directory)"
+    echo "ex: chperm van test"
+    echo " "
+    exit 0
+fi
+    
+setfacl --recursive --modify user:${USERNAME}:rX,default:user:${USERNAME}:rX ${INPUT}

@@ -1,0 +1,10 @@
+#!/bin/bash
+
+CWD=$(pwd)
+REALPATH=$(realpath ${CWD})
+
+
+echo "Last: ${OLDPWD}"
+echo "Now: ${REALPATH}"
+
+cd $REALPATH

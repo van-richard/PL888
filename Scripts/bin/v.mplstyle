@@ -7,7 +7,12 @@ figure.dpi : 300
 font.size  : 12
 
 xtick.labelsize : 11
-
 ytick.labelsize : 11
-
 legend.fontsize : 10
+
+axes.grid: True
+grid.linestyle: --
+grid.alpha: 0.4
+
+savefig.bbox: tight
+savefig.transparent: True
