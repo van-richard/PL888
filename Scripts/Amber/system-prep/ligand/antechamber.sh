@@ -1,36 +1,44 @@
 #!/bin/bash
 
-LIGAND=$1
-CHARGE_METHOD="bcc"
-VERBOSE=2
-NET_CHARGE=0
-RESNAME="LIG"
-INTERMEDIATE_FILES="yes" # delete
+module load ambertools23
 
-if [ -z "${LIGAND}" ]; then
-    echo "Need a PDB file!!!"
+ligand=$1
+charge_method="bcc"
+verbose=2
+net_charge=0
+resname="lig"
+intermediate_files="yes" # delete
+
+if [ -z "${ligand}" ]; then
+    echo "NOT FOUND: Requires the ligand PDB file!!!"
     exit 1
-else
-    NAME=$(echo ${LIGAND} | sed 's/.pdb//')
 fi
 
-shopt -s expand_aliases
-source ~/.bash_aliases
-mfa ambertools
+if grep -q ".pdb" ${ligand}; then
+    filename=$(awk -F "." '{print $1}')
+    fileformat=$(awk -F "." '{print $1}')
+else
+    echo "Assuming PDB file"
+    filename=${ligand}
+    fileformat="pdb"
+    name=$(echo ${ligand} | sed 's/.pdb//')
+fi
 
 antechamber \
-    -i ${NAME}.pdb \
-    -fi pdb \
-    -o ${NAME}.mol2 \
+    -i ${filename}.${fileformat} \
+    -fi ${fileformat} \
+    -o ${filename}.mol2 \
     -fo mol2 \
-    -c ${CHARGE_METHOD} \
-    -s ${VERBOSE} \
-    -nc ${NET_CHARGE} \
-    -rn ${RESNAME} \
-    -pf ${INTERMEDIATE_FILES}
+    -c ${charge_method} \
+    -s ${verbose} \
+    -nc ${net_charge} \
+    -rn ${resfilename} \
+    -pf ${intermediate_files}
 
-if [ ! -f "${NAME}.frcmod" ]; then
-    parmchk2 -i ${NAME}.mol2 -f mol2 -o ${NAME}.frcmod
+if [ -f parmchk2.sh ] && [ ! -f "${filename}.frcmod" ]; then
+    parmchk2 -i ${filename}.mol2 -f mol2 -o ${NAME}.frcmod
+elif [ ! -f "parmchk2.sh" ] && [ ! -f "${filename}.frcmod" ]; then
+    echo "NOT FOUND: parmchk2.sh - required for frcmod !!!"
 else
     echo "Found frcmod file.. Skipping parmchk2."
 fi

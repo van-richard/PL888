@@ -15,7 +15,7 @@ function check () {
 APPS="/scratch/van/apptainer/apps"
 
 function vmd () {
-    apptainer run ${APPS}/vmd/1.9.4a57/app.sif
+    apptainer run ${APPS}/vmd-1.9.4a57.sif
 }
 
 
