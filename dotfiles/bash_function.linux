@@ -1,0 +1,29 @@
+#!/bin/bash
+
+# gen
+
+function check () {
+    local readonly INP=${1}
+    if [ ! -f ${INP} ];
+        exit 1
+    fi
+}
+
+
+# 
+
+APPS="/scratch/van/apptainer/apps"
+
+function vmd () {
+    apptainer run ${APPS}/vmd/1.9.4a57/app.sif
+}
+
+
+function mfbase () {
+    local readonly OPTS="${1}"
+    if [ -z "${OPTS}" ]; then
+        apptainer shell ${APPS}/miniforge3/base/app.sif
+    else;
+        apptainer shell -${OPTS} ${APPS}/miniforge3/base/app.sif
+    fi
+}
