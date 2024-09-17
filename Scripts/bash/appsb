@@ -1,7 +1,7 @@
 #!/bin/bash
 
 if [ -z "${1}" ]; then
-    APP="app"
+    APP="app.def"
     echo "Assume apptainer definition file name: ${APP}.def"
 else
     if [ $(echo ${1} | tr '.' '\t' | wc -w) -ge 2 ]; then
@@ -17,4 +17,4 @@ if [ -z "${2}" ]; then
     exit 0
 fi
 
-apptainer build --sandbox /tmp/${2} ${APP}.def
+apptainer build --sandbox /tmp/${2} ${APP}

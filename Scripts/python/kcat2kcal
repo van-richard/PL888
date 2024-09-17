@@ -9,7 +9,7 @@ If no value is given,  kcat=1.0 s^-1
 
 Usage:
     
-    ./kcat2kcal [value]
+    ./kcat2kcal kcat units 
 """
 
 Boltzman = 1.3806452e-23 # J / K
@@ -19,7 +19,7 @@ Gas = 8.314 # J / (mol * K)
 Joules_to_cal = 4.184
 
 parser = argparse.ArgumentParser()
-parser.add_argument('--kcat','-kc', type=float, default=1.0,
+parser.add_argument('kcat', type=float, default=1.0,
                    help='Value for kcat - rate constant. (float)')
 parser.add_argument('--unit','-u', choices=['s','min'], default='s',
                     help='Units for rate: per second (s), or per minute (min)')

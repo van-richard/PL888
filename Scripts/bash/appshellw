@@ -12,5 +12,4 @@ else
     echo "Using apptainer definition file name: ${APP}.sif"
 fi
 
-input=$1
-apptainer shell -Ccw $input
+apptainer shell -Ccw "$@"

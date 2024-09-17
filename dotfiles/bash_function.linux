@@ -1,29 +1,30 @@
 #!/bin/bash
 
-# gen
-
-function check () {
-    local readonly INP=${1}
-    if [ ! -f ${INP} ];
-        exit 1
-    fi
+function write () {
+    local MESSAGE="${1}"
+    
+    printf "  ${MESSAGE}\n"
 }
 
-
-# 
-
-APPS="/scratch/van/apptainer/apps"
+# Apptainer
+function apprun () {
+    local APP_ROOT="/scratch/van/apptainer/apps"
+    local APP_FILE="${1}"
+    local APP="${APP_ROOT}/${APP_FILE}"
+    
+    if [ ! -d "${APP_ROOT}" ]; then
+        write "Missing: \${APP_ROOT}=/path/to/apptainer/apps" 
+    elif [ ! -f "${APP}" ]; then
+        write "Missing: \${APP_FILE}=/path/to/apptainer/apps/[FILENAME]" 
+    else
+        apptainer run ${APP}
+    fi
+}
 
 function vmd () {
-    apptainer run ${APPS}/vmd-1.9.4a57.sif
+    apprun vmd-1.9.4.a57.sif
 }
 
-
-function mfbase () {
-    local readonly OPTS="${1}"
-    if [ -z "${OPTS}" ]; then
-        apptainer shell ${APPS}/miniforge3/base/app.sif
-    else;
-        apptainer shell -${OPTS} ${APPS}/miniforge3/base/app.sif
-    fi
+function webdev () {
+    apptainer exec /scratch/van/apptainer/apps/miniforge3/webdev.sif "$@"
 }

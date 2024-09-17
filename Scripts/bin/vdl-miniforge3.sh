@@ -1,0 +1,1 @@
+../bash/vdl-miniforge3.sh

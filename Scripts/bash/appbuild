@@ -12,5 +12,13 @@ else
     echo "Using apptainer definition file name: ${APP}.def"
 fi
 
+n_SIF=$(ls ${APP}.sif | wc -l)
 
-apptainer build ${APP}.sif ${APP}.def
+if [[ "{n_SIF}" -gt 1 ]]; then
+    OUT="${APP}${n_SIF}"
+else;
+    OUT="${APP}"
+fi
+
+
+apptainer build ${OUT}.sif ${APP}.def

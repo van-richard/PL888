@@ -1,10 +1,13 @@
 #!/bin/bash
 
-CWD=$(pwd)
-REALPATH=$(realpath ${CWD})
+function cdpath () {
+    cd "${@}"
+}
 
+CWD=$(pwd)
+REALPATH=$(realpath .)
 
 echo "Last: ${OLDPWD}"
 echo "Now: ${REALPATH}"
 
-cd $REALPATH
+cd $(realpath .)
