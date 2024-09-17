@@ -7,22 +7,8 @@ function write () {
 }
 
 # Apptainer
-function apprun () {
-    local APP_ROOT="/scratch/van/apptainer/apps"
-    local APP_FILE="${1}"
-    local APP="${APP_ROOT}/${APP_FILE}"
-    
-    if [ ! -d "${APP_ROOT}" ]; then
-        write "Missing: \${APP_ROOT}=/path/to/apptainer/apps" 
-    elif [ ! -f "${APP}" ]; then
-        write "Missing: \${APP_FILE}=/path/to/apptainer/apps/[FILENAME]" 
-    else
-        apptainer run ${APP}
-    fi
-}
-
 function vmd () {
-    apprun vmd-1.9.4.a57.sif
+    apptainer exec /scratch/van/apptainer/apps/vmd-1.9.4.a57.sif
 }
 
 function webdev () {

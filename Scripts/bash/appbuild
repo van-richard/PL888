@@ -12,12 +12,15 @@ else
     echo "Using apptainer definition file name: ${APP}.def"
 fi
 
-n_SIF=$(ls ${APP}.sif | wc -l)
-
-if [[ "{n_SIF}" -gt 1 ]]; then
-    OUT="${APP}${n_SIF}"
-else;
-    OUT="${APP}"
+if [ -f "${APP}.sif" ]; then
+    n_SIF=$(ls ${APP}.sif | wc -l)
+    if [ "{n_SIF}" == "1" ]; then
+        OUT="${APP}${n_SIF}"
+    else
+        OUT="${APP}"
+    fi
+else
+    exit 0
 fi
 
 
