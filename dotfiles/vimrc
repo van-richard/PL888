@@ -2,8 +2,10 @@
 
 " line numbers
 set number
+
 " syntax highlight
 syntax on
+
 " ignore case in search
 set ignorecase
 set smartcase
@@ -44,9 +46,9 @@ set autoread
 au FocusGained, BufEnter * silent? checktime
 
 " spell check
-map <leader>ss :setlocal spell check!!<cr>
+map <leader>ss :setlocal spell!<cr>
 
-" files/backup/undo
+" files/backup
 set noswapfile
 " set nobackup
 set nowb
@@ -68,7 +70,6 @@ set tm=500
 if has("gui_macvim")
         autocmd GUIEnter * set vb t_vb
 endif
-
 
 
 """""""""""""""""""""""""""""""
