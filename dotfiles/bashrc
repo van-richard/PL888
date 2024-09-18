@@ -144,8 +144,8 @@ if ! shopt -oq posix; then
   fi
 fi
 
-source ~/Programs/miniforge3/bin/activate
 eval "$(zoxide init bash --cmd cd)"
+eval "$(fzf --bash)"
 
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
