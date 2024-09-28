@@ -1,1 +1,1 @@
-../bash/vdl-miniforge3.sh
+../bash/vdownloadmf3.sh

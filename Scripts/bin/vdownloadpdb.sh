@@ -1,1 +1,1 @@
-../bash/vdl-pdb
+../bash/vdownloadpdb.sh

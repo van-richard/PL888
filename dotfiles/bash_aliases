@@ -29,7 +29,7 @@ if [ "${HOSTNAME}" == "lynnx" ]; then
 fi
 
 # Conda
-alias mfa="source ${USER}/Programs/miniforge3/etc/profile.d/conda.sh; conda activate"
+alias mfa="source ${HOME}/Programs/miniforge3/etc/profile.d/conda.sh; conda activate"
 alias mfd="conda deactivate"
 alias mf="conda"
 
