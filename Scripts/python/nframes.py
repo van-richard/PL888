@@ -1,4 +1,7 @@
 #!/scratch/van/shared_envs/ambertools23/bin/python
+"""
+Get number of frames from Amber trajectory (.nc)
+"""
 import os
 import sys
 from glob import glob
