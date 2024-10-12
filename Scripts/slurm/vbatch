@@ -1,7 +1,0 @@
-#!/bin/bash
-
-script="${2}"
-
-checkfor ${script}
-
-sbatch -J $(basename $(pwd)) ${script}

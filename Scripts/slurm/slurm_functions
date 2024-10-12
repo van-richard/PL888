@@ -1,0 +1,7 @@
+#!/bin/bash
+
+function vbatch () {
+    local script="${2}"
+    checkfor ${script}
+    sbatch -J $(basename $(pwd)) ${script}
+}
