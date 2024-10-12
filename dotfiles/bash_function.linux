@@ -1,16 +1,32 @@
 #!/bin/bash
 
-function write () {
+function writemess () {
     local MESSAGE="${1}"
-    
     printf "  ${MESSAGE}\n"
 }
 
 # Apptainer
-function vmd () {
-    apptainer exec /scratch/van/apptainer/apps/vmd-1.9.4.a57.sif
+function vmdapp () {
+    #apptainer exec /archive/van/apptainer/apps/vmd-1.9.4.a57.sif "$@"
+    $APP_PATH/vmd.sif
 }
 
-function webdev () {
-    apptainer exec /scratch/van/apptainer/apps/miniforge3/webdev.sif "$@"
+function webdevapp () {
+    apptainer exec /archive/van/apptainer/apps/miniforge3/webdev.sif "$@"
 }
+
+#
+# MINICONDA
+#
+function mfa () {
+    if [ -d "${HOME}/Programs/miniforge3" ]; then
+        source ${HOME}/Programs/miniforge3/etc/profile.d/conda.sh
+    elif [ -d /opt/conda ]; then
+        source /opt/conda/etc/profile.d/conda.sh
+    fi
+    conda info
+    conda activate "$@"
+}
+
+
+

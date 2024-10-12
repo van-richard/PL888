@@ -12,9 +12,9 @@ alias lt="ls -lt"
 alias lta="ls -lta"
 alias ltd="ls -ltd"
 alias lth="ls -lt | head"
+alias lht="lth"
 alias ltt="ls -lt | tail"
 
-alias cdreal="cd $(realpath .)"
 alias ..="cd ../"                   
 alias ...="cd ../../"               
 alias ....="cd ../../../"           
@@ -29,17 +29,18 @@ if [ "${HOSTNAME}" == "lynnx" ]; then
 fi
 
 # Conda
-alias mfa="source ${HOME}/Programs/miniforge3/etc/profile.d/conda.sh; conda activate"
+#alias mfa="source /opt/conda/etc/profile.d/conda.sh; conda activate"
+#alias mfa="source ${HOME}/Programs/miniforge3/etc/profile.d/conda.sh; conda activate"
 alias mfd="conda deactivate"
 alias mf="conda"
 
 # lobos 
-alias jblobos="export LOBOS_JNB_PORT_NUM=8989; ssh -L localhost:\${LOBOS_JNB_PORT_NUM}}:localhost:\${LOBOS_JNB_PORT_NUM} lobos"
-alias scplobos="scp -rpq -P 1701"
-alias rsynclobos="rsync -a -e -v \'ssh -p 1701\'"
+#alias jblobos="export LOBOS_JNB_PORT_NUM=8989; ssh -L localhost:\${LOBOS_JNB_PORT_NUM}}:localhost:\${LOBOS_JNB_PORT_NUM} lobos"
+#alias scplobos="scp -rpq -P 1701"
+#alias rsynclobos="rsync -a -e -v \'ssh -p 1701\'"
 
 
 # Add an "alert" alias for long running commands.  Use like so:
 #   sleep 10; alert
-alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
+#alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
 
