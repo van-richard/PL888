@@ -1,5 +1,5 @@
 #!/bin/bash
-# Bash login shells start by reading:
+# For MacOS
 # Settings here are for important, one-time things when Bash starts up.
 
 export BASH_SILENCE_DEPRECATION_WARNING=1

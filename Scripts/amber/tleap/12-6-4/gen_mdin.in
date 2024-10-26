@@ -1,0 +1,355 @@
+#!/bin/bash
+
+cat <<_EOF > min.in
+Minimization input file in explicit solvent
+ &cntrl
+    ! Minimization options
+    imin=1,        ! Turn on minimization
+    maxcyc=1000,   ! Maximum number of minimization cycles
+    ncyc=1000,     ! 100 steepest-descent steps, better for strained systems
+
+    ! Potential energy function options
+    cut=9.0,       ! nonbonded cutoff, in angstroms
+
+    ! Control how often information is printed to the output file
+    ntpr=100,      ! Print energies every 100 steps
+    ntxo=2,        ! Write NetCDF format
+
+    ! Restraint options
+    ntr=1,         ! Positional restraints for proteins, sugars, ligands, and lipid head groups
+    restraint_wt=300,
+    restraintmask='! (@H=) &!(:WAT| @Na+=)'
+ /
+
+_EOF
+
+cat <<_EOF > heat1.in
+A NVT simulation for common production-level simulations
+ &cntrl
+    imin=0,        ! No minimization
+    irest=0,       ! This is NOT a restart of an old MD simulation
+    ntx=1,         ! So our inpcrd file has no velocities
+
+    ! Temperature control
+    ntt=3,         ! Langevin dynamics
+    gamma_ln=1.0,  ! Friction coefficient (ps^-1)
+    tempi=0,   ! Initial temp -- give it some small random velocities
+    temp0=50,   ! Target temperature
+
+    ! Potential energy control
+    cut=9.0,       ! nonbonded cutoff, in angstroms
+
+    ! MD settings
+    nstlim=5000, ! 125K steps, 125 ps total
+    dt=0.001,      ! time step (ps)
+
+    ! SHAKE
+    ntc=2,         ! Constrain bonds containing hydrogen
+    ntf=2,         ! Do not calculate forces of bonds containing hydrogen
+
+    ! Control how often information is printed
+    ntpr=1000,     ! Print energies every 1000 steps
+    ntwx=5000,     ! Print coordinates every 5000 steps to the trajectory
+    ntwr=10000,    ! Print a restart file every 10K steps (can be less frequent)
+!   ntwv=-1,       ! Uncomment to also print velocities to trajectory
+!   ntwf=-1,       ! Uncomment to also print forces to trajectory
+    ntxo=2,        ! Write NetCDF format
+    ioutfm=1,      ! Write NetCDF format (always do this!)
+
+    ! Wrap coordinates when printing them to the same unit cell
+    iwrap=1,
+
+    ! Restraint options
+    ntr=1,         ! Positional restraints for proteins, sugars, ligands, and lipid head groups
+    restraint_wt=100,
+    restraintmask='! (@H=) &!(:WAT| @Na+=)'
+ /
+
+_EOF 
+
+cat <<_EOF > heat2.in
+A NVT simulation for common production-level simulations
+ &cntrl
+    imin=0,        ! No minimization
+    irest=0,       ! This is NOT a restart of an old MD simulation
+    ntx=1,         ! So our inpcrd file has no velocities
+
+    ! Temperature control
+    ntt=3,         ! Langevin dynamics
+    gamma_ln=1.0,  ! Friction coefficient (ps^-1)
+    tempi=50,   ! Initial temp -- give it some small random velocities
+    temp0=100,   ! Target temperature
+
+    ! Potential energy control
+    cut=9.0,       ! nonbonded cutoff, in angstroms
+
+    ! MD settings
+    nstlim=5000, ! 125K steps, 125 ps total
+    dt=0.001,      ! time step (ps)
+
+    ! SHAKE
+    ntc=2,         ! Constrain bonds containing hydrogen
+    ntf=2,         ! Do not calculate forces of bonds containing hydrogen
+
+    ! Control how often information is printed
+    ntpr=1000,     ! Print energies every 1000 steps
+    ntwx=5000,     ! Print coordinates every 5000 steps to the trajectory
+    ntwr=10000,    ! Print a restart file every 10K steps (can be less frequent)
+!   ntwv=-1,       ! Uncomment to also print velocities to trajectory
+!   ntwf=-1,       ! Uncomment to also print forces to trajectory
+    ntxo=2,        ! Write NetCDF format
+    ioutfm=1,      ! Write NetCDF format (always do this!)
+
+    ! Wrap coordinates when printing them to the same unit cell
+    iwrap=1,
+
+    ! Restraint options
+    ntr=1,         ! Positional restraints for proteins, sugars, ligands, and lipid head groups
+    restraint_wt=100,
+    restraintmask='! (@H=) &!(:WAT| @Na+=)'
+ /
+
+_EOF
+
+
+cat <<_EOF > density1.in
+A NPT simulation for common production-level simulations
+ &cntrl
+    imin=0,        ! No minimization
+    irest=1,       ! This IS a restart of an old MD simulation
+    ntx=5,         ! So our inpcrd file has velocities
+
+    ! Temperature control
+    ntt=3,         ! Langevin dynamics
+    gamma_ln=1.0,  ! Friction coefficient (ps^-1)
+    temp0=200,   ! Target temperature
+
+    ! Potential energy control
+    cut=9.0,       ! nonbonded cutoff, in angstroms
+
+    ! MD settings
+    nstlim=100000, ! 100K steps, 100 ps total
+    dt=0.001,      ! time step (ps)
+
+    ! SHAKE
+    ntc=2,         ! Constrain bonds containing hydrogen
+    ntf=2,         ! Do not calculate forces of bonds containing hydrogen
+
+    ! Control how often information is printed
+    ntpr=1000,     ! Print energies every 1000 steps
+    ntwx=5000,     ! Print coordinates every 5000 steps to the trajectory
+    ntwr=10000,    ! Print a restart file every 10K steps (can be less frequent)
+!   ntwv=-1,       ! Uncomment to also print velocities to trajectory
+!   ntwf=-1,       ! Uncomment to also print forces to trajectory
+    ntxo=2,        ! Write NetCDF format
+    ioutfm=1,      ! Write NetCDF format (always do this!)
+
+    ! Wrap coordinates when printing them to the same unit cell
+    iwrap=1,
+
+    ! Constant pressure control.
+    barostat=1,    ! Berendsen barostat... change to 2 for MC
+    ntp=1,         ! 1=isotropic, 2=anisotropic, 3=semi-isotropic w/ surften
+    pres0=1.0,     ! Target external pressure, in bar
+    taup=1.0,
+
+    ! Restraint options
+    ntr=1,         ! Positional restraints for proteins, sugars, ligands, and lipid head groups
+    restraint_wt=25,
+    restraintmask='! (@H=) &!(:WAT| @Na+=)'
+ /
+
+_EOF
+
+cat <<_EOF > denisty2.in
+A NPT simulation for common production-level simulations
+ &cntrl
+    imin=0,        ! No minimization
+    irest=1,       ! This IS a restart of an old MD simulation
+    ntx=5,         ! So our inpcrd file has velocities
+
+    ! Temperature control
+    ntt=3,         ! Langevin dynamics
+    gamma_ln=1.0,  ! Friction coefficient (ps^-1)
+    temp0=300,   ! Target temperature
+
+    ! Potential energy control
+    cut=9.0,       ! nonbonded cutoff, in Angstroms
+
+    ! MD settings
+    nstlim=500000, ! 500 ps total
+    dt=0.001,      ! time step (ps)
+
+    ! SHAKE
+    ntc=2,         ! Constrain bonds containing hydrogen
+    ntf=2,         ! Do not calculate forces of bonds containing hydrogen
+
+    ! Control how often information is printed
+    ntpr=1000,     ! Print energies every 1000 steps
+    ntwx=50000,    ! Print coordinates every 50000 steps to the trajectory
+    ntwr=10000,    ! Print a restart file every 10K steps (can be less frequent)
+!   ntwv=-1,       ! Uncomment to also print velocities to trajectory
+!   ntwf=-1,       ! Uncomment to also print forces to trajectory
+    ntxo=2,        ! Write NetCDF format
+    ioutfm=1,      ! Write NetCDF format (always do this!)
+
+    ! Wrap coordinates when printing them to the same unit cell
+    iwrap=1,
+
+    ! Constant pressure control.
+    barostat=1,    ! Berendsen barostat... change to 2 for MC
+    ntp=1,         ! 1=isotropic, 2=anisotropic, 3=semi-isotropic w/ surften
+    pres0=1.0,     ! Target external pressure, in bar
+    taup=1.0
+
+/
+
+_EOF
+
+cat <<_EOF > prod.in
+A NPT simulation for common production-level simulations
+ &cntrl
+    imin=0,        ! No minimization
+    irest=1,       ! This IS a restart of an old MD simulation
+    ntx=5,         ! So our inpcrd file has velocities
+
+    ! Temperature control
+    ntt=3,         ! Langevin dynamics
+    gamma_ln=1.0,  ! Friction coefficient (ps^-1)
+    temp0=300,   ! Target temperature
+
+    ! Potential energy control
+    cut=9.0,       ! nonbonded cutoff, in Angstroms
+
+    ! MD settings
+    nstlim=5000000, ! 2 ns total
+    dt=0.002,      ! time step (ps)
+
+    ! SHAKE
+    ntc=2,         ! Constrain bonds containing hydrogen
+    ntf=2,         ! Do not calculate forces of bonds containing hydrogen
+
+    ! Control how often information is printed
+    ntpr=1000,     ! Print energies every 1000 steps
+    ntwx=50000,    ! Print coordinates every 50000 steps to the trajectory
+    ntwr=10000,    ! Print a restart file every 10K steps (can be less frequent)
+!   ntwv=-1,       ! Uncomment to also print velocities to trajectory
+!   ntwf=-1,       ! Uncomment to also print forces to trajectory
+    ntxo=2,        ! Write NetCDF format
+    ioutfm=1,      ! Write NetCDF format (always do this!)
+
+    ! Wrap coordinates when printing them to the same unit cell
+    iwrap=1,
+
+    ! Constant pressure control.
+    barostat=1,    ! Berendsen barostat... change to 2 for MC
+    ntp=1,         ! 1=isotropic, 2=anisotropic, 3=semi-isotropic w/ surften
+    pres0=1.0,     ! Target external pressure, in bar
+    taup=1.0
+
+/
+
+_EOF
+
+
+cat <<_EOF > runeq.sh
+#!/bin/bash
+#SBATCH --partition=gpu_kepler
+#SBATCH --exclusive
+#SBATCH --ntasks=20
+#SBATCH --ntasks-per-node=20
+#SBATCH --output=%j.out
+#SBATCH --error=%j.err
+#SBATCH --time=48:00:00
+#SBATCH --job-name=cas9
+
+date
+source /home/panxl/intel/bin/compilervars.sh intel64
+source /home/panxl/intel/impi/2019.5.281/intel64/bin/mpivars.sh
+source /home/panxl/amber20/amber.sh
+export I_MPI_PMI_LIBRARY=/usr/lib64/libpmi.so
+module load CUDA/10.1.243-GCC-8.3.0
+
+pmemd="pmemd.cuda"
+
+#pmemd="srun -n \${SLURM_NTASKS} pmemd.MPI"
+
+# Minimisation
+init="cas9_mg_5f9r"
+
+\$pmemd \
+ -i min.in -p \${init}.parm7 -c \${init}.inpcrd \
+ -O -o min.out -r min.rst7 -inf min.mdinfo -ref \${init}.inpcrd -x min.nc 
+
+echo "Minimisation Done..."
+
+# Heating at 0 K.
+\$pmemd \
+-i heat1.in -p \${init}.parm7 -c min.rst7 \
+-O -o heat1.out -r heat1.rst7 -inf heat1.mdinfo -ref \${init}.inpcrd -x heat1.nc
+
+echo "Equilibration from 0K Done..."
+
+# Heating at 100 K.
+\$pmemd \
+-i heat2.in -p \${init}.parm7 -c heat1.rst7 \
+-O -o heat2.out -r heat2.rst7 -inf heat2.mdinfo -ref \${init}.inpcrd -x heat2.nc
+
+echo "Equilibration from 100K Done..."
+
+# Density  at 200 K.
+\$pmemd \
+-i density1.in -p \${init}.parm7 -c heat2.rst7 \
+-O -o density1.out -r density1.rst7 -inf density1.mdinfo -ref \${init}.inpcrd -x density1.nc
+
+echo "Density at 200K Done..."
+
+# Density  at 300 K.
+\$pmemd \
+-i density2.in -p \${init}.parm7 -c density1.rst7 \
+-O -o density2.out -r density2.rst7 -inf density2.mdinfo -ref \${init}.inpcrd -x density2.nc
+
+echo "Density at 300K Done..."
+
+date
+_EOF
+
+
+cat <<_EOF > runprod.sh
+#!/bin/bash
+#SBATCH --partition=gpu_kepler
+#SBATCH --exclusive
+#SBATCH --ntasks=20
+#SBATCH --ntasks-per-node=20
+#SBATCH --output=%j.out
+#SBATCH --error=%j.err
+#SBATCH --time=48:00:00
+#SBATCH --job-name=cas9
+
+date
+source /home/panxl/intel/bin/compilervars.sh intel64
+source /home/panxl/intel/impi/2019.5.281/intel64/bin/mpivars.sh
+source /home/panxl/amber20/amber.sh
+export I_MPI_PMI_LIBRARY=/usr/lib64/libpmi.so
+module load CUDA/10.1.243-GCC-8.3.0
+
+pmemd="pmemd.cuda"
+
+#pmemd="srun -n \${SLURM_NTASKS} pmemd.MPI"
+
+date
+
+init="cas9_mg_5f9r"
+
+# Production  at 300 K.
+\$pmemd \
+-i prod.in -p \${init}.parm7 -c density2.rst7 \
+-O -o prod.out -r prod.rst7 -inf prod.mdinfo -ref \${init}.inpcrd -x prod.nc
+
+echo "Production at 300K Done..."
+
+date
+
+_EOF
+
+

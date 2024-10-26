@@ -1,5 +1,3 @@
-#
-
 # Configure VMD window location on startup
 menu main on ; menu main move 1100 200
 menu graphics on ; menu graphics move 1100 500

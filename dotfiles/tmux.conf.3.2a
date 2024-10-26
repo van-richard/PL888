@@ -1,7 +1,6 @@
 # tmux 3.2a configuration file
 
-#set -g default-terminal "tmux-256color"
-unbind r
+#unbind r
 bind r source-file ~/.tmux.conf; display-message "Reloaded !!!" # one-liner
 
 # prefix - C=control - M=alt
@@ -14,8 +13,8 @@ unbind '"'; bind '|' split-window -h -c "#{pane_current_path}"  # Horizontal spl
 unbind '%'; bind '-' split-window -v -c "#{pane_current_path}"  # Vertical split
 bind -r '>' swap-window -d -t '-1'
 bind -r '<' swap-window -d -t '+1' 
-#bind 'C-p' previous-window                          # Switch window (right)
-#bind 'C-a' next-window                              # Switch window (left)
+bind 'C-p' previous-window                          # Switch window (right)
+bind 'C-a' next-window                              # Switch window (left)
 
 set -g mouse on
 set -s escape-time 0                                # vim mode switch delay

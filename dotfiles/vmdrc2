@@ -1,25 +1,74 @@
 menu main on
 menu main move 900 5 
-
-# menu files on
-# menu files move 5 575 
-
-menu graphics on
-menu graphics move 1200 200 
+menu graphics on ; menu graphics move 900 30
 
 display resize 1000 1000
 display reposition 300 800
 display projection orthographic
-axes location off
-stage location off
 
-color Display Background white
-color Labels Bonds black
-
-# turn on lights 0 and 1
+display depthcue on
+display culling off
+display fps off
+display stereoswap off
+display rendermode Normal
+display shadows off
+display ambientocclusion off
+display aoambient 0.80
+display aodirect 0.30
+display stereo "Off"
+axes location Off
 light 0 on
 light 1 on
 light 2 off
 light 3 off
+      
+# Colors
+color add item Display Background white
+color Display Background white
+color Labels Bonds black
+color Type C iceblue
 
+# Load default representations of molecules after VMD initialization.
+proc reset_viz {molid} {
+    # operate only on existing molecules
+    if {[lsearch [molinfo list] $molid] >= 0} {
+        # Get number of Reps
+        set numrep [molinfo $molid get numreps] 
+        for {set i 0} {$i < $numrep} {incr i} {
+            # Delete all Reps
+            mol delrep $i $molid 
+        }
+    # Create Rep 0
+    mol addrep $molid 
+    mol showrep 0 0 0 
 
+    # Create Rep 1
+    mol addrep 0
+    mol modselect 1 0 all not water
+    mol modstyle 1 0 NewCartoon
+
+    # Create Rep 2
+    mol addrep 0 
+    mol modselect 2 0 protein
+    mol modstyle 2 0 NewCartoon
+    
+    mol addrep 0 
+    mol modselect 3 0 nucleic
+    mol modstyle 3 0 NewCartoon
+    mol modcolor 3 0 Type
+
+    mol addrep 0
+    mol modselect 4 0 hetero and not water
+    mol modstyle 4 0 CPK
+    mol modstyle 4 0 Type
+    }
+}
+proc reset_viz_proxy {args} {
+  foreach {fname molid rw} $args {}
+  eval "after idle {reset_viz $molid}"
+}
+
+## hook up the function.
+trace variable vmd_initialize_structure w reset_viz_proxy
+# take care of molecule loaded at st
+after idle { reset_viz 0}

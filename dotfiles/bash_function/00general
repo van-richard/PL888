@@ -1,0 +1,9 @@
+#!/bin/bash
+
+
+function writemess () {
+    local MESSAGE="${1}"
+    printf "  ${MESSAGE}\n"
+}
+
+

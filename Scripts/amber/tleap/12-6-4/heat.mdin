@@ -1,19 +1,20 @@
-A NPT simulation for common production-level simulations
+A NVT simulation for common production-level simulations
  &cntrl
     imin=0,        ! No minimization
-    irest=1,       ! This IS a restart of an old MD simulation
-    ntx=5,         ! So our inpcrd file has velocities
+    irest=0,       ! This is NOT a restart of an old MD simulation
+    ntx=1,         ! So our inpcrd file has no velocities
 
     ! Temperature control
     ntt=3,         ! Langevin dynamics
-    gamma_ln=5.0,  ! Friction coefficient (ps^-1)
+    gamma_ln=1.0,  ! Friction coefficient (ps^-1)
+    tempi=0,   ! Initial temp -- give it some small random velocities
     temp0=300,   ! Target temperature
 
     ! Potential energy control
     cut=12.0,       ! nonbonded cutoff, in angstroms
 
     ! MD settings
-    nstlim=5000000,! 2ns total
+    nstlim=250000,! 2ns total
     dt=0.001,      ! time step (ps)
 
     ! SHAKE
@@ -23,7 +24,7 @@ A NPT simulation for common production-level simulations
     ! Control how often information is printed
     ntpr=50000,     ! Print energies every 1000 steps
     ntwx=50000,     ! Print coordinates every 5000 steps to the trajectory
-    ntwr=50000,    ! Print a restart file every 10K steps (can be less frequent)
+    ntwr=100000,    ! Print a restart file every 10K steps (can be less frequent)
 !   ntwv=-1,       ! Uncomment to also print velocities to trajectory
 !   ntwf=-1,       ! Uncomment to also print forces to trajectory
     ntxo=2,        ! Write NetCDF format
@@ -32,12 +33,16 @@ A NPT simulation for common production-level simulations
     ! Wrap coordinates when printing them to the same unit cell
     iwrap=1,
 
-    ! Constant pressure control.
-    barostat=1,    ! Berendsen barostat... change to 2 for MC
-    ntp=1,         ! 1=isotropic, 2=anisotropic, 3=semi-isotropic w/ surften
-    pres0=1.0,     ! Target external pressure, in bar
-    taup=1.0,
+    ! Restraint options
+    ntr=1,                          ! Positional restraints
+    restraint_wt=0.25,               !weight for cartesian restraints
+    restraintmask="(:MG&@C=)",    !restrained atoms
+ /
 
+ &ewald
+ / 
+
+ &wt type = 'END'
  /
 
 

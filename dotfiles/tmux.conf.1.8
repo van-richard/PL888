@@ -1,9 +1,6 @@
-# tmux config (v 3.4)
-#set-option -sa terminal-overrides ",xterm*:Tc"
-#set -g default-terminal "tmux-256color"
+# tmux config (v 1.8)
 
 #unbind r
-#bind r source-file ~/.tmux.conf
 bind r source-file ~/.tmux.conf \; display-message "Reloaded !!!" # one-liner
 
 # prefix - C=control - M=alt
@@ -52,4 +49,4 @@ set-window-option -g allow-rename off                      # Rename windows
 set-window-option -g renumber-windows on
 set-window-option -g mode-keys vi                   # turn on default vim mode
 
-set -g status-position top
+set -g status-position bottom
