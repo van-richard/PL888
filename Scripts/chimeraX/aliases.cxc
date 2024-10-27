@@ -1,0 +1,9 @@
+alias savepng save ~/Desktop/$1.png supersample 3 transparentbackground True
+alias savemoviespinmovie record supersample 3; turn y 2 180 ; wait 180; movie encode ~/Desktop/$1.mp4 
+alias sil graphics silhouettes width 1
+alias tpribbon transparency $1 80 ribbon
+alias tpatoms transparency $1 80 atoms
+alias notpribbon transparency $1 0 ribbon
+alias notpatoms transparency $1 0 atoms
+
+alias c color bychain; color byhetero

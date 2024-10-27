@@ -1,4 +1,0 @@
-[
-    {"repoName": "CodingNotes", "branch": "dev, main"},
-    {"repoName": "CodingNotes", "branch": "dev, main"}
-]

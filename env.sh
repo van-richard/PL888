@@ -11,20 +11,24 @@ if ! grep -q "umask 027" $HOME/.bashrc; then
 fi
 
 # Add my custom modulefiles, persist configuration on future logins
-#   See /home/van/modules.sh for more information
 if ! grep -q "source $MOD_ENV" $HOME/.bashrc; then
     echo "# Add custom modules on login" >> $HOME/.bashrc
     echo "source $MOD_ENV" >> $HOME/.bashrc
-fi
-if grep -q "source /home/van/modules.sh" $HOME/.bashrc; then
+else
     echo "Please remove this line: source /home/van/modules.sh - VAN"
+    exit 1
 fi
 
 # Add my bash commands/scripts to environment, persist configuration on future logins
-#   See /home/van/Scripts/bin for more information
 if ! grep -q "PATH=/home/van/Scripts/bin" $HOME/.bashrc; then
     echo "# Add van's custom bash commands/scripts on login" >> $HOME/.bashrc
     echo "export PATH=/home/van/Scripts/bin:\${PATH}" >> $HOME/.bashrc
+fi
+
+# Persist changes to environment on future logins
+if ! grep -q "source $NEW_ENV" $HOME/.bashrc; then
+    echo "# Add custom environment to ~/.bashrc" >> $HOME/.bashrc
+    echo "source $NEW_ENV" >> $HOME/.bashrc
 fi
 
 # Persist changes to environment on future logins
