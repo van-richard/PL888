@@ -1,18 +1,16 @@
 --- Point to package 
-local PkgDir = "/projects/ok001/Programs/"
-local Pkg    = "ADFRsuite"
+local PkgDir = "/scratch/van/Programs"
+local Pkg    = "autodock"
 local Base   = tostring(pathJoin(PkgDir, Pkg))
-local Miniforge = "/home/van/.Programs/miniforge3"
-local CondaEnv = "vina"
+--- local Miniforge = "/home/van/.Programs/miniforge3"
+--- local CondaEnv = "vina"
+
+load("vina")
+
 
 prepend_path( "PATH"             , pathJoin(Base, "bin"))
 prepend_path( "LD_LIBRARY_PATH"  , pathJoin(Base, "lib"))
 
-
--- python
-conda_sh = pathJoin(Miniforge, "etc", "profile.d", "conda.sh")
-cmd = "source "..conda_sh.."; conda activate "..CondaEnv
-execute{cmd=cmd, modeA={"load"}}
 
 if (mode() == "unload") then
     remove_path("PATH", pathJoin(Base, "bin"))

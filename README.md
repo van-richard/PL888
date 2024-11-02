@@ -14,13 +14,12 @@ git clone https://github.com/van-richard/PL888.git
 ```
 
 - `source` the file, `PL888/env.sh` to fix permissions on Pete, add my custom modules, and scripts
+- Should only need to do this once, changes will persist on login
 
 ```bash
 source $HOME/Programs/PL888/env.sh
 ```
 
-```{note}
-You will only need to do this once, changes will persist on login
-```
+- This file
 
 
