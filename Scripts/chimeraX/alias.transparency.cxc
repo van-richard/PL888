@@ -1,0 +1,8 @@
+alias cleanview hide atoms,cartoons,surfaces
+alias setthe cleanview; sel $1
+alias setprotein setthe protein; show sel cartoons; ~sel
+alias setligand setthe ligand,:UNL; show sel atoms; style sel stick; ~sel
+alias setucleic setthe nucleic; show sel cartoons; style sel stick; ~sel
+
+alias setopacity transparency sel $2 $3; ~sel
+
