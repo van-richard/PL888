@@ -1,0 +1,12 @@
+$STRINGSETUP
+dir = "results/"
+guess_file = "guess"
+!params_file = "parameters2.dat"
+preparation_steps = 0
+REX_period = 100
+fix_ends = .true.
+!read_M = .true.
+only_PMF = .false.
+!force_constant = 250.0
+!force_constant_d = 50.0
+$END

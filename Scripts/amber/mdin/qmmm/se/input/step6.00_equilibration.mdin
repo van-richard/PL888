@@ -9,13 +9,11 @@ A NVT simulation for SINR THERMOSTAT production-level simulations
     ntp=0,         ! No pressure control
 
     ! Temperature control
-    ntt=12,         ! Langevin dynamics
+    ntt=3,         ! Langevin dynamics
     gamma_ln=1.0,  ! Friction coefficient (ps^-1)
     tempi=10.0,    ! Initial temp -- give it some small random velocities
     temp0=300.0,   ! Target temperature
     ig=-1,         ! Random number seed
-    nkija=4,
-    sinrtau=0.05,
 
     ! Potential energy control
     cut=10.0,      ! nonbonded cutoff, in Angstroms
@@ -58,7 +56,7 @@ A NVT simulation for SINR THERMOSTAT production-level simulations
 
  &qmmm
     ! QM atoms
-    qmmask='(__QMMASK__)',
+    qmmask="__QMMASK__",
 
     ! QM settings
     qm_theory='__QMTHEORY__',
@@ -73,11 +71,6 @@ A NVT simulation for SINR THERMOSTAT production-level simulations
     qm_pme=__QMPME__,      ! Use PME for QM-MM electrostatic interactions
     qmmm_switch=__QMSWITCH__, ! Switching for QM-MM
     writepdb=1,    ! Check QM atoms
- /
-
- &qmhub
-  config="qmhub.ini",
-  basedir="__QMHUBSCRATCH__",
  /
 
  &wt type='DUMPFREQ', istep1=10 /

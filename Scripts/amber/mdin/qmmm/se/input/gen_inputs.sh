@@ -2,17 +2,20 @@
 # Prepare QMMM free energy simulations 
 # Umbrella sampling 
 
-MDRST="step3_pbcsetup.ncrst"
-QMMASK='\(\:324,303\&\!\@N,H,CA,HA,C,O\)\|\(:14\&\@410-416\)|\(\:13\&\!\@378-384\)|\:371,611,612,601,729'
-QMTHEORY="PM3" # EXTERN = QMHub .. or give semi-empirical method 
-QMCHARGE="+1"
-total_num_w=20
+
+init="step3_pbcsetup_1264"
+MDRST="prod00.rst7"
+QMMASK="\(\:1010,1066,1081,1358\&\!\@N,H,CA,HA,C,O\)\|\(:1424\&\@24369-24375\)|\(\:1423,1498\&\!\@P,OP1,OP2,O5\'\)"
+QMTHEORY="PM3" #= QMHub .. or give semi-empirical method 
+QMCHARGE="-1"
+total_num_w=40
 
 # Dont't change this
-cwd=$(realpath ..)
-inp_dir="${cwd}/input"
+cwd=$(realpath ../)
+inp_dir="../input"
 n_windows=$(echo "${total_num_w}-1" | bc)
 
+# start
 cd ${cwd}
 seq -w 0 ${n_windows} > list
 windows=($(cat list))
@@ -25,21 +28,16 @@ for window in "${windows[@]}"; do
     cp ${inp_dir}/step6.00_equilibration.mdin .
 
     if [ ${window} == "00" ]; then
-        ln -sf ${inp_dir}/${MDRST}  step5.00_equilibration_inp.ncrst
+        ln -sf ${inp_dir}/${MDRST} step5.00_equilibration_inp.rst7
         IREST=0
         NTX=1
+        sed -i "s/__IREST__/${IREST}/;s/__NTX__/${NTX}/" step5.00_equilibration.mdin
+        sed "s/0/${IREST}/;s/1/${NTX}/;s/step5.00/step5.01/" step5.00_equilibration.mdin > step5.01_equilibration.mdin
     else
         IREST=1
         NTX=5
-    fi
-    
-    sed -i "s/__IREST__/${IREST}/;s/__NTX__/${NTX}/" step5.00_equilibration.mdin
-    
-    # Setup MD input for reverse 
-    if [ ${window} == "00" ]; then
-        sed "s/0/${IREST}/;s/1/${NTX}/;s/step5.00/step5.01/" step5.00_equilibration > step5.01_equilibration.mdin
-    else
-        sed "s/step5.00/step5.02/" step5.00_equilibration.mdin > step5.01_equilibration.mdin
+        sed -i "s/__IREST__/${IREST}/;s/__NTX__/${NTX}/" step5.00_equilibration.mdin
+        sed "s/step5.00/step5.01/" step5.00_equilibration.mdin > step5.01_equilibration.mdin
     fi
     
     # Flags for QMHub / QChem
@@ -57,9 +55,10 @@ for window in "${windows[@]}"; do
         QMEWALD=1
         QMPME=1
         QMSWITCH=1
+        QMHUBSCRATCH="\/tmp\/${USER}\/$(basename ${cwd})\/${QMTHEORY}\/${window}\/qmhub"
     fi
 
-    for STEP in "step5.00" "step6.00"; do
+    for STEP in "step5.00" "step5.01" "step6.00"; do
         sed -i "\
             s/__QMMASK__/${QMMASK}/;\
             s/__QMCHARGE__/${QMCHARGE}/;\

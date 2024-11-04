@@ -1,8 +1,8 @@
 #!/bin/bash
 #input file and setup simulation parameters
 
-CV_i=-1.8
-step=0.2
+CV_i=-1.9
+step=0.1
 
 cwd=$(realpath ..)
 inp_dir="${cwd}/input"
