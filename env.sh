@@ -36,12 +36,12 @@ else
 fi
 
 # Persist changes to environment on future logins
-if ! grep -q "source $BASE/aliases.sh" $HOME/.bashrc; then
-    echo "Adding: $BASE/aliases.sh !!!"
+if ! grep -q "source $BASE/aliases/aliases.sh" $HOME/.bashrc; then
+    echo "Adding: $BASE/aliases/aliases.sh !!!"
     echo "# Add aliases to ~/.bashrc" >> $HOME/.bashrc
-    echo "source $BASE/aliases.sh" >> $HOME/.bashrc
+    echo "source $BASE/aliases/aliases.sh" >> $HOME/.bashrc
     echo ""
 else
-    echo "Found: $BASE/aliases.sh in $HOME/.bashrc !!!"
+    echo "Found: $BASE/aliases/aliases.sh in $HOME/.bashrc !!!"
 fi
 
