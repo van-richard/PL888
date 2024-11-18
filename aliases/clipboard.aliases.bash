@@ -1,5 +1,6 @@
 #!/bin/bash
-#
+
+
 HOSTNAME=$(hostname)
 if [ "${HOSTNAME}" == "lynnx" ]; then
     alias pbcopy="xclip -selection clipboard"
