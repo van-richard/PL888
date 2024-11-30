@@ -1,8 +1,6 @@
 #!/bin/bash
 #
 #
-
-
 function DL-miniforge3 () {
     local PROGDIR="$HOME/Programs"
     local _mf="https://github.com/conda-forge/miniforge/releases/latest/download/Miniforge3-$(uname -s)-$(uname -m).sh"

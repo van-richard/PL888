@@ -7,7 +7,7 @@ for cmd in "${cmds[@]}"; do
     if [ ! -z $(which ${cmd}) ]; then
         alias cat="${cmd}"
     fi
-done
+done 2>/dev/null
 
 
 

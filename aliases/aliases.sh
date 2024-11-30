@@ -1,9 +1,7 @@
 #!/bin/bash
 
-cwd=$(dirname ${BASH_SOURCE})
+DIRNAME=$(dirname "${BASH_SOURCE[@]}")
 
-echo "
-for a in $(ls ${cwd}/*.aliases.bash); do
+for a in $(ls ${DIRNAME}/*.aliases.bash); do
     source $a
 done
-" >> ~/.bashrc
