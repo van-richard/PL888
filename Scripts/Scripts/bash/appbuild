@@ -1,0 +1,27 @@
+#!/bin/bash
+
+if [ -z "${1}" ]; then
+    APP="app"
+    echo "Assume apptainer definition file name: ${APP}.def"
+else
+    if [ $(echo ${1} | tr '.' '\t' | wc -w) -ge 2 ]; then
+        APP=$(echo $1 | awk -F '.' '{print $1}')
+    else
+        APP="${1}"
+    fi
+    echo "Using apptainer definition file name: ${APP}.def"
+fi
+
+if [ -f "${APP}.sif" ]; then
+    n_SIF=$(ls ${APP}.sif | wc -l)
+    if [ "{n_SIF}" == "1" ]; then
+        OUT="${APP}${n_SIF}"
+    else
+        OUT="${APP}"
+    fi
+else
+    exit 0
+fi
+
+
+apptainer build ${OUT}.sif ${APP}.def

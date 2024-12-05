@@ -1,0 +1,68 @@
+#!/usr/bin/python3
+import sys
+import math
+
+"""
+Estimate free energy barrier from kcat value
+If no value is given,  kcat=1.0 s^-1
+
+\DeltaG = -RTln(K_cat)
+
+Usage:
+    
+    ./kcat2kcal kcat units 
+"""
+
+joules2cal = 4.184
+boltzman = 1.3806452e-23 # J / K
+planck  = 6.6260701e-34 # J / s
+gasconstant  = 8.314 # J / (mol * K)
+
+
+def convert2pSec(val, units):
+    if units == 's':
+        pS = val
+    elif units == 'min':
+        pS = val / 60
+    return pS
+
+def convert2E(val):
+    return f"{val:8.2f}" # scientific notation
+
+def Joulestokcal(J):
+    J = float(J)
+    return J / joules2cal / 1000 
+
+def ln(x):
+    n = 1000.0
+    return n * ((x ** (1/n)) - 1)
+
+def kcat2dG(kcat, rate, temperature):
+    kB = Joulestokcal(boltzman)
+    h  = Joulestokcal(planck)
+    R  = Joulestokcal(gasconstant)
+
+    K_cat = convert2pSec(kcat, rate)
+    E_K_cat = convert2E(K_cat)
+    num = K_cat * h
+    den = kB * temperature
+    dG = ln(num/den) * R * temperature
+    print(f"\n\t            kcat (/s): {E_K_cat}",
+          f"\tdG Barrier (kcal/mol): {dG:8.2f}\n",
+          sep="\n",
+          )
+
+if __name__ == '__main__':
+    import argparse
+    parser = argparse.ArgumentParser()
+    parser.add_argument('kcat', type=float, default=1.0,help='Value for kcat - rate constant. (float)')
+    parser.add_argument('--unit','-u', choices=['s','min'], default='s',
+                    help='Units for rate: per second (s), or per minute (min)')
+    parser.add_argument('--temp','-t', type=float, default=298.15,
+                    help='Temperature in kelvin')
+    args = parser.parse_args()
+
+    kcat2dG(args.kcat, args.unit, args.temp)
+
+
+

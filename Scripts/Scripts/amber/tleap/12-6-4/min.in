@@ -1,0 +1,20 @@
+Minimization input file in explicit solvent
+ &cntrl
+    ! Minimization options
+    imin=1,        ! Turn on minimization
+    maxcyc=500,   ! Maximum number of minimization cycles
+    ncyc=500,     ! 100 steepest-descent steps, better for strained systems
+
+    ! Potential energy function options
+    cut=9.0,       ! nonbonded cutoff, in angstroms
+
+    ! Control how often information is printed to the output file
+    ntpr=100,      ! Print energies every 100 steps
+    ntxo=2,        ! Write NetCDF format
+
+    ! Restraint options
+    ntr=1,         ! Positional restraints for proteins, sugars, ligands, and lipid head groups
+    restraint_wt=300,
+    restraintmask='(:371,611,612,601,303,13,14,324,729)'
+ /
+

@@ -1,0 +1,17 @@
+#!/bin/bash
+# Check if file exists
+# INP can be file in current directory or path to file
+# 
+
+INP=${1}
+
+if [ -z "$INP" ]; then
+    echo "nothing to check..."
+    exit 1
+elif [ -e "${INP}" ]; then
+    echo "Found: ${INP} !!!"
+    exit 0
+else
+    echo "Missing: ${INP} "
+    exit 1
+fi

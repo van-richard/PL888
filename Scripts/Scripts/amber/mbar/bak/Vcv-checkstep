@@ -1,0 +1,65 @@
+#!/bin/bash
+
+help () 
+(
+printf "%s\n"\
+    "Quickly check if CVs are wonky"\
+    "Default right now is R1-R2 umbrella sampling simuatiions"\
+    "Provide one argument (0 = step6.00, 1 = step6.01...)"\
+    "Haven't argparse this yet, so change the window if you use it (seq -w 0 41"
+)
+
+
+
+# while getopts ":sh" option; do
+#     case $option in
+#         i ) # Invalid option
+#             if [ ! -z "${1}" ]; then
+#                 idx=$(printf "%02d" $repindex)
+#             else
+#                 idx=$(printf "%02d" $OPTARG)
+#             fi;;
+# 
+#         h)
+#             help
+#             exit;;
+#     esac
+# done
+
+
+# Check step index
+if [[ ! -z ${1} ]]; then
+    stepindex="${1}"
+else
+    stepindex="0"
+fi
+
+# Set the variable for the *.cv file
+
+stepfile="step6"
+stepindex=$(printf "%02d" ${1})
+fname="${stepfile}.${stepindex}_equilibration.cv"
+first_window="0"
+last_window="41"
+
+printf "%s\n" \
+    "Default values:"\
+    "file: ${fname}"\
+    "windows: ${first_window} to ${last_window}"
+
+# Print header for the output table
+printf "\nWindow\tSteps\tR1-R2\tR1\tR2\n"
+
+# Iterate through windows and print information
+seq -w ${first_window} ${last_window} | while read i_window; do
+    if [ -f ${i_window}/${fname} ]; then
+        # Print window information
+        n_cvs=$(tail -n 1 ${i_window}/${fname} | column -t)
+        printf "\t${i_window}\t${n_cvs}\n"
+    else
+        # Indicate if the file is not found
+        printf "${i_window}\tNo File!\tSimulation probably has not started..\n"
+    fi
+done | pr -t -2
+
+printf "\n\tCheck others by providing a value (0,1,2,3) for ${stepfile}\n\n"

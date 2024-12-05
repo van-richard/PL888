@@ -1,0 +1,26 @@
+4
+
+$COLVAR
+COLVAR_type = "BOND"
+atoms = 409, 410
+box = 0, 6.0
+$END
+
+$COLVAR
+COLVAR_type = "BOND"
+atoms = 410, 7251
+box = 0, 8.0
+$END
+
+$COLVAR
+COLVAR_type = "BOND"
+atoms = 7251, 7252
+box = 0, 5.0
+$END
+
+$COLVAR
+COLVAR_type = "BOND"
+atoms = 5261, 7252
+box = 0, 5.0
+$END
+
