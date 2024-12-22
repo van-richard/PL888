@@ -26,9 +26,14 @@ function _vrsync_host () {
 }
 
 function vrsync () {
-    local ssh="osu"
+    local ssh=$1
     local srcdir="/scratch/van"
     local dirname
+    
+    if [ -z "${ssh}" ]; then
+        printf "\nenter host: "
+        read -e ssh
+    fi
 
     printf "\nenter path to local directory (assumes ${srcdir}): "
     read -e dirname
@@ -72,3 +77,5 @@ function vrsync () {
 
     unset _V_SSH
 }
+
+complete -W "osu ou dtn2" vrsync

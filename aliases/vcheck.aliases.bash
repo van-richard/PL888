@@ -3,7 +3,7 @@
 # INP can be file in current directory or path to file
 # 
 
-function checkfor () {
+function vcheck () {
     local INPS="${@}"
     for INP in ${INPS[@]}; do
         if [ -e "${INP}" ]; then
