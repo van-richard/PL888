@@ -10,7 +10,6 @@ function checkfor () {
             echo "Found: ${INP} !!!"
         else
             echo "Missing: ${INP} "
-            exit 1
         fi
     done
 }

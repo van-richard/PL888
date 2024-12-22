@@ -11,24 +11,47 @@ function DL-miniforge3 () {
 }
 
 function mf () {
-    local MF="${HOME}/Programs/miniforge3"
-    local uMF=${1}
-    if [ ! -d $MF ]; then
-        echo "missing: ${MF}"
-        echo "try passing the path to your miniforge as the first arg"
-        echo ""
-        exit 0
-    elif [ -d $MF ]; then
-        echo "found: ${MF}"
-        source ${MF}/bin/activate
-    elif [ ! -z ${uMF} ] && [ -d ${uMF} ]; then 
-        echo "found: ${uMF}"
-        source ${MF}/bin/activate
-        echo "found: ${uMF}"
+    local diropts=("${HOME}" "/scratch/${USER}")
+    local program="Programs"
+    local dirname="miniforge3"
+    local log="/tmp/$USER-check-conda.txt"
+    local n_dirs=0
+    local condabase
+
+    touch $log
+    
+    for opt in ${diropts[@]}; do
+        local base="${opt}/${program}/${dirname}"
+
+        #echo "searching: ${base}" 
+        if [ -d "${base}" ]; then
+            echo ${base} > $log
+        fi
+    done
+        
+    n_dirs=$(cat $log | wc -l)
+
+    if [[ ${n_dirs} -gt 1 ]]; then
+        echo "found: ${n_dirs} conda directories"
+    elif [[ ${n_dirs} -lt 1 ]]; then
+        echo "missing: miniforge install !!!"
+    else
+        condabase=$(cat $log)
     fi
+
+    source $condabase/bin/activate
 }
 
 
-alias mfa="conda activate"
-alias mfd="conda deactivate"
+function mfa () {
+    local env
 
+    conda activate $env
+}
+
+function mfd () {
+    conda deactivate
+}
+
+
+complete -W "create remove" mf

@@ -1,6 +1,6 @@
-#!/bin/bash
+o#!/bin/bash
 
-DIRNAME=$(dirname "${BASH_SOURCE}")
+DIRNAME="$HOME/github/PL888/aliases"
 
 for a in $(ls ${DIRNAME}/*.aliases.bash); do
     source $a

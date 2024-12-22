@@ -1,23 +1,30 @@
 #!/bin/bash
 
-source check.aliases.bash
+opts="ssh mpi"
+sshopt="osu ou"
 
-function rsyncf () {
-    # local rsync 
-    rsyncf --archive --itemize-changes --delete --progress --update --verbose ${@}
+function vsync () {
+    local ssh
+    local mpi
+
+    vreplys="rsync --archive --itemize-changes --delete --progress --update --verbose ${@}"
+
+    if [ "${2}" == "ssh" ]; then
+        complete -W "${sshopt}" $2
+        #${vreply} -e 'ssh' ${@}
+
+    elif "${2}" == "mpi" ]; then
+        local SRC
+        if [ -z "${SRC}" ]; then
+            echo "missing: source directory path"
+        else
+            find ${SRC} -type f | parallel -j 4 -X ${vreply} --hard-links --relative "$SRC" ${@}
+        fi
+    fi
+
 }
 
-function rsyncssh () {
-    # server-client rsync
-    rsyncf -e 'ssh' ${@}
-}
-
-
-function rsyncp () {
-    local SRC=$1
-    find ${SRC} -type f | parallel -j 4 -X rsyncf --hard-links --relative \
-        "$SRC" ${@}
-}
+complete -W "${opts}" vsync
 
 # sbatch <<_EOF
 # #!/bin/bash
