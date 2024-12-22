@@ -9,5 +9,3 @@ for cmd in "${cmds[@]}"; do
     fi
 done 2>/dev/null
 
-
-

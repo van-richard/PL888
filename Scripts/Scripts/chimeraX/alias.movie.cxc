@@ -1,8 +1,0 @@
-alias savepng save ~/Desktop/$1.png supersample 3 transparentbackground True
-alias savemovie record supersample 3; $1;  movie encode ~/Desktop/$1.mp4 
-
-
-alias esurf sel #$1 & protein; show sel surface; hide sel atoms; ~label;coulombic protein; key red-white-blue :-1.0 :0.0 :1.0; setopacity 55 surface
-alias setzone select $1 :<$2; ~sel $1
-alias zonelig setzone ligand,:UNL 5
-alias setlabels zonelig; show sel atoms; label sel bgcolor 100,100,100,50 attribute label_one_letter_code height 1 ontop true color red; ~sel
