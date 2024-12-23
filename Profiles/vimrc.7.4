@@ -1,3 +1,6 @@
+" vim config with tmux and autocomplete
+"""""""""""""""""""""""""""""""""""""""
+
 " line numbers
 set number
 
@@ -17,9 +20,8 @@ set mat=2
 " "map <silent> <leader><cr> :noh<cr>
 set nohlsearch
 
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"""" file management       
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" file management       
+"""""""""""""""""
 
 " text/tab/index
 set expandtab           " use spaces
@@ -47,14 +49,6 @@ map <leader>ss :setlocal spell!<cr>
 
 " files/backup/undo
 set noswapfile
+
 " set nobackup
 set nowb
-
-" turn off sound
-set noerrorbells
-set novisualbell
-set t_vb=
-set tm=500
-if has("gui_macvim")
-        autocmd GUIEnter * set vb t_vb=
-endif

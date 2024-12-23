@@ -1,3 +1,3 @@
 #!/bin/bash
 
-alias 
+alias gs="git status"

@@ -1,4 +1,5 @@
 " vim config with tmux and autocomplete
+"""""""""""""""""""""""""""""""""""""""
 
 " line numbers
 set number
@@ -19,9 +20,8 @@ set mat=2
 " "map <silent> <leader><cr> :noh<cr>
 set nohlsearch
 
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"""" file management       
-
+" file management       
+"""""""""""""""""
 
 " text/tab/index
 set expandtab           " use spaces
@@ -50,6 +50,7 @@ map <leader>ss :setlocal spell!<cr>
 
 " files/backup
 set noswapfile
+
 " set nobackup
 set nowb
 

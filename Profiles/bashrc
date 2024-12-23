@@ -5,7 +5,7 @@ case $- in
     *i*) ;;
       *) return;;
 esac
-#######################################################
+
 # SOURCED ALIAS'S AND SCRIPTS 
 #######################################################
 
@@ -16,7 +16,6 @@ if [ -f /etc/bashrc ]; then source /etc/bashrc; fi
 if [ -f ~/.bash_aliases ]; then source ~/.bash_aliases; fi
 
 
-#######################################################
 # EXPORTS
 #######################################################
 
@@ -122,10 +121,4 @@ if ! shopt -oq posix; then
     . /etc/bash_completion
   fi
 fi
-
-
-export NVM_DIR="$HOME/.nvm"
-if [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-if [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
-export PATH="/usr/local/bin/vmd":${PATH}
 

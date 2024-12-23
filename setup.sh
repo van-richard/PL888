@@ -3,7 +3,7 @@
 _vlocal="$HOME/.local"
 _vgithub="$HOME/github"
 _vtemplates="$_vgithub/PL888"
-_vsetup="$_vtemplates/PL888/Setup"
+_vsetup="$_vtemplates/Setup"
 _vmodules="$_vtemplates/modulefiles/modules.sh"
 _vscripts="$_vtemplates/Scripts/bin"
 vbashrc="$HOME/.vbashrc"
@@ -40,7 +40,7 @@ export _vscripts="$_vscripts"
 # configuration
 umask 027
 source \${_vmodules}
-source \${_templates}/aliases/aliases.sh
+source \${_vtemplates}/Setup/aliases.sh
 export PATH=\${_vlocal}/bin:\${_vscripts}:\${PATH}
 _EOF
 
@@ -64,7 +64,7 @@ if [[ ${n_diff} -gt 0 ]]; then
     printf "replace with new changes? (y/n) "
     read yeschange
     if [ "${yeschange}" == "y" ]; then
-        "copying tmp.vbashrc to $vbashrc !!!"
+        "adding: replace $vbashrc with tmp.vbashrc !!!"
         mv tmp.vbashrc $vbashrc
     else
         printf "\n\tskipping: add diff and deleting tmp.bashrc"
