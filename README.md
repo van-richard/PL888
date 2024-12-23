@@ -1,25 +1,27 @@
 # PL888s (n.) /plāt-s/ 
 
-- short for templates
+- my templates for setup, configuration, and stuff
+- Use with caution: May (or may not) improve your workflow
 
-- a cabinet of _kinda_ helpful scripts that (may or may not) improve your workflow
+## Setup
 
-## How to use:
-
-- clone this repo to your cluster home directory 
-
-```bash
-cd ~/Programs
-git clone https://github.com/van-richard/PL888.git
-```
-
-- `source` the file, `PL888/env.sh` to fix permissions on Pete, add my custom modules, and scripts
-- Should only need to do this once, changes will persist on login
+1. clone the repo to local/remote 
+    - create a github directory in `$HOME`
+    - `git clone` to `$HOME/github`
 
 ```bash
-source $HOME/Programs/PL888/env.sh
+mkdir -p $HOME/github && git clone https://github.com/van-richard/PL888.git $HOME/github
 ```
 
-- This file
+2. add to the shell environment
+    - `source` the `PL888/env.sh`
+    - export tp `$PATH` to persist changes 
+    - log out and then log in for changes or `source ~/.bashrc` file
+
+```bash
+echo 'export \$PATH=\$HOME/github/PL888/env.sh" >> ~/.bashrc
+source ~/.bashrc
+```
+
 
 

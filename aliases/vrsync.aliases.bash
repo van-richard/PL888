@@ -25,6 +25,7 @@ function _vrsync_host () {
     echo $ssh
 }
 
+
 function vrsync () {
     local ssh=$1
     local srcdir="/scratch/van"

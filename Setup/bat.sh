@@ -3,7 +3,6 @@
 
 url="https://github.com/sharkdp/bat/releases/download/v0.24.0/"
 fname="bat-v0.24.0-i686-unknown-linux-musl"
-dirname="$HOME/.local"
 
 wget ${url}/${fname}.tar.gz -P /tmp
 tar xf /tmp/${fname}.tar.gz -C /tmp
@@ -19,3 +18,5 @@ printf "\nexport PATH='${dirname}/bin:\${PATH}'"
 printf "\nexport PATH='${dirname}/share:\${PATH}'"
 
 rm -rf /tmp/${fname}.tar.gz /tmp/${fname}
+
+unset url fname dirname

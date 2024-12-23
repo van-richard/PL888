@@ -1,5 +1,6 @@
 #!/bin/bash
 #
+# install apptainer on linux
 
 sudo apt update -y
 sudo apt install -y software-properties-common
