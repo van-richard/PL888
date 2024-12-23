@@ -6,7 +6,7 @@ _vtemplates="$_vgithub/PL888"
 _vsetup="$_vtemplates/Setup"
 _vmodules="$_vtemplates/modulefiles/modules.sh"
 _vscripts="$_vtemplates/Scripts/bin"
-alias bashrc="$HOME/.bashrc"
+bashrc="$(echo $HOME/.bashrc)"
 
 printf "\nstarting $(realpath .)/setup.sh\n\n"
 
@@ -56,7 +56,7 @@ else
 fi
 
 # if different
-n_diff=$(diff $vbashrc tmp.bashrc --suppress-common-lines --brief | wc -l)
+n_diff=$(diff $bashrc tmp.bashrc --suppress-common-lines --brief | wc -l)
 if [[ ${n_diff} -gt 0 ]]; then
     printf "\n\tsee diff? (y/n) "
     read yesdiff
