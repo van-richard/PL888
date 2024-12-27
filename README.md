@@ -1,11 +1,15 @@
 # PL888s (n.) /plāt-s/ 
 
-- my templates for setup, configuration, and stuff
-- Use with caution: May (or may not) improve your workflow
+- templates for all things setup, configuration, and whatnot
+- May (or may not) improve your workflow
 
-## Setup
+```{warning}
+Use with caution
+```
 
-1. clone the repo to local/remote 
+## Getting Started
+
+1. clone the repo to local/remote, generally I prefer to:
     - create a github directory in `$HOME`
     - `git clone` to `$HOME/github`
 
@@ -13,15 +17,30 @@
 mkdir -p $HOME/github && git clone https://github.com/van-richard/PL888.git $HOME/github
 ```
 
-2. add to the shell environment
-    - `source` the `PL888/env.sh`
-    - export tp `$PATH` to persist changes 
-    - log out and then log in for changes or `source ~/.bashrc` file
+2. add to the shell environment, 2 approaches:
+    a) "Don't care, just need things to work"
+        - `source` the script `PL888/env.sh`
+        - export tp `$PATH` to persist changes 
+        - log out and then log in for changes or `source ~/.bashrc` file
 
 ```bash
 echo 'export \$PATH=\$HOME/github/PL888/env.sh" >> ~/.bashrc
 source ~/.bashrc
 ```
+
+    b) "I like to break things, and it can always be optimized"
+        - take a look at `PL888/Setup`
+        - modify to your needs, then execute the script
+
+```bash
+bash Setup.sh
+```
+
+## Example Configuration files
+
+- some sample config files I use for `bash`, `VMD`, `ChimeraX`, etc. can be found in, `PL888/Profiles`
+
+##
 
 
 
