@@ -1,6 +1,6 @@
 #!/bin/bash
 
-_vlocal="$HOME/.local"
+_vlocal="$HOME/Programs"
 _vgithub="$HOME/github"
 _vtemplates="$_vgithub/PL888"
 _vsetup="$_vtemplates/Setup"

@@ -1,5 +1,6 @@
 #!/bin/bash
 
+#export _vlocal=$HOME/Programs
 cmd="zoxide"
 
 

@@ -42,9 +42,13 @@ function mf () {
 
 
 function mfa () {
-    local env
-
-    conda activate $env
+    local env=$1
+    
+    if [ -z $1 ]; then
+        conda activate base
+    else
+        conda activate $env
+    fi
 }
 
 function mfd () {

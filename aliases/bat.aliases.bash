@@ -1,6 +1,6 @@
 #!/bin/bash
 
-base="/home/van/.local"
+base="/home/van/Programs"
 cmds=("bat" "batcat")
 
 for cmd in "${cmds[@]}"; do

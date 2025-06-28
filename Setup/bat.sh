@@ -7,7 +7,6 @@ cmd="bat"
 if ! echo "$(which ${bat})"| grep -q "${bat}"; then
     echo "missing: bat !!!"
     
-
     wget ${url}/${fname}.tar.gz -P /tmp
     tar xf /tmp/${fname}.tar.gz -C /tmp
     
