@@ -1,0 +1,27 @@
+#!/bin/bash
+
+PARTITION="bullet"
+NTASK=32
+MEM="20G"
+TIME="12:00:00"
+
+# Check if the partition exists
+if ! command -v sinfo >/dev/null 2>&1; then
+    echo "missing: sinfo"
+    exit 1
+elif ! sinfo -h -o "%P" | awk -F'[*]' '{print $1}' | grep -qw "$PARTITION"; then
+    echo "Error: Partition '$PARTITION' does not exist."
+    echo "Available partitions are:"
+    sinfo -h -o "%P" | awk -F'[*]' '{print $1}' | sort -u
+    exit 1
+fi
+
+
+srun --pty \
+    -p $PARTITION \
+    -N 1 \
+    --ntasks=$NTASK \
+    --mem=$MEM \
+    --time=$TIME \
+    --gres=gpu:1 \
+    /bin/bash
