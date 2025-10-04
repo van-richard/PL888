@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
 """
-kcat2kcal — Convert kcat (rate constant) to ΔG‡ in kcal/mol using Eyring TST.
+kcal2kcat — Convert ΔG‡ (kcal/mol) to kcat using Eyring TST.
 
-    ΔG‡ = R T ln[(k_B T)/(h k)]
+    k = (k_B T / h) * exp(-ΔG‡/(R T))
 
-Defaults: T = 298.15 K, input unit = s^-1, output unit = kcal/mol.
-Supports batch input via --file or stdin. 
+Defaults: T = 298.15 K, input ΔG‡ unit = kcal/mol, output rate unit = s^-1.
+Supports batch input via --file or stdin. TSV/CSV output available.
 """
 from __future__ import annotations
 import argparse, sys, math
@@ -18,18 +18,15 @@ H_SI   = 6.62607015e-34        # J·s
 MIN_TO_S = 60.0
 MS_TO_S  = 1e-3
 
-def rate_to_per_second(k: float, unit: str) -> float:
+def per_second_to_rate(k_s: float, unit: str) -> float:
     u = unit.lower()
-    if u in {"s", "sec", "1/s", "s^-1"}: return k
-    if u in {"min", "m", "1/min", "min^-1"}: return k / MIN_TO_S
-    if u in {"ms", "1/ms", "ms^-1"}: return k / MS_TO_S
+    if u in {"s", "sec", "1/s", "s^-1"}: return k_s
+    if u in {"min", "m", "1/min", "min^-1"}: return k_s * MIN_TO_S
+    if u in {"ms", "1/ms", "ms^-1"}: return k_s * MS_TO_S
     raise ValueError(f"Unsupported rate unit: {unit!r}. Use s, min, or ms.")
 
-def dg_from_kcat(k_s: float, T: float) -> float:
-    if k_s <= 0.0:
-        raise ValueError("kcat must be > 0.")
-    val = (KB_SI * T) / (H_SI * k_s)
-    return R_KCAL * T * math.log(val)
+def kcat_from_dg(dg_kcal: float, T: float) -> float:
+    return (KB_SI * T / H_SI) * math.exp(-dg_kcal / (R_KCAL * T))
 
 def parse_values(src):
     vals = []
@@ -42,37 +39,36 @@ def parse_values(src):
 
 def main(argv=None) -> int:
     p = argparse.ArgumentParser(
-        prog="kcat2kcal",
-        formatter_class=argparse.ArgumentDefaultsHelpFormatter,
-        description="Convert kcat → ΔG‡ (kcal/mol) using Eyring TST.",
-    )
-    p.add_argument("kcat", nargs="?", type=float, default=1.00e00, help="kcat value; if omitted, use --file or pipe stdin")
-    p.add_argument("--unit", "-u", default="s", help="Input rate unit (s, min, ms [Default: s])")
+            prog="kcal2kcat",
+            formatter_class=argparse.ArgumentDefaultsHelpFormatter,
+            description="Convert ΔG‡ (kcal/mol) → kcat using Eyring TST.",
+            )
+    p.add_argument("dg", nargs="?", type=float, default=-1*17.19, help="ΔG‡ value in kcal/mol; if omitted, use --file or stdin.")
     p.add_argument("--temp", "-t", type=float, default=298.15, help="Temperature in kelvin (Default: 298.15K)")
     p.add_argument("--file", "-f", type=str, help="Read values (one per line) from file" )
+    p.add_argument("--out-unit", "-u", default="s", help="Output rate unit for kcat (s, min, ms)")
     args = p.parse_args(argv)
 
     # get inputs
     if len(sys.argv) == 1:  # no args
         p.print_help(sys.stdout)
         sys.exit(0)
-    if args.kcat is not None:
-        inputs = [args.kcat]
+    if args.dg is not None:
+        inputs = [args.dg]
     elif args.file:
         with open(args.file, 'r') as fh: inputs = parse_values(fh)
     else:
         if not sys.stdin.isatty():
             inputs = parse_values(sys.stdin)
         else:
-            p.error("Provide a kcat value, --file, or pipe values via stdin.")
-
+            p.error("Provide ΔG‡, --file, or pipe values via stdin.")
 
     try:
-        for k in inputs:
-            k_s = rate_to_per_second(k, args.unit)
-            dg = dg_from_kcat(k_s, args.temp)
+        for dg in inputs:
+            k_s = kcat_from_dg(dg, args.temp)
+            kout = per_second_to_rate(k_s, args.out_unit)
             print(f"\n\t               Temp (K): {args.temp:8.2f}",
-                  f"\t\t      kcat (/{args.unit}): {k:8.2e}",
+                  f"\t\t      kcat (/{args.out_unit}): {kout:8.2e}",
                   f"\t\t ΔG‡ (kcal/mol):  {dg:.4f}\n",
                   sep="\n")
     except ValueError as e:

@@ -1,1 +1,0 @@
-../Amber/analysis/rmsd2d.py
