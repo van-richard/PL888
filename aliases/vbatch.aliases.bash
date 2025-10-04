@@ -9,7 +9,9 @@ function vbatch () {
     local vpart
     local vexclude
     local xlist
-    local dirname="${1:-$(dirname $(realpath .))}"
+    local dname="$(dirname $(realpath .))"
+    local dirname="${1:${dname}}"
+
 
     if [ -f "/home/van/exclude.list" ]; then
         vexclude="--exclude=$(cat /home/van/exclude.list)"
