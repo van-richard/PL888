@@ -1,0 +1,1 @@
+../bash/change-perms.sh

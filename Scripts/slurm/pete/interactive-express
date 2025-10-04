@@ -1,11 +1,23 @@
 #!/bin/bash
 
+PARTITION="express"
 NTASK=32
 MEM="30G"
 TIME="01:00:00"
 
+# Check if the partition exists
+if ! command -v sinfo >/dev/null 2>&1; then
+    echo "missing: sinfo"
+    exit 1
+elif ! sinfo -h -o "%P" | awk -F'[*]' '{print $1}' | grep -qw "$PARTITION"; then
+    echo "error: Partition '$PARTITION' does not exist."
+    echo "Available partitions are:"
+    sinfo -h -o "%P" | awk -F'[*]' '{print $1}' | sort -u
+    exit 1
+fi
+
 srun --pty \
-    -p express \
+    -p $PARTITION \
     -N 1 \
     --ntasks=$NTASK \
     --mem=$MEM \
