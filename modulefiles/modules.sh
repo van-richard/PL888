@@ -1,30 +1,28 @@
 #!/bin/bash
 
-# Path to custom modules
-MF="/home/van/modulefiles"
+BASE="${HOME}/modulefiles" # Path to custom modules
+HOSTNAME=$(hostname)       # Computer 
 
-# Aliases
 alias mlav='module --default available' # Only show default modules
 
-# Prepend new modules to $MODULEPATH 
-#   1) /home/van/modulefiles/conda_environments
-#       - Similar to `conda activate [environment name]`. Should work with your existing conda...
-#   2) /home/van/modulefiles/softwares
-#       - CCATS research group softwares. Programs can be stacked (see examples in /home/van/examplesfiles/modulefiles/)
+module unuse /usr/share/modules/modulefiles # examples
 
-if [[ "${MODULEPATH}" == "*/home/van/modulefiles/softwares*" ]] | [[ "${MODULEPATH}" == "*/home/van/modulefiles/conda_environments*" ]]; then
-    # Don't need this if my modules found in $MODULEPATH 
-    continue
-else
-    # Copy of original modulepath, and prepend new modules 
-    export original_MODULEPATH=$(env | grep "^MODULEPATH=" | awk -F "=" '{print $2}')   # Save original $MODULEPATH
-    module use ${MF}/conda_environments                                                 # Shared conda environments
-    module use ${MF}/softwares                                                          # Shared softwares
+if [[ "${HOSTNAME}" == "lynnx" ]]; then
+    # Prepend new modules to $MODULEPATH 
+    if [[ "${MODULEPATH}" == "*/${BASE}/lynnx*" ]]; then
+        continue
+    else
+        module use ${BASE}/${HOSTNAME}/conda
+        module use ${BASE}/${HOSTNAME}/apps
+    fi
+elif [[ "${HOSTNAME}" != "lynnx" ]]; then
+    if [[ "${MODULEPATH}" == "*/${BASE}/softwares*" ]] | [[ "${MODULEPATH}" == "*/${BASE}/conda_environments*" ]]; then
+        continue # Don't need this if my modules found in $MODULEPATH 
+    else
+        module use ${BASE}/pete/conda_environments                   # Shared conda environments
+        module use ${BASE}/pete/softwares                            # Shared softwares
+    fi
 fi
-
-
-
-
 
 
 ##############################################################################

@@ -1,6 +1,6 @@
 --- Point to package 
-local TargetName     = "parallel"
-local TargetPath     = "/projects/ok001/Programs/"..TargetName
+local TargetName     = "parallel2024"
+local TargetPath     = "/scratch/van/Programs/"..TargetName
 
 prepend_path(   "PATH"              , tostring(pathJoin(TargetPath, "bin")))
 
