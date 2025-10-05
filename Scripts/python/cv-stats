@@ -1,0 +1,221 @@
+#!/usr/bin/env python3
+import argparse
+import os
+import re
+from glob import glob
+from pathlib import Path
+import numpy as np
+
+# ---------- Formatting ----------
+COLS_TWO = [("n_W", 8), ("ref", 10), ("mean", 10), ("std", 10), ("min", 10), ("max", 10)]
+COLS_MULTI = [("col", 8), ("ref", 10), ("mean", 10), ("std", 10), ("min", 10), ("max", 10)]
+
+def fmt_val(x):
+    if x is None or (isinstance(x, float) and np.isnan(x)):
+        return f"{0:.2f}".rjust(10)
+    return f"{x:.2f}".rjust(10)
+
+def fmt_text(s, w):
+    return str(s).rjust(w)
+
+def print_header(spec):
+    print("".join(fmt_text(name, width) for name, width in spec))
+
+def print_row_two(win, ref, mean_, std_, min_, max_):
+    parts = [
+        fmt_text(win, COLS_TWO[0][1]),
+        fmt_val(ref),
+        fmt_val(mean_),
+        fmt_val(std_),
+        fmt_val(min_),
+        fmt_val(max_),
+    ]
+    print("".join(parts))
+
+def print_row_multi(col_label, ref, mean_, std_, min_, max_):
+    parts = [
+        fmt_text(col_label, COLS_MULTI[0][1]),
+        fmt_val(ref),
+        fmt_val(mean_),
+        fmt_val(std_),
+        fmt_val(min_),
+        fmt_val(max_),
+    ]
+    print("".join(parts))
+
+# ---------- Parsing / Logic ----------
+RK_RE = re.compile(
+    r"""(?ix)
+    \b r2 \s* = \s* ([+-]?\d+(?:\.\d+)?(?:[eE][+-]?\d+)?)
+    .*?
+    \b r3 \s* = \s* ([+-]?\d+(?:\.\d+)?(?:[eE][+-]?\d+)?)
+    """,
+    re.DOTALL
+)
+
+def parse_args():
+    p = argparse.ArgumentParser(description="Per-window column-wise stats over matching *.cv files, including r2/r3 reference.")
+    p.add_argument("step", nargs="?", default="5",
+                   help="Step number (e.g., 5 for step5.*). Ignored if --filename is used.")
+    p.add_argument("index", nargs="?", default="all",
+                   choices=["0", "1", "2", "3", "4", "5", "all"],
+                   help='Index of step (e.g., 0 → .00; "all" → .??). Ignored if --filename is used.')
+    p.add_argument("--filename", "-f", default=None,
+                   help=("Custom filename or pattern (overrides step/index). "
+                         "Wildcards allowed, e.g. '*.cv', 'step5.??_prod.cv', 'energy_*.dat'."))
+    return p.parse_args()
+
+def list_window_dirs(base: Path):
+    """
+    Return a sorted list of directories representing windows.
+    Matches 2–3 digits with optional single letter suffix: 00, 01, ..., 99, 100, 05a.
+    """
+    dirs = []
+    for d in base.iterdir():
+        if d.is_dir() and re.fullmatch(r"\d{2,3}[A-Za-z]?", d.name):
+            dirs.append(d)
+    dirs.sort(key=lambda x: x.name)
+    return dirs
+
+def file_pattern(step: str, index: str, override: str | None) -> str:
+    if override:
+        return override
+    if index != "all":
+        return f"step{step}.0{index}_equilibration.cv"
+    return f"step{step}.??_equilibration.cv"
+
+def load_numeric_table(path: Path) -> np.ndarray | None:
+    """
+    Load a whitespace-separated numeric table.
+    - Ignores lines starting with '#' or ';'
+    - Returns 2D array (n_rows, n_cols) or None if unreadable/empty.
+    """
+    try:
+        arr = np.loadtxt(path, comments=('#',';'))
+        if np.size(arr) == 0:
+            return None
+        if np.ndim(arr) == 0:
+            return arr.reshape(1, 1)
+        if np.ndim(arr) == 1:
+            return arr.reshape(-1, 1)
+        return arr
+    except Exception:
+        return None
+
+def gather_columns_for_window(window_dir: Path, pattern: str):
+    """
+    Return a list where item k is a 1D array of all values for column k,
+    concatenated across all matching files in this window. Missing columns
+    in some files are ignored for those files.
+    """
+    files = [Path(p) for p in glob(str(window_dir / pattern))]
+    if not files:
+        return []
+    tables = []
+    max_cols = 0
+    for fp in files:
+        tab = load_numeric_table(fp)
+        if tab is None:
+            continue
+        tables.append(tab)
+        max_cols = max(max_cols, tab.shape[1])
+    if not tables:
+        return []
+    columns = []
+    for k in range(max_cols):
+        col_vals = [tab[:, k] for tab in tables if tab.shape[1] > k]
+        if col_vals:
+            columns.append(np.concatenate(col_vals))
+        else:
+            columns.append(np.array([], dtype=float))
+    return columns
+
+def stats_1d(x: np.ndarray):
+    if x.size == 0:
+        return (np.nan, np.nan, np.nan, np.nan)
+    x = np.asarray(x, dtype=float)
+    return (float(np.mean(x)), float(np.std(x)), float(np.min(x)), float(np.max(x)))
+
+def find_cv_rst(window_dir: Path) -> Path | None:
+    """
+    Locate cv.rst for a given window.
+    - First try WINDOW/cv.rst
+    - Then search recursively under WINDOW/**/cv.rst (first match)
+    """
+    direct = window_dir / "cv.rst"
+    if direct.is_file():
+        return direct
+    matches = list(window_dir.rglob("cv.rst"))
+    return matches[0] if matches else None
+
+def parse_rc(window_dir: Path) -> float:
+    """
+    Parse r2 and r3 from cv.rst and return the reference value iff r2 == r3.
+    Returns nan if not found or not equal.
+    """
+    path = find_cv_rst(window_dir)
+    if not path:
+        return float("nan")
+    try:
+        text = path.read_text()
+    except Exception:
+        return float("nan")
+
+    m = RK_RE.search(text)
+    if m:
+        r2 = float(m.group(1))
+        r3 = float(m.group(2))
+    else:
+        m2 = re.search(r"(?i)\brk2\s*=\s*([+-]?\d+(?:\.\d+)?(?:[eE][+-]?\d+)?)", text)
+        m3 = re.search(r"(?i)\brk3\s*=\s*([+-]?\d+(?:\.\d+)?(?:[eE][+-]?\d+)?)", text)
+        if not (m2 and m3):
+            return float("nan")
+        r2 = float(m2.group(1))
+        r3 = float(m3.group(1))
+
+    return r2 if abs(r2 - r3) <= 1e-12 else float("nan")
+
+def main():
+    args = parse_args()
+    base = Path(os.getcwd())
+    windows = list_window_dirs(base)
+    patt = file_pattern(args.step, args.index, args.filename)
+
+    if not windows:
+        print(f"No window directories found in {base}")
+        return
+
+    # Two-/single-column header printed once
+    printed_two_col_header = False
+
+    for w in windows:
+        ref = parse_rc(w)
+        cols = gather_columns_for_window(w, patt)
+
+        # Two columns (use column 1), or single column (use column 0)
+        if not cols or len(cols) <= 2:
+            if not printed_two_col_header:
+                print_header(COLS_TWO)
+                printed_two_col_header = True
+            if not cols:
+                print_row_two(w.name, ref, np.nan, np.nan, np.nan, np.nan)
+            elif len(cols) == 2:
+                vec = cols[1] if cols[1].size > 0 else cols[0]
+                mean_, std_, min_, max_ = stats_1d(vec)
+                print_row_two(w.name, ref, mean_, std_, min_, max_)
+            else:  # single column
+                mean_, std_, min_, max_ = stats_1d(cols[0])
+                print_row_two(w.name, ref, mean_, std_, min_, max_)
+
+        # More than two columns: print one line per column (omit window id)
+        else:
+            # Optional separator for readability (does not break fixed-width lines)
+            print(f"\n# window {w.name} (>2 columns) — per-column stats")
+            print_header(COLS_MULTI)
+            for i, vec in enumerate(cols):
+                mean_, std_, min_, max_ = stats_1d(vec)
+                print_row_multi(f"c{i}", ref, mean_, std_, min_, max_)
+
+if __name__ == "__main__":
+    main()
+
