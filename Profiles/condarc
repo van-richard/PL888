@@ -2,6 +2,10 @@
 
 channels:
   - conda-forge
+pkg_dirs:
+  - /home/van/.conda/pkgs
+env_dirs:
+  - /home/van/.conda/envs
 
 default_threads: 8
 notify_outdated_conda: false
