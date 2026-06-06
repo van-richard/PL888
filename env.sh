@@ -12,7 +12,7 @@ fi
 
 #NEW_ENV="/home/van/env.sh"
 #export _vmodules="$HOME/modulefiles/modules.sh"
-export _vtemplates="$HOME/Github/PL888"
+export _vtemplates="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd -P)"
 export _vscripts="$HOME/Scripts/bin"
 export _vlocal="$HOME/.local"
 
@@ -27,4 +27,3 @@ else
 fi
 
 export PATH=${_vlocal}/bin:${_vscripts}:${PATH}
-
