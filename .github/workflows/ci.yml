@@ -1,0 +1,59 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  hygiene:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check shell syntax
+        shell: bash
+        run: |
+          find . -type f \
+            \( -name "*.sh" -o -name "*.bash" \
+            -o -path "./Scripts/shell/*" \
+            -o \( -path "./Scripts/slurm/*" ! -name "*.py" \) \
+            -o -path "./Scripts/apptainer/*" \) \
+            -print0 |
+            xargs -0 -r bash -n
+
+      - name: Run ShellCheck when available
+        shell: bash
+        run: |
+          if command -v shellcheck >/dev/null 2>&1; then
+            find . -type f \
+              \( -name "*.sh" -o -name "*.bash" \
+              -o -path "./Scripts/shell/*" \
+              -o \( -path "./Scripts/slurm/*" ! -name "*.py" \) \
+              -o -path "./Scripts/apptainer/*" \) \
+              -print0 |
+              xargs -0 -r shellcheck --shell=bash --severity=error
+          else
+            echo "ShellCheck is not available; skipping."
+          fi
+
+      - name: Check Python syntax
+        env:
+          PYTHONPYCACHEPREFIX: ${{ runner.temp }}/pycache
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import py_compile
+
+          scripts = set(Path("Scripts").rglob("*.py"))
+          for path in Path("Scripts/python").iterdir():
+              first_line = path.read_bytes().splitlines()[:1] if path.is_file() else []
+              if first_line and first_line[0].startswith(b"#!") and b"python" in first_line[0]:
+                  scripts.add(path)
+
+          for path in sorted(scripts):
+              py_compile.compile(str(path), doraise=True)
+          PY

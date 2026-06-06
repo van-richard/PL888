@@ -73,3 +73,14 @@ are grouped by application under `Profiles/`. Treat them as templates rather
 than files that are safe to overwrite into `$HOME`.
 
 Additional layout and machine-specific notes are available under `docs/`.
+
+## Validation
+
+GitHub Actions performs lightweight, non-mutating hygiene checks:
+
+- `bash -n` for shell scripts;
+- ShellCheck error checks when ShellCheck is available;
+- `py_compile` for Python scripts, with bytecode written outside the checkout.
+
+The workflow does not execute setup scripts or install GUI or scientific
+software.
