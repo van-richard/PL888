@@ -14,9 +14,9 @@ Count the total number of frames from Amber NC files
 """
 
 PARM = sys.argv[1]  # First option is Amber PARM7 filename (step3_pbcsetup.parm7)
-PROD= sys.argv[2]   # Second option is Amber NC filename (prod)
+PROD = sys.argv[2]   # Second option is Amber NC filename (prod)
 
-TRAJ = sorted(glob(f'{PROD}*.nc'))
+TRAJ = sorted(glob(f'{PROD}'))
 
 traj = pt.iterload(TRAJ, PARM)
 
