@@ -38,9 +38,8 @@ source "$HOME/.bashrc"
 ```
 
 This path loads the existing environment and aliases without running the
-software installers in `Setup/`. The current environment loader expects
-`~/.vbashrc` and retains the existing `$HOME/Scripts/bin` convention, so review
-those assumptions before enabling it on a new machine.
+software installers in `Setup/`. The environment loader expects `~/.vbashrc`
+and adds this repository's `Scripts/bin` command facade to `PATH`.
 
 ### Advanced setup
 
@@ -70,6 +69,7 @@ Do not run the entire directory as an automated installer.
 ## Example Configuration Files
 
 Example configurations for Bash, Vim, tmux, VMD, ChimeraX, and related tools
-are stored in `Profiles/`. Treat them as templates rather than files that are
-safe to overwrite into `$HOME`.
+are grouped by application under `Profiles/`. Treat them as templates rather
+than files that are safe to overwrite into `$HOME`.
 
+Additional layout and machine-specific notes are available under `docs/`.

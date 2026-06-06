@@ -22,7 +22,7 @@ Options:
   --apply              Perform the printed operations.
   --backup             Move conflicting destinations to timestamped backups.
   --no-portable        Do not configure the portable Bash, Vim, and tmux files.
-  --personal-profiles  Include personal profiles such as Profiles/condarc.
+  --personal-profiles  Include personal profiles such as the Conda example.
   --hpc-modules        Include the machine-specific modulefiles directory.
   -h, --help           Show this help.
 
@@ -142,15 +142,15 @@ fi
 printf 'Repository: %s\n' "$REPO_ROOT"
 
 if (( PORTABLE )); then
-    link_file "$REPO_ROOT/Profiles/bashrc" "$HOME/.vbashrc"
-    link_file "$REPO_ROOT/Profiles/bash_aliases" "$HOME/.bash_aliases"
-    link_file "$REPO_ROOT/Profiles/vimrc.9.0" "$HOME/.vimrc"
-    link_file "$REPO_ROOT/Profiles/tmux.conf" "$HOME/.tmux.conf"
+    link_file "$REPO_ROOT/Profiles/bash/bashrc" "$HOME/.vbashrc"
+    link_file "$REPO_ROOT/Profiles/bash/bash_aliases" "$HOME/.bash_aliases"
+    link_file "$REPO_ROOT/Profiles/vim/vimrc" "$HOME/.vimrc"
+    link_file "$REPO_ROOT/Profiles/tmux/tmux.conf" "$HOME/.tmux.conf"
 fi
 
 if (( PERSONAL_PROFILES )); then
     printf 'Including explicitly requested personal profiles.\n'
-    link_file "$REPO_ROOT/Profiles/condarc" "$HOME/.condarc"
+    link_file "$REPO_ROOT/Profiles/conda/condarc.example" "$HOME/.condarc"
 fi
 
 if (( HPC_MODULES )); then

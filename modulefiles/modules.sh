@@ -12,15 +12,15 @@ if [[ "${HOSTNAME}" == "lynnx" ]]; then
     if [[ "${MODULEPATH}" == "*/${BASE}/lynnx*" ]]; then
         continue
     else
-        module use ${BASE}/${HOSTNAME}/conda
-        module use ${BASE}/${HOSTNAME}/apps
+        module use "${BASE}/sites/${HOSTNAME}/conda"
+        module use "${BASE}/sites/${HOSTNAME}/apps"
     fi
 elif [[ "${HOSTNAME}" != "lynnx" ]]; then
     if [[ "${MODULEPATH}" == "*/${BASE}/softwares*" ]] | [[ "${MODULEPATH}" == "*/${BASE}/conda_environments*" ]]; then
         continue # Don't need this if my modules found in $MODULEPATH 
     else
-        module use ${BASE}/pete/conda_environments                   # Shared conda environments
-        module use ${BASE}/pete/softwares                            # Shared softwares
+        module use "${BASE}/sites/pete/conda_environments"          # Shared conda environments
+        module use "${BASE}/sites/pete/softwares"                   # Shared software
     fi
 fi
 

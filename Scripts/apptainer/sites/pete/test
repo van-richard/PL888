@@ -1,0 +1,9 @@
+#!/bin/bash
+
+APP_PATH="/scratch/van/apptainer"
+
+apptainer shell -B /home,/scratch,/archive \
+    -B ${APP_PATH}/squashfs/ambertools23.squashfs:/opt/conda/envs/ambertools23:image-src=/ \
+    -B ${APP_PATH}/squashfs/mbar.squashfs:/opt/conda/envs/mbar:image-src=/ \
+    ${APP_PATH}/apps/miniforge3.sif
+

@@ -1,9 +1,10 @@
 import os                                               
 import sys
 from glob import glob
+from pathlib import Path
 import numpy as np
 
-sys.path.append('/home/van/Scripts/bin')
+sys.path.append(str(Path(__file__).resolve().parent))
 from topandas import mbar2df
 
 import matplotlib.pyplot as plt                         
@@ -109,4 +110,3 @@ def quickmbar(outdir, ref=None):
     
     # Save table
     mbar2df(outdir=f'{outdir}', time=time, dg=dg)
-
