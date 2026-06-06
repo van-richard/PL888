@@ -5,6 +5,11 @@ Interactive Bash shells load aliases through
 from its own path, so the checkout can be moved without updating hardcoded
 paths.
 
+Canonical repository aliases live only in the `aliases/common/`, `aliases/os/`,
+`aliases/hpc/`, and `aliases/host/` subdirectories. Top-level
+`aliases/*.aliases.bash` compatibility files are not loaded by the alias
+loader.
+
 Aliases are loaded in this order:
 
 1. `aliases/common/*.bash`, sorted by filename
@@ -45,5 +50,6 @@ Private aliases belong in:
 ~/.config/pl888/aliases.bash
 ```
 
-`Setup/aliases.sh` is retained only as a compatibility wrapper and is
-deprecated. It does not create `~/.vbashrc` or modify files under `$HOME`.
+The former `Setup/aliases.sh` compatibility wrapper has been removed. The
+legacy setup script still mentions that old path for historical reference, but
+the supported mechanism is `Profiles/bash/alias_loader.bash`.
