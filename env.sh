@@ -1,29 +1,26 @@
-#!/bin/bash
+#!/usr/bin/env bash
 # FOR PUBLIC USE
 # if you don't really care then source this file
 #
-# echo "source /path/to/this/file.sh" >> $HOME/.bashrc
+# echo "source /path/to/this/file.sh" >> "$HOME/.bashrc"
 
-if [ -z "${PS1:-}" ]; then
-    # Since STDOUT from 'echo' breaks non-interactive sesssions...
-    #   $PS1 not set means this is most likely a non-interactive shell
-    return 
+if [[ -z "${PS1:-}" ]]; then
+    # Keep non-interactive shells quiet. Exit safely if this file was executed.
+    if [[ "${BASH_SOURCE[0]}" != "$0" ]]; then
+        return 0
+    fi
+    exit 0
 fi
 
-#NEW_ENV="/home/van/env.sh"
-#export _vmodules="$HOME/modulefiles/modules.sh"
 export _vtemplates="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd -P)"
 export _vscripts="${_vtemplates}/Scripts/bin"
-export _vlocal="$HOME/.local"
+export _vlocal="${HOME}/.local"
 
-#umask 027
-#source ${_vmodules}
-
-if [ -f ~/.vbashrc ]; then
-    . ~/.vbashrc
+if [[ -f "${HOME}/.vbashrc" ]]; then
+    . "${HOME}/.vbashrc"
 else
-    bash ${_vtemplates}/Setup/aliases.sh
-    . ~/.vbashrc
+    printf 'Warning: %s is missing; continuing without it.\n' \
+        "${HOME}/.vbashrc" >&2
 fi
 
-export PATH=${_vlocal}/bin:${_vscripts}:${PATH}
+export PATH="${_vlocal}/bin:${_vscripts}:${PATH}"

@@ -3,7 +3,6 @@ name: CI
 on:
   pull_request:
   push:
-    branches: [main]
 
 permissions:
   contents: read
@@ -48,10 +47,16 @@ jobs:
           from pathlib import Path
           import py_compile
 
-          scripts = set(Path("Scripts").rglob("*.py"))
-          for path in Path("Scripts/python").iterdir():
-              first_line = path.read_bytes().splitlines()[:1] if path.is_file() else []
-              if first_line and first_line[0].startswith(b"#!") and b"python" in first_line[0]:
+          scripts = set()
+          for path in Path("Scripts").rglob("*"):
+              if not path.is_file():
+                  continue
+              first_line = path.read_bytes().splitlines()[:1]
+              if path.suffix == ".py" or (
+                  first_line
+                  and first_line[0].startswith(b"#!")
+                  and b"python" in first_line[0]
+              ):
                   scripts.add(path)
 
           for path in sorted(scripts):

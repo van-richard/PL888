@@ -18,3 +18,16 @@ compatibility symlinks during migration.
 Current compatibility examples include `pete-batch` as the preferred command
 and `batch` as its older short alias. The former `Scripts/bash/` path is also a
 symlink to `Scripts/shell/`.
+
+## Legacy Research Utilities
+
+Some research utilities remain intentionally unchanged:
+
+- `Scripts/python/gen_cvs.py` and `nframes.py` use site-specific Python
+  shebangs and require scientific packages not installed by CI.
+- `Scripts/python/sqm_param2.py` imports personal external parameter modules.
+- `Scripts/mbar/mbar_pmf.py` and `mbar_pmf2.py` remain separate pending a
+  domain-specific review.
+
+TODO: make these utilities configurable before treating them as portable
+commands.

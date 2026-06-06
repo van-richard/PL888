@@ -72,24 +72,3 @@ if ! __sm_is_sourced; then
     exit 1
   fi
 fi
-
-# print help if not already in .bashrc
-if ! grep -q "$HOME/modulefiles/set_modules.sh" "$HOME/.bashrc" 2>/dev/null; then
-echo '
-add this to your ~/.bashrc
---------------------------
-
-if [ -f "$HOME/modulefiles/set_modules.sh" ]; then
-    . "$HOME/modulefiles/set_modules.sh"
-    export MACHINE="oscer"
-fi
-
-
-# Re-apply on every shell start if MACHINE is already set in the environment.
-# This keeps MODULEPATH correct for non-interactive shells.
-if [ -n "${MACHINE:-}" ]; then
-    set_modules "$MACHINE" >/dev/null || true
-fi
-
-'
-fi
