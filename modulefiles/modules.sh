@@ -1,52 +1,33 @@
-#!/bin/bash
+#!/usr/bin/env bash
+# Compatibility wrapper. Prefer sourcing set_modules.sh directly.
 
-BASE="${HOME}/modulefiles" # Path to custom modules
-HOSTNAME=$(hostname)       # Computer 
+_modules_is_sourced() {
+    [[ "${BASH_SOURCE[0]}" != "$0" ]]
+}
 
-alias mlav='module --default available' # Only show default modules
+_modules_dir="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd -P)"
+_set_modules="${_modules_dir}/set_modules.sh"
 
-module unuse /usr/share/modules/modulefiles # examples
-
-if [[ "${HOSTNAME}" == "lynnx" ]]; then
-    # Prepend new modules to $MODULEPATH 
-    if [[ "${MODULEPATH}" == "*/${BASE}/lynnx*" ]]; then
-        continue
-    else
-        module use ${BASE}/${HOSTNAME}/conda
-        module use ${BASE}/${HOSTNAME}/apps
+if [[ ! -f "$_set_modules" ]]; then
+    printf 'Warning: module loader not found: %s\n' "$_set_modules" >&2
+    if _modules_is_sourced; then
+        return 1
     fi
-elif [[ "${HOSTNAME}" != "lynnx" ]]; then
-    if [[ "${MODULEPATH}" == "*/${BASE}/softwares*" ]] | [[ "${MODULEPATH}" == "*/${BASE}/conda_environments*" ]]; then
-        continue # Don't need this if my modules found in $MODULEPATH 
-    else
-        module use ${BASE}/pete/conda_environments                   # Shared conda environments
-        module use ${BASE}/pete/softwares                            # Shared softwares
-    fi
+    exit 1
 fi
 
+# shellcheck source=set_modules.sh
+. "$_set_modules"
 
-##############################################################################
-# Need to work on lua spider cache
-# Update module spider cache
-#export LMOD_CACHED_LOADS=yes
+_machine="${MACHINE:-$(hostname -s)}"
+case "$_machine" in
+    lynnx|pete|oscer)
+        set_modules "$_machine"
+        ;;
+    *)
+        printf 'Warning: no PL888 modulefile site selected for host %s.\n' \
+            "$_machine" >&2
+        ;;
+esac
 
-#for luafiles in "softwares" "conda_environments"; do
-#    $LMOD_DIR/update_lmod_system_cache_files \
-#        -d ${MF}/${luafiles}/.cache \
-#        -t ${MF}/${luafiles}/.cache/timestamp \
-#        ${MF}/${luafiles}
-#    echo $(date +%s) > ${MF}/${luafiles}/.cache/timestamp
-#done
-
-# if [ ! -f "$HOME/.lmodrc.lua" ]; then
-#     echo "scDescriptT = { 
-#     { 
-#         ["dir"] = "/home/van/modulefiles/softwares/.cache", 
-#         ["timestamp"] = "/home/van/modulefiles/softwares/.cache/timestamp", 
-#     },
-#     { 
-#         ["dir"] = "/home/van/modulefiles/conda_environments/.cache", 
-#         ["timestamp"] = "/home/van/modulefiles/conda_environments/.cache/timestamp", 
-#     }
-# }" > $HOME/.lmodrc.lua
-# fi
+unset _machine _modules_dir _set_modules

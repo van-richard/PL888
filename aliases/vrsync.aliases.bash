@@ -2,7 +2,7 @@
 
 
 function _vrsync_host () {
-    local opts=${@}
+    local opts=("$@")
     local vhost
     local ssh
 
@@ -11,7 +11,7 @@ function _vrsync_host () {
     fi
 
 
-    for opt in ${opts[@]}; do
+    for opt in "${opts[@]}"; do
         if echo ${vhostnames} | grep -q "${opt}"; then
             ssh=${opt}
             echo $vhost

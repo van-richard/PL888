@@ -1,0 +1,17 @@
+#!/bin/bash
+
+ENV=$1
+if [ -z "${ENV}" ]; then
+    APP="miniforge3"
+elif [ ! -z "${ENV}" ]; then
+    APP="${ENV}"
+fi
+
+APP_PATH="/archive/van/apptainer/apps"
+if [ ! -f "${APP_PATH}/${APP}.sif" ]; then
+    echo "Missing: ${APP}.sif"
+    exit 1
+fi
+
+apptainer shell -B /home,/scratch,/archive ${APP_PATH}/${APP}.sif
+

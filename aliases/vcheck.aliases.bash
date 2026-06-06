@@ -4,8 +4,9 @@
 # 
 
 function vcheck () {
-    local INPS="${@}"
-    for INP in ${INPS[@]}; do
+    local INPS=("$@")
+    local INP
+    for INP in "${INPS[@]}"; do
         if [ -e "${INP}" ]; then
             echo "Found: ${INP} !!!"
         else
@@ -13,4 +14,3 @@ function vcheck () {
         fi
     done
 }
-

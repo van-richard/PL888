@@ -1,4 +1,4 @@
-#/bin/bash
+#!/bin/bash
 
 alias ls="ls --color"
 
@@ -17,4 +17,3 @@ alias lth="ls -lt | head"
 alias lht="lth"
 
 alias ltt="ls -lt | tail"
-

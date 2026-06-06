@@ -24,7 +24,7 @@ for n in range(n_windows):
         if args.index != 'all':
             filename = f'step{args.step}.0{args.index}_equilibration.cv'
         else:
-            sys.quit()
+            sys.exit()
 
         if os.path.isfile(f'{n:02d}/{filename}') is True:
             with open(f'{n:02d}/{filename}', 'r') as f:
@@ -36,4 +36,3 @@ for n in range(n_windows):
     else:
         print('Missing dir')
     
-

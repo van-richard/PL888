@@ -18,9 +18,9 @@ _sm_have_module() {
 }
 
 _sm_find_machine_module_dir() {
-  # Prefer ~/modulefiles/<MACHINE>, fallback to ~/modulesfiles/<MACHINE>.
+  # Prefer the canonical sites layout, then the compatibility path.
   local m="$1" d
-  for d in "/home/van/modulefiles/$m"; do
+  for d in "$HOME/modulefiles/sites/$m" "$HOME/modulefiles/$m"; do
     [[ -d "$d" ]] && { printf '%s\n' "$d"; return 0; }
   done
   return 1
@@ -28,11 +28,9 @@ _sm_find_machine_module_dir() {
 
 _sm_unuse_all_user_machine_dirs() {
   # Avoid path bloat when switching machines repeatedly.
-  local base d
-  for base in "/home/van/modulesfiles/$m"; do
-    [[ -d "$base" ]] || continue
-    # Only unuse direct subdirs (machine buckets).
-    for d in "$base"/*; do
+  local m d
+  for m in lynnx pete oscer; do
+    for d in "$HOME/modulefiles/sites/$m" "$HOME/modulefiles/$m"; do
       [[ -d "$d" ]] || continue
       module unuse "$d" >/dev/null 2>&1 || true
     done
@@ -47,7 +45,7 @@ sm_apply_modulepath() {
   if path="$(_sm_find_machine_module_dir "$m")"; then
     module use "$path"   # prepends path; idempotent if re-run
   else
-    printf "Warning: no modulefiles dir for '%s' under ~/modulefiles or ~/modulesfiles\n" "$m" >&2
+    printf "Warning: no modulefiles directory found for '%s'\n" "$m" >&2
   fi
 }
 
@@ -73,25 +71,4 @@ if ! __sm_is_sourced; then
   else
     exit 1
   fi
-fi
-
-# print help if not already in .bashrc
-if $(grep -q "/home/van/modulefiles/set_modules.sh" $HOME/.bashrc); then
-echo '
-add this to your ~/.bashrc
---------------------------
-
-if [ -f "/home/van/modulefiles/set_modules.sh" ]; then
-    . "/home/van/modulefiles/set_modules.sh"
-    export MACHINE="oscer"
-fi
-
-
-# Re-apply on every shell start if MACHINE is already set in the environment.
-# This keeps MODULEPATH correct for non-interactive shells.
-if [ -n "${MACHINE:-}" ]; then
-    set_modules "$MACHINE" >/dev/null || true
-fi
-
-'
 fi
