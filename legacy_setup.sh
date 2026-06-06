@@ -1,1 +1,0 @@
-Setup/legacy/legacy_setup.sh

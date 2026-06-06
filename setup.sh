@@ -142,7 +142,6 @@ fi
 printf 'Repository: %s\n' "$REPO_ROOT"
 
 if (( PORTABLE )); then
-    link_file "$REPO_ROOT/Profiles/bash/bashrc" "$HOME/.vbashrc"
     link_file "$REPO_ROOT/Profiles/vim/vimrc" "$HOME/.vimrc"
     link_file "$REPO_ROOT/Profiles/tmux/tmux.conf" "$HOME/.tmux.conf"
 fi

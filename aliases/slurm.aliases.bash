@@ -1,1 +1,0 @@
-hpc/pete.d/slurm.bash

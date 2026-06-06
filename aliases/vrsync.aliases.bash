@@ -1,1 +1,0 @@
-hpc/pete.d/vrsync.bash
