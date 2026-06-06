@@ -44,9 +44,21 @@ those assumptions before enabling it on a new machine.
 
 ### Advanced setup
 
-The scripts in `Setup/` are independent, optional examples; there is no single
-`Setup.sh` entry point. Inspect and adapt an individual script before running
-it. Depending on the script, it may:
+The top-level `setup.sh` provides a dry-run-first path for linking selected
+configuration files:
+
+```bash
+./setup.sh
+./setup.sh --apply
+./setup.sh --apply --backup
+```
+
+Existing destinations are skipped unless `--backup` is supplied. Personal
+profiles and HPC modulefiles require explicit flags; run `./setup.sh --help`
+for the complete option list.
+
+The scripts in `Setup/` remain independent, optional examples. Inspect and
+adapt an individual script before running it. Depending on the script, it may:
 
 - modify `~/.bashrc` or other dotfiles;
 - install software with a package manager or `sudo`;
@@ -60,5 +72,4 @@ Do not run the entire directory as an automated installer.
 Example configurations for Bash, Vim, tmux, VMD, ChimeraX, and related tools
 are stored in `Profiles/`. Treat them as templates rather than files that are
 safe to overwrite into `$HOME`.
-
 
