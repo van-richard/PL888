@@ -73,6 +73,8 @@ are grouped by application under `Profiles/`. Treat them as templates rather
 than files that are safe to overwrite into `$HOME`.
 
 Additional layout and machine-specific notes are available under `docs/`.
+Alias selection and local override behavior are documented in
+[`docs/aliases.md`](docs/aliases.md).
 
 ## Validation
 

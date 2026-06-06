@@ -19,8 +19,9 @@ export _vlocal="${HOME}/.local"
 if [[ -f "${HOME}/.vbashrc" ]]; then
     . "${HOME}/.vbashrc"
 else
-    printf 'Warning: %s is missing; continuing without it.\n' \
-        "${HOME}/.vbashrc" >&2
+    printf 'Warning: %s is missing. Run ./setup.sh --apply from %s or source %s manually.\n' \
+        "${HOME}/.vbashrc" "${_vtemplates}" \
+        "${_vtemplates}/Profiles/bash/bashrc" >&2
 fi
 
 export PATH="${_vlocal}/bin:${_vscripts}:${PATH}"

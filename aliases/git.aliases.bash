@@ -1,3 +1,1 @@
-#!/bin/bash
-
-alias gs="git status"
+common/git.bash

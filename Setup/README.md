@@ -29,3 +29,7 @@ explicit `--personal-profiles` and `--hpc-modules` flags.
 The portable profile links `Profiles/bash/bashrc` as `~/.vbashrc`, leaving an
 existing `~/.bashrc` in place. The environment loader can then be sourced from
 `~/.bashrc` as documented in the top-level README.
+
+`Setup/aliases.sh` is a deprecated compatibility wrapper. Alias loading is
+handled by `Profiles/bash/alias_loader.bash`, and the wrapper does not create
+or modify files under `$HOME`.
