@@ -17,3 +17,6 @@ machine-specific templates.
 
 Former flat paths such as `Profiles/vimrc.9.0` remain as relative symlinks
 during the migration.
+
+Bash aliases are loaded by `Profiles/bash/alias_loader.bash`; see
+`docs/aliases.md` for precedence, site selection, and private overrides.
