@@ -14,52 +14,88 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Detect scripts
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import os
+          import re
+
+          root = Path(".")
+          temp = Path(os.environ["RUNNER_TEMP"])
+          shell_shebang = re.compile(rb"^#!.*\b(?:bash|sh|zsh)\b", re.IGNORECASE)
+          python_shebang = re.compile(rb"^#!.*\bpython(?:[0-9.]*)?\b", re.IGNORECASE)
+
+          shell_files = []
+          python_files = []
+
+          for path in root.rglob("*"):
+              if not path.is_file() or path.is_symlink() or ".git" in path.parts:
+                  continue
+
+              first_line = path.read_bytes().splitlines()[:1]
+              shebang = first_line[0] if first_line else b""
+
+              if path.suffix in {".sh", ".bash"} or (
+                  not path.suffix and shell_shebang.search(shebang)
+              ):
+                  shell_files.append(path)
+
+              if path.parts[0] == "Scripts" and (
+                  path.suffix == ".py"
+                  or (not path.suffix and python_shebang.search(shebang))
+              ):
+                  python_files.append(path)
+
+          shell_files.sort()
+          python_files.sort()
+          (temp / "shell-files.txt").write_text(
+              "".join(f"{path}\n" for path in shell_files)
+          )
+          (temp / "python-files.txt").write_text(
+              "".join(f"{path}\n" for path in python_files)
+          )
+
+          print("Detected shell scripts:")
+          print(*(f"  {path}" for path in shell_files), sep="\n")
+          print("Detected Python scripts:")
+          print(*(f"  {path}" for path in python_files), sep="\n")
+          PY
+
       - name: Check shell syntax
         shell: bash
         run: |
-          find . -type f \
-            \( -name "*.sh" -o -name "*.bash" \
-            -o -path "./Scripts/shell/*" \
-            -o \( -path "./Scripts/slurm/*" ! -name "*.py" \) \
-            -o -path "./Scripts/apptainer/*" \) \
-            -print0 |
-            xargs -0 -r bash -n
+          mapfile -t files < "$RUNNER_TEMP/shell-files.txt"
+          if ((${#files[@]} == 0)); then
+            echo "No shell scripts detected."
+            exit 0
+          fi
+          bash -n "${files[@]}"
 
       - name: Run ShellCheck when available
         shell: bash
         run: |
-          if command -v shellcheck >/dev/null 2>&1; then
-            find . -type f \
-              \( -name "*.sh" -o -name "*.bash" \
-              -o -path "./Scripts/shell/*" \
-              -o \( -path "./Scripts/slurm/*" ! -name "*.py" \) \
-              -o -path "./Scripts/apptainer/*" \) \
-              -print0 |
-              xargs -0 -r shellcheck --shell=bash --severity=error
-          else
+          if ! command -v shellcheck >/dev/null 2>&1; then
             echo "ShellCheck is not available; skipping."
+            exit 0
           fi
+
+          mapfile -t files < "$RUNNER_TEMP/shell-files.txt"
+          if ((${#files[@]} == 0)); then
+            echo "No shell scripts detected."
+            exit 0
+          fi
+          shellcheck --shell=bash --severity=error "${files[@]}"
 
       - name: Check Python syntax
         env:
           PYTHONPYCACHEPREFIX: ${{ runner.temp }}/pycache
+        shell: bash
         run: |
-          python - <<'PY'
-          from pathlib import Path
-          import py_compile
-
-          scripts = set()
-          for path in Path("Scripts").rglob("*"):
-              if not path.is_file():
-                  continue
-              first_line = path.read_bytes().splitlines()[:1]
-              if path.suffix == ".py" or (
-                  first_line
-                  and first_line[0].startswith(b"#!")
-                  and b"python" in first_line[0]
-              ):
-                  scripts.add(path)
-
-          for path in sorted(scripts):
-              py_compile.compile(str(path), doraise=True)
-          PY
+          mapfile -t files < "$RUNNER_TEMP/python-files.txt"
+          if ((${#files[@]} == 0)); then
+            echo "No Python scripts detected."
+            exit 0
+          fi
+          python -m py_compile "${files[@]}"

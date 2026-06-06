@@ -18,7 +18,7 @@ function mf () {
 
     touch $log
     
-    for opt in ${diropts[@]}; do
+    for opt in "${diropts[@]}"; do
         local base="${opt}/${program}/${dirname}"
 
         #echo "searching: ${base}" 

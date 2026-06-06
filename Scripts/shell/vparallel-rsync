@@ -16,6 +16,7 @@ sbatch <<_EOF
 # quickly sync hella directories
 
 date
+_EOF
 
 module load parallel
 
@@ -28,4 +29,3 @@ parallel -j $SLURM_NTASKS -X \
     rsync -avuim ${SRC}/ ${DEST}
 
 date
-

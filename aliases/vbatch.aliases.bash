@@ -16,13 +16,12 @@ function vbatch () {
         vexclude="--exclude=$(cat /home/van/exclude.list)"
     fi
 
-    for partition in ${partitions[@]}; do
+    for partition in "${partitions[@]}"; do
         if [ "${part}" == "${partition}" ]; then
             vpart="-p ${part}"
         fi
     done
 
-    sbatch $vexclude -J ${dirname} ${@}
+    sbatch $vexclude -J "${dirname}" "$@"
 }
-
 
