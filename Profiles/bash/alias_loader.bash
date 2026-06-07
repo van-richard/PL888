@@ -46,12 +46,26 @@ _pl888_load_alias_directory() {
 
 _pl888_load_alias_directory "${_pl888_alias_root}/common"
 
+_pl888_load_pbs_aliases=0
 case "$(uname -s 2>/dev/null || true)" in
     Linux)
         _pl888_source_alias_file "${_pl888_alias_root}/os/linux.bash"
+        if command -v qsub >/dev/null 2>&1; then
+            _pl888_load_pbs_aliases=1
+        elif [[ "${PL888_DEBUG:-0}" == "1" ]]; then
+            printf 'PL888 aliases: skipping PBS aliases (qsub not found)\n' >&2
+        fi
         ;;
     Darwin)
         _pl888_source_alias_file "${_pl888_alias_root}/os/macos.bash"
+        if [[ "${PL888_DEBUG:-0}" == "1" ]]; then
+            printf 'PL888 aliases: skipping PBS aliases (non-Linux)\n' >&2
+        fi
+        ;;
+    *)
+        if [[ "${PL888_DEBUG:-0}" == "1" ]]; then
+            printf 'PL888 aliases: skipping PBS aliases (non-Linux)\n' >&2
+        fi
         ;;
 esac
 
@@ -68,6 +82,13 @@ case "${PL888_SITE:-}" in
         ;;
 esac
 
+if [[ "${_pl888_load_pbs_aliases:-0}" == "1" ]]; then
+    if [[ "${PL888_DEBUG:-0}" == "1" ]]; then
+        printf 'PL888 aliases: loading PBS aliases\n' >&2
+    fi
+    _pl888_source_alias_file "${_pl888_alias_root}/scheduler/pbs.bash"
+fi
+
 _pl888_short_hostname="$(hostname -s 2>/dev/null || hostname 2>/dev/null || true)"
 if [[ -n "$_pl888_short_hostname" ]]; then
     _pl888_source_alias_file \
@@ -78,4 +99,5 @@ _pl888_source_alias_file "${HOME}/.config/pl888/aliases.bash"
 
 unset _pl888_short_hostname _pl888_alias_root _pl888_root
 unset _pl888_alias_loader_dir
+unset _pl888_load_pbs_aliases
 unset -f _pl888_load_alias_directory _pl888_source_alias_file
