@@ -6,7 +6,7 @@ from its own path, so the checkout can be moved without updating hardcoded
 paths.
 
 Canonical repository aliases live only in the `aliases/common/`, `aliases/os/`,
-`aliases/hpc/`, and `aliases/host/` subdirectories. Top-level
+`aliases/scheduler/`, `aliases/hpc/`, and `aliases/host/` subdirectories. Top-level
 `aliases/*.aliases.bash` compatibility files are not loaded by the alias
 loader.
 
@@ -15,8 +15,10 @@ Aliases are loaded in this order:
 1. `aliases/common/*.bash`, sorted by filename
 2. `aliases/os/linux.bash` on Linux or `aliases/os/macos.bash` on macOS
 3. `aliases/hpc/${PL888_SITE}.bash` when `PL888_SITE` is set
-4. `aliases/host/${short_hostname}.bash` when that file exists
-5. `~/.config/pl888/aliases.bash` for private local aliases
+4. `aliases/scheduler/pbs.bash` on Linux systems where `qsub` is available
+5. `aliases/scheduler/slurm.bash` on Linux systems where `sbatch` or `squeue` is available
+6. `aliases/host/${short_hostname}.bash` when that file exists
+7. `~/.config/pl888/aliases.bash` for private local aliases
 
 Optional files and directories may be absent. The loader does not create or
 modify shell startup files.
@@ -91,3 +93,32 @@ export VRSYNC_HOSTS="osu ou dtn2"
 The former `Setup/aliases.sh` compatibility wrapper has been removed. The
 legacy setup script still mentions that old path for historical reference, but
 the supported mechanism is `Profiles/bash/alias_loader.bash`.
+
+## PBS aliases
+
+PBS helpers are loaded automatically only on Linux systems where `qsub` is in
+`PATH`. They are skipped on macOS, on Linux systems without PBS, and on hosts
+that do not expose `qsub`.
+
+The PBS helper file defines:
+
+- `vsub`: wrapper around `qsub` that defaults the job name to the current
+  directory basename unless the user already supplied `-N` or `--job-name`
+- `pbfree`: wrapper around `pbsnodes -avSj`
+- `vdel`: delete jobs by PBS job name using `qselect -N` and `qdel`
+
+## SLURM aliases
+
+SLURM helpers are loaded automatically only on Linux systems where `sbatch` or
+`squeue` is in `PATH`. They are skipped on macOS and on Linux systems without
+SLURM.
+
+The SLURM helper file defines:
+
+- `sq`: formatted `squeue` wrapper
+- `me`: show jobs for the current user or a supplied username
+- `vbatch`: wrapper around `sbatch` that defaults the job name to the current
+  directory basename unless the user already supplied `-J` or `--job-name`
+
+The former Pete-specific SLURM aliases have been generalized into
+`aliases/scheduler/slurm.bash`.
