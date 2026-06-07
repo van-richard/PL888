@@ -16,8 +16,9 @@ Aliases are loaded in this order:
 2. `aliases/os/linux.bash` on Linux or `aliases/os/macos.bash` on macOS
 3. `aliases/hpc/${PL888_SITE}.bash` when `PL888_SITE` is set
 4. `aliases/scheduler/pbs.bash` on Linux systems where `qsub` is available
-5. `aliases/host/${short_hostname}.bash` when that file exists
-6. `~/.config/pl888/aliases.bash` for private local aliases
+5. `aliases/scheduler/slurm.bash` on Linux systems where `sbatch` or `squeue` is available
+6. `aliases/host/${short_hostname}.bash` when that file exists
+7. `~/.config/pl888/aliases.bash` for private local aliases
 
 Optional files and directories may be absent. The loader does not create or
 modify shell startup files.
@@ -105,3 +106,19 @@ The PBS helper file defines:
   directory basename unless the user already supplied `-N` or `--job-name`
 - `pbfree`: wrapper around `pbsnodes -avSj`
 - `vdel`: delete jobs by PBS job name using `qselect -N` and `qdel`
+
+## SLURM aliases
+
+SLURM helpers are loaded automatically only on Linux systems where `sbatch` or
+`squeue` is in `PATH`. They are skipped on macOS and on Linux systems without
+SLURM.
+
+The SLURM helper file defines:
+
+- `sq`: formatted `squeue` wrapper
+- `me`: show jobs for the current user or a supplied username
+- `vbatch`: wrapper around `sbatch` that defaults the job name to the current
+  directory basename unless the user already supplied `-J` or `--job-name`
+
+The former Pete-specific SLURM aliases have been generalized into
+`aliases/scheduler/slurm.bash`.
