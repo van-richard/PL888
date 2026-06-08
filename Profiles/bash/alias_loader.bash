@@ -78,7 +78,7 @@ case "$(uname -s 2>/dev/null || true)" in
 esac
 
 case "${PL888_SITE:-}" in
-    pete|oscer|lynnx|local)
+    pete|oscer|lynnx|local|polaris|crux)
         _pl888_source_alias_file \
             "${_pl888_alias_root}/hpc/${PL888_SITE}.bash"
         ;;

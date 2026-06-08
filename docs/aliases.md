@@ -32,7 +32,8 @@ export PL888_SITE="pete"
 source "$HOME/github/PL888/env.sh"
 ```
 
-Valid site values are `pete`, `oscer`, `lynnx`, and `local`.
+Valid site values are `pete`, `oscer`, `lynnx`, `local`, `polaris`, and
+`crux`.
 
 Disable repository aliases:
 
@@ -106,6 +107,11 @@ The PBS helper file defines:
   directory basename unless the user already supplied `-N` or `--job-name`
 - `pbfree`: wrapper around `pbsnodes -avSj`
 - `vdel`: delete jobs by PBS job name using `qselect -N` and `qdel`
+
+Polaris and Crux share these PBS helpers through `aliases/scheduler/pbs.bash`.
+Use `aliases/hpc/polaris.bash` or `aliases/hpc/crux.bash` only for future
+site-specific additions. Polaris is a mixed CPU/GPU cluster, Crux is mainly
+CPU, and both primarily rely on Cray compiler environments.
 
 ## SLURM aliases
 
