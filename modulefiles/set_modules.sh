@@ -20,7 +20,7 @@ _sm_have_module() {
 _sm_find_machine_module_dir() {
   # Prefer the canonical sites layout, then the compatibility path.
   local m="$1" d
-  for d in "$HOME/modulefiles/sites/$m" "$HOME/modulefiles/$m"; do
+  for d in "$HOME/modulefiles/sites/$m/apps" "$HOME/modulefiles/$m/conda"; do
     [[ -d "$d" ]] && { printf '%s\n' "$d"; return 0; }
   done
   return 1
@@ -30,7 +30,7 @@ _sm_unuse_all_user_machine_dirs() {
   # Avoid path bloat when switching machines repeatedly.
   local m d
   for m in lynnx pete oscer; do
-    for d in "$HOME/modulefiles/sites/$m" "$HOME/modulefiles/$m"; do
+    for d in "$HOME/modulefiles/sites/$m/apps" "$HOME/modulefiles/$m/conda"; do
       [[ -d "$d" ]] || continue
       module unuse "$d" >/dev/null 2>&1 || true
     done
