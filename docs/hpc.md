@@ -8,6 +8,7 @@ default:
 - `modulefiles/sites/lynnx/`
 - `modulefiles/sites/oscer/`
 - `modulefiles/sites/pete/`
+- `modulefiles/sites/hpcc/`
 - monitor-specific files under `Profiles/vmd/variants/`
 - `Profiles/conda/condarc.example`
 - scripts containing `/home`, `/scratch`, `/archive`, cluster hostnames, or
@@ -17,6 +18,6 @@ Treat these files as examples. Review usernames, paths, partitions, software
 versions, and scheduler directives before use. The top-level `setup.sh`
 requires explicit flags before linking personal profiles or HPC modulefiles.
 
-Compatibility links currently preserve `modulefiles/{lynnx,oscer,pete}` and
-`Scripts/slurm/pete`; new references should use the corresponding `sites/`
-paths.
+Compatibility links currently preserve `modulefiles/{lynnx,oscer,pete,hpcc}`
+and `Scripts/slurm/pete`; new references should use the corresponding
+`sites/` paths.

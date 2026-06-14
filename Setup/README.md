@@ -14,6 +14,20 @@ Package-manager scripts are grouped under `packages/`, individual tool
 installers under `tools/`, and superseded environment setup scripts under
 `legacy/`. Compatibility symlinks preserve the former top-level paths.
 
+Active scripts under `tools/` do not require the historical `_vgithub`,
+`_vlocal`, `_vsetup`, `_vtemplates`, or `_vscripts` variables. Configure paths
+with `PL888_*` variables or per-command flags:
+
+```bash
+PL888_LOCAL_DIR="$HOME/Programs" ./tools/bat.sh
+./tools/vivim.sh --repo-root "$HOME/src/PL888" --home-dir "$HOME"
+```
+
+Common tool-script flags are `--repo-root`, `--local-dir`, `--scripts-dir`,
+and `--home-dir`; command-line flags override matching environment variables.
+Scripts under `legacy/` are retained as historical references and may still
+show old environment-variable conventions.
+
 Use the top-level setup entry point for dotfile links:
 
 ```bash

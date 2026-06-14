@@ -18,6 +18,8 @@ downloads/
 eggs/
 .eggs/
 lib/
+!Setup/lib/
+!Setup/lib/setup_paths.bash
 lib64/
 parts/
 sdist/

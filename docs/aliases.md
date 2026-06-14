@@ -32,8 +32,8 @@ export PL888_SITE="pete"
 source "$HOME/github/PL888/env.sh"
 ```
 
-Valid site values are `pete`, `oscer`, `lynnx`, `local`, `polaris`, and
-`crux`.
+Valid site values are `pete`, `oscer`, `lynnx`, `local`, `polaris`, `crux`,
+and `hpcc`.
 
 Disable repository aliases:
 
@@ -126,5 +126,6 @@ The SLURM helper file defines:
 - `vbatch`: wrapper around `sbatch` that defaults the job name to the current
   directory basename unless the user already supplied `-J` or `--job-name`
 
-The former Pete-specific SLURM aliases have been generalized into
-`aliases/scheduler/slurm.bash`.
+Pete and HPCC use the shared SLURM helpers from `aliases/scheduler/slurm.bash`.
+Use `aliases/hpc/pete.bash` or `aliases/hpc/hpcc.bash` only for future
+site-specific additions.

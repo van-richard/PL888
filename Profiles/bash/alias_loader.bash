@@ -2,6 +2,7 @@
 
 # This file is intended to be sourced by an interactive Bash shell.
 if [[ -z "${BASH_VERSION:-}" || $- != *i* ]]; then
+    # shellcheck disable=SC2317
     return 0 2>/dev/null || exit 0
 fi
 
@@ -78,7 +79,7 @@ case "$(uname -s 2>/dev/null || true)" in
 esac
 
 case "${PL888_SITE:-}" in
-    pete|oscer|lynnx|local|polaris|crux)
+    pete|oscer|lynnx|local|polaris|crux|hpcc)
         _pl888_source_alias_file \
             "${_pl888_alias_root}/hpc/${PL888_SITE}.bash"
         ;;
