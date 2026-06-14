@@ -1,1 +1,1 @@
-../../../templates/conda-env-home.lua
+../../../templates/conda-env-programs.lua

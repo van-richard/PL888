@@ -9,41 +9,35 @@ local TargetMPI      = 'openmpi3/3.1.0'
 --- Load 
 load(TargetCompiler)
 load(TargetMPI)
+load('openblas/0.2.20')
 load('share_modules/FFTW/3.3.8_gcc_dp')
 load('boost/1.67.0')
 load('share_modules/NETCDF/NETCDF4')
 load('share_modules/HDF5/1.10.5_gcc')
+load('qmhub2')
 
 --- From `amber.sh` ($LMOD_DIR/sh_to_modulefile /path/to/amber.sh > 23.lua)
 setenv(         "AMBERHOME"         , Base)
 prepend_path(   "LD_LIBRARY_PATH"   , pathJoin(Base, "lib"))
-prepend_path(   "LD_LIBRARY_PATH"   , MklLibDir)
 prepend_path(   "PATH"              , pathJoin(Base, "bin"))
-pushenv(         "PERL5LIB"          , pathJoin(Base, "lib/perl"))
+setenv(         "QUICK_BASIS"       , pathJoin(Base, "AmberTools/src/quick/basis"))
 
---- Set threads for QMHub - QChem
-if (os.getenv('MKL_NUM_THREADS') == nil) and (os.getenv('OMP_NUM_THREADS') == nil) then
-    if (os.getenv('SLURM_NTASKS')) then
-        pushenv("MKL_NUM_THREADS", tostring(os.getenv('SLURM_NTASKS')))
-        pushenv("OMP_NUM_THREADS", tostring(os.getenv('SLURM_NTASKS')))
-    elseif (os.getenv('SLURM_NTASKS_PER_NODE')) then
-        pushenv("MKL_NUM_THREADS", tostring(os.getenv('SLURM_NTASKS_PER_NODE')))
-        pushenv("OMP_NUM_THREADS", tostring(os.getenv('SLURM_NTASKS_PER_NODE')))
-    else
-        pushenv("MKL_NUM_THREADS", "4")
-        pushenv("OMP_NUM_THREADS", "4")
-    end
-end
+--- From `env-gnu.sh`
+setenv(         "CC"                  , "/opt/ohpc/pub/compiler/gcc/7.3.0/bin/gcc")
+setenv(         "CXX"                 , "/opt/ohpc/pub/compiler/gcc/7.3.0/bin/g++")
+setenv(         "FC"                  , "/opt/ohpc/pub/compiler/gcc/7.3.0/bin/gfortran")
+pushenv(        "OPENBLAS_NUM_THREADS", "1")
 
 --- unload
 if (mode() == "unload") then
-    unsetenv( "AMBERHOME")
-    remove_path(   "LD_LIBRARY_PATH"   , pathJoin(Base, "lib"))
-    remove_path(   "LD_LIBRARY_PATH"   , MklLibDir)
-    remove_path(   "PATH"              , pathJoin(Base, "bin"))
-    unsetenv(      "PERL5LIB")
-    unsetenv(      "MKL_NUM_THREADS")
-    unsetenv(      "OMP_NUM_THREADS")
+    unsetenv(    "AMBERHOME")
+    remove_path( "LD_LIBRARY_PATH"      , pathJoin(Base, "lib"))
+    remove_path( "PATH"                 , pathJoin(Base, "bin"))
+    unsetenv(    "QUICK_BASIS")
+    unsetenv(    "CC")
+    unsetenv(    "CXX")
+    unsetenv(    "FC")
+    unsetenv(    "OPENBLAS_NUM_THREADS")
 end
 
 --- Description of software (`module whatis [module name]`)
