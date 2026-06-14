@@ -1,5 +1,12 @@
 .DS_Store
+
+# Local agent / Codex metadata
 AGENTS.md
+.agents/
+.codex/
+**/.codex/
+**/*codex*
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
