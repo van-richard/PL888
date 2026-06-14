@@ -1,3 +1,5 @@
+# Variant of mbar_pmf intended for multidimensional collective variables.
+# PMF binning currently uses the first collective-variable dimension.
 import numpy as np
 from sklearn.gaussian_process import GaussianProcessRegressor
 from sklearn.gaussian_process.kernels import RBF, ConstantKernel as C
