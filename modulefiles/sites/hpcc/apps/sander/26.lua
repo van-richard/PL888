@@ -39,6 +39,7 @@ end
 if (mode() == "unload") then
     unsetenv( "AMBERHOME")
     remove_path(   "LD_LIBRARY_PATH"   , pathJoin(Base, "lib"))
+    remove_path(   "LD_LIBRARY_PATH"   , MklLibDir)
     remove_path(   "PATH"              , pathJoin(Base, "bin"))
     unsetenv(      "PERL5LIB")
     unsetenv(      "MKL_NUM_THREADS")
