@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+alias vacctmgr_allowed='sacctmgr show user $USER withassoc'
+
 _pl888_slurm_usage_me() {
     printf 'Usage: me [username] [extra-squeue-args...]\n'
 }

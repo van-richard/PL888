@@ -123,9 +123,16 @@ The SLURM helper file defines:
 
 - `sq`: formatted `squeue` wrapper
 - `me`: show jobs for the current user or a supplied username
+- `vacctmgr_allowed`: show the current user's SLURM account associations with
+  `sacctmgr show user $USER withassoc`
 - `vbatch`: wrapper around `sbatch` that defaults the job name to the current
   directory basename unless the user already supplied `-J` or `--job-name`
 
 Pete and HPCC use the shared SLURM helpers from `aliases/scheduler/slurm.bash`.
 Use `aliases/hpc/pete.bash` or `aliases/hpc/hpcc.bash` only for future
 site-specific additions.
+
+HPCC defines:
+
+- `guest-compute`: start an interactive login shell on the `guest-compute`
+  partition with 16 tasks, 32 GB memory, and an 8 hour limit
