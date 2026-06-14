@@ -5,6 +5,9 @@
 
 __sm_is_sourced() { [[ "${BASH_SOURCE[0]}" != "$0" ]]; }
 
+_sm_script_dir="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd -P)"
+PL888_MODULEFILES_ROOT="${PL888_MODULEFILES_ROOT:-$_sm_script_dir}"
+
 _sm_valid() {
   case "${1:-}" in
     lynnx|pete|oscer|hpcc) return 0 ;;
@@ -20,7 +23,7 @@ _sm_have_module() {
 _sm_find_machine_module_dirs() {
   # Prefer the canonical sites layout.
   local m="$1" d
-  for d in "$HOME/modulefiles/sites/$m/conda" "$HOME/modulefiles/sites/$m/apps"; do
+  for d in "$PL888_MODULEFILES_ROOT/sites/$m/conda" "$PL888_MODULEFILES_ROOT/sites/$m/apps"; do
     [[ -d "$d" ]] && printf '%s\n' "$d"
   done
 }
@@ -29,7 +32,7 @@ _sm_unuse_all_user_machine_dirs() {
   # Avoid path bloat when switching machines repeatedly.
   local m d
   for m in lynnx pete oscer hpcc; do
-    for d in "$HOME/modulefiles/sites/$m/conda" "$HOME/modulefiles/sites/$m/apps"; do
+    for d in "$PL888_MODULEFILES_ROOT/sites/$m/conda" "$PL888_MODULEFILES_ROOT/sites/$m/apps"; do
       [[ -d "$d" ]] || continue
       module unuse "$d" >/dev/null 2>&1 || true
     done
@@ -63,7 +66,8 @@ sm_apply_modulepath() {
     found=1
   done < <(_sm_find_machine_module_dirs "$m")
   if [[ "$found" -eq 0 ]]; then
-    printf "Warning: no modulefiles directory found for '%s'\n" "$m" >&2
+    printf "Warning: no modulefiles directory found for '%s' under %s/sites/%s\n" \
+      "$m" "$PL888_MODULEFILES_ROOT" "$m" >&2
   fi
   if [[ "$m" == "lynnx" ]]; then
     _sm_prune_lynnx_system_dirs
