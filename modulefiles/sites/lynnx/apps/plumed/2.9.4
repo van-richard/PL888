@@ -1,0 +1,28 @@
+#%Module1.0
+
+module-whatis "PLUMED 2.9.4"
+module-whatis "Molecular dynamics plugin for enhanced sampling and free-energy calculations"
+conflict plumed
+
+proc ModulesHelp { } {
+    puts stderr "plumed --help"
+}
+
+set base /home/van/Programs/plumed-2.9.4
+set bin_dir [file join $base bin]
+set lib_dir [file join $base lib]
+set include_dir [file join $base include]
+set kernel_lib [file join $lib_dir libplumedKernel.so]
+
+setenv PLUMED_ROOT $base
+setenv PLUMED_LIBRARY [file join $lib_dir libplumed.so]
+setenv PLUMED_KERNEL_LIBRARY $kernel_lib
+setenv PLUMED_KERNEL $kernel_lib
+setenv PLUMED_VIMPATH [file join $lib_dir plumed vim]
+prepend-path PATH $bin_dir
+prepend-path LD_LIBRARY_PATH $lib_dir
+prepend-path LIBRARY_PATH $lib_dir
+prepend-path CPATH $include_dir
+prepend-path INCLUDE $include_dir
+prepend-path PKG_CONFIG_PATH [file join $lib_dir pkgconfig]
+prepend-path PYTHONPATH [file join $lib_dir plumed python]

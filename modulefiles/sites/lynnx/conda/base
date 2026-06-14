@@ -1,0 +1,8 @@
+#%Module1.0
+
+module-whatis "Miniforge3 base environment"
+conflict conda
+
+set base /home/van/Programs/miniforge3
+
+source-sh bash [file join $base bin activate]

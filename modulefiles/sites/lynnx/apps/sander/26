@@ -1,0 +1,15 @@
+#%Module1.0
+
+module-whatis "sander26"
+module-whatis "Compiled on CPU"
+conflict amber
+
+proc ModulesHelp { } {
+    puts stderr "mpirun -n \$SLURM_NTASKS_PER_NODE sander.MPI"
+}
+
+set base /home/van/Programs/sander24
+
+setenv PMEMDHOME $base
+prepend-path LD_LIBRARY_PATH [file join $base lib]
+prepend-path PATH [file join $base bin]

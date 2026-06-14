@@ -1,0 +1,34 @@
+#%Module1.0
+
+module-whatis "QChem 6.1"
+module-whatis "Compiled by Chance Lander"
+conflict qchem
+
+proc ModulesHelp { } {
+    puts stderr "Email Chance"
+}
+
+set base /home/van/Programs/qchem/6.1
+
+setenv QC $base
+setenv QCAUX /home/van/Programs/qchem/6.1/qcaux
+setenv QCPLATFORM LINUX_Ix86_64
+setenv QCSCRATCH [file join /tmp $env(USER)]
+setenv RUNCPP [file join lib cpp]
+
+prepend-path PATH [file join $base bin]
+prepend-path PATH [file join $base bin perl]
+prepend-path PATH [file join $base bin mpi]
+prepend-path PATH [file join $base exe]
+prepend-path PATH [file join $base util]
+
+set-alias qc "cd \$QC"
+set-alias aimdman "cd \$QC/aimdman"
+set-alias drvman "cd \$QC/drvman"
+set-alias libgen "cd \$QC/libgen"
+set-alias libint "cd \$QC/libint"
+set-alias liblas "cd \$QC/liblas"
+set-alias oepman "cd \$QC/oepman"
+set-alias progman "cd \$QC/progman"
+set-alias scfman "cd \$QC/scfman"
+set-alias setman "cd \$QC/setman"

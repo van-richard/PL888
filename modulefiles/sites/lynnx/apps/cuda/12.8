@@ -1,0 +1,16 @@
+#%Module1.0
+
+module-whatis "CUDA 12.8"
+conflict cuda
+
+proc ModulesHelp { } {
+    puts stderr "nvidia-smi"
+}
+
+set cuda_root /usr/local/cuda
+
+setenv CUDA_HOME $cuda_root
+prepend-path PATH [file join $cuda_root bin]
+append-path LD_LIBRARY_PATH /usr/local/cuda/lib64:/usr/local/cuda/extras/CUPTI/lib64
+setenv XLA_TARGET cuda120
+setenv XLA_FLAGS --xla_gpu_cuda_data_dir=/usr/local/cuda

@@ -1,0 +1,9 @@
+#%Module1.0
+
+module-whatis "Conda environment ambertools23"
+conflict conda
+
+set base /home/van/Programs/miniforge3
+set env ambertools23
+
+source-sh bash [file join $base bin activate] $env

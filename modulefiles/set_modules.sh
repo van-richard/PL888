@@ -7,7 +7,7 @@ __sm_is_sourced() { [[ "${BASH_SOURCE[0]}" != "$0" ]]; }
 
 _sm_valid() {
   case "${1:-}" in
-    lynnx|pete|oscer) return 0 ;;
+    lynnx|pete|oscer|hpcc) return 0 ;;
     *) return 1 ;;
   esac
 }
@@ -17,46 +17,67 @@ _sm_have_module() {
   type module &>/dev/null
 }
 
-_sm_find_machine_module_dir() {
-  # Prefer the canonical sites layout, then the compatibility path.
+_sm_find_machine_module_dirs() {
+  # Prefer the canonical sites layout.
   local m="$1" d
-  for d in "$HOME/modulefiles/sites/$m/apps" "$HOME/modulefiles/sites/$m/conda"; do
-    [[ -d "$d" ]] && { printf '%s\n' "$d"; return 0; }
+  for d in "$HOME/modulefiles/sites/$m/conda" "$HOME/modulefiles/sites/$m/apps"; do
+    [[ -d "$d" ]] && printf '%s\n' "$d"
   done
-  return 1
 }
 
 _sm_unuse_all_user_machine_dirs() {
   # Avoid path bloat when switching machines repeatedly.
   local m d
-  for m in lynnx pete oscer; do
-    for d in "$HOME/modulefiles/sites/$m/apps" "$HOME/modulefiles/$m/conda"; do
+  for m in lynnx pete oscer hpcc; do
+    for d in "$HOME/modulefiles/sites/$m/conda" "$HOME/modulefiles/sites/$m/apps"; do
       [[ -d "$d" ]] || continue
       module unuse "$d" >/dev/null 2>&1 || true
     done
   done
 }
 
+_sm_prune_lynnx_system_dirs() {
+  # Keep local workstation module listings focused on PL888 modulefiles.
+  local d
+  module unload use.own >/dev/null 2>&1 || true
+  for d in \
+    "$HOME/privatemodules" \
+    "/etc/environment-modules/modules" \
+    "/usr/share/modules/versions" \
+    "/usr/share/modules/\$MODULE_VERSION/modulefiles" \
+    "/usr/share/modules/${MODULE_VERSION:-}/modulefiles" \
+    "/usr/share/modules/modulefiles"; do
+    [[ -n "$d" ]] || continue
+    module unuse "$d" >/dev/null 2>&1 || true
+  done
+}
+
 sm_apply_modulepath() {
   # Why: Keep MODULEPATH aligned with $MACHINE across interactive & non-interactive shells.
-  local m="$1" path
+  local m="$1" path found=0
   _sm_have_module || return 0
   _sm_unuse_all_user_machine_dirs
-  if path="$(_sm_find_machine_module_dir "$m")"; then
+  while IFS= read -r path; do
+    [[ -n "$path" ]] || continue
     module use "$path"   # prepends path; idempotent if re-run
-  else
+    found=1
+  done < <(_sm_find_machine_module_dirs "$m")
+  if [[ "$found" -eq 0 ]]; then
     printf "Warning: no modulefiles directory found for '%s'\n" "$m" >&2
+  fi
+  if [[ "$m" == "lynnx" ]]; then
+    _sm_prune_lynnx_system_dirs
   fi
 }
 
 set_modules() {
   local arg="${1:-${MACHINE:-}}"
   if [[ -z "$arg" ]]; then
-    printf 'Warning: MACHINE not provided. Allowed: lynnx, pete, oscer.\n' >&2
+    printf 'Warning: MACHINE not provided. Allowed: lynnx, pete, oscer, hpcc.\n' >&2
     return 1
   fi
   if ! _sm_valid "$arg"; then
-    printf "Warning: invalid machine '%s'. Allowed: lynnx, pete, oscer.\n" "$arg" >&2
+    printf "Warning: invalid machine '%s'. Allowed: lynnx, pete, oscer, hpcc.\n" "$arg" >&2
     return 1
   fi
   export MACHINE="$arg"

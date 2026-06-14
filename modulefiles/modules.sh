@@ -16,12 +16,12 @@ if [[ ! -f "$_set_modules" ]]; then
     exit 1
 fi
 
-# shellcheck source=set_modules.sh
+# shellcheck disable=SC1090,SC1091
 . "$_set_modules"
 
 _machine="${MACHINE:-$(hostname -s)}"
 case "$_machine" in
-    lynnx|pete|oscer)
+    lynnx|pete|oscer|hpcc)
         set_modules "$_machine"
         ;;
     *)

@@ -1,7 +1,7 @@
 # Modules
 
 Site-specific definitions are grouped under `sites/`. The `lynnx`, `oscer`,
-and `pete` paths at this directory's top level are compatibility symlinks.
+`pete`, and `hpcc` paths at this directory's top level are compatibility symlinks.
 Exact-copy Conda environment definitions are centralized under `templates/`;
 their module names remain available through symlinks in each site tree.
 
@@ -12,7 +12,7 @@ source "$HOME/modulefiles/set_modules.sh"
 set_modules pete
 ```
 
-Valid site names are `lynnx`, `pete`, and `oscer`. Set `MACHINE` before
+Valid site names are `lynnx`, `pete`, `oscer`, and `hpcc`. Set `MACHINE` before
 sourcing if the selection should be inherited by child shells:
 
 ```bash
