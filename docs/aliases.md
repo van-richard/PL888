@@ -146,6 +146,7 @@ SLURM.
 The SLURM helper file defines:
 
 - `sq`: formatted `squeue` wrapper
+- `qq`: raw `squeue` wrapper
 - `me`: show jobs for the current user or a supplied username
 - `vacctmgr_allowed`: show the current user's SLURM account associations with
   `sacctmgr show user $USER withassoc`

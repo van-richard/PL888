@@ -64,7 +64,7 @@ _pl888_detect_site() {
         [[ -n "$host_value" ]] || continue
 
         case "$host_value" in
-            pete*|*.hpc.okstate.edu)
+            pete*|*.hpc.okstate.edu|login*.cluster)
                 printf 'osu\n'
                 return 0
                 ;;

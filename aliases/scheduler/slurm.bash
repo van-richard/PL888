@@ -38,6 +38,20 @@ sq() {
     command squeue --format='%.12i %.10P %.14j %.8u %.12M %.10T %.4D  %R' "$@"
 }
 
+qq() {
+    if [[ "${1:-}" == "-h" || "${1:-}" == "--help" ]]; then
+        printf 'Usage: qq [squeue-args...]\n'
+        return 0
+    fi
+
+    if ! command -v squeue >/dev/null 2>&1; then
+        printf 'qq: squeue not found in PATH\n' >&2
+        return 1
+    fi
+
+    command squeue "$@"
+}
+
 me() {
     local target="${USER:-}"
     local -a extra_args=()
