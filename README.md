@@ -16,19 +16,20 @@ mkdir -p "$HOME/github"
 git clone https://github.com/van-richard/PL888.git "$HOME/github/PL888"
 ```
 
-### Safe environment setup
+### Safe Bash setup
 
-Review `env.sh`, then source it for the current interactive shell:
+Review `Profiles/bash/bashrc`, then source it for the current interactive
+shell:
 
 ```bash
-source "$HOME/github/PL888/env.sh"
+source "$HOME/github/PL888/Profiles/bash/bashrc"
 ```
 
 To load it in future Bash sessions, add that source command once:
 
 ```bash
-grep -qxF 'source "$HOME/github/PL888/env.sh"' "$HOME/.bashrc" ||
-    printf '%s\n' 'source "$HOME/github/PL888/env.sh"' >> "$HOME/.bashrc"
+grep -qxF 'source "$HOME/github/PL888/Profiles/bash/bashrc"' "$HOME/.bashrc" ||
+    printf '%s\n' 'source "$HOME/github/PL888/Profiles/bash/bashrc"' >> "$HOME/.bashrc"
 ```
 
 Then start a new shell or run:
@@ -38,8 +39,19 @@ source "$HOME/.bashrc"
 ```
 
 This path loads the existing environment and aliases without running the
-software installers in `Setup/`. The environment loader expects `~/.vbashrc`
-and adds this repository's `Scripts/bin` command facade to `PATH`.
+software installers in `Setup/`. To load only repository aliases, source the
+alias loader directly instead:
+
+```bash
+source "$HOME/github/PL888/Profiles/bash/alias_loader.bash"
+```
+
+To expose the remaining Python command links in `Scripts/bin`, add this PATH
+entry explicitly:
+
+```bash
+export PATH="$HOME/github/PL888/Scripts/bin:$PATH"
+```
 
 ### Advanced setup
 

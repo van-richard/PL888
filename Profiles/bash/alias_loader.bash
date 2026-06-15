@@ -45,6 +45,63 @@ _pl888_load_alias_directory() {
     )
 }
 
+_pl888_lower() {
+    printf '%s\n' "$1" | tr '[:upper:]' '[:lower:]'
+}
+
+_pl888_detect_site() {
+    local short_hostname=""
+    local fqdn=""
+    local hostname_value=""
+    local host_value=""
+
+    short_hostname="$(hostname -s 2>/dev/null || hostname 2>/dev/null || true)"
+    fqdn="$(hostname -f 2>/dev/null || true)"
+    hostname_value="$(hostname 2>/dev/null || true)"
+
+    for host_value in "$short_hostname" "$fqdn" "$hostname_value"; do
+        host_value="$(_pl888_lower "$host_value")"
+        [[ -n "$host_value" ]] || continue
+
+        case "$host_value" in
+            pete*|*.hpc.okstate.edu)
+                printf 'osu\n'
+                return 0
+                ;;
+            schooner*|dtn2*|*.oscer.ou.edu)
+                printf 'ou\n'
+                return 0
+                ;;
+            polaris*|*.polaris.alcf.anl.gov)
+                printf 'polaris\n'
+                return 0
+                ;;
+            crux*|*.crux.alcf.anl.gov)
+                printf 'crux\n'
+                return 0
+                ;;
+            hpcc*|*.hpcc.brandeis.edu)
+                printf 'hpcc\n'
+                return 0
+                ;;
+        esac
+    done
+}
+
+_pl888_resolve_site_alias() {
+    case "$1" in
+        pete)
+            printf 'osu\n'
+            ;;
+        oscer)
+            printf 'ou\n'
+            ;;
+        *)
+            printf '%s\n' "$1"
+            ;;
+    esac
+}
+
 _pl888_load_alias_directory "${_pl888_alias_root}/common"
 
 _pl888_load_pbs_aliases=0
@@ -78,16 +135,26 @@ case "$(uname -s 2>/dev/null || true)" in
         ;;
 esac
 
-case "${PL888_SITE:-}" in
-    pete|oscer|lynnx|local|polaris|crux|hpcc)
+_pl888_site="${PL888_SITE:-}"
+_pl888_site="$(_pl888_lower "$_pl888_site")"
+if [[ -z "$_pl888_site" ]]; then
+    _pl888_site="$(_pl888_detect_site)"
+    if [[ -n "$_pl888_site" && "${PL888_DEBUG:-0}" == "1" ]]; then
+        printf 'PL888 aliases: detected site %s\n' "$_pl888_site" >&2
+    fi
+fi
+_pl888_site="$(_pl888_resolve_site_alias "$_pl888_site")"
+
+case "$_pl888_site" in
+    osu|ou|pete|oscer|lynnx|local|polaris|crux|hpcc)
         _pl888_source_alias_file \
-            "${_pl888_alias_root}/hpc/${PL888_SITE}.bash"
+            "${_pl888_alias_root}/hpc/${_pl888_site}.bash"
         ;;
     "")
         ;;
     *)
         printf 'Warning: unsupported PL888_SITE=%s; skipping site aliases.\n' \
-            "$PL888_SITE" >&2
+            "$_pl888_site" >&2
         ;;
 esac
 
@@ -117,4 +184,6 @@ unset _pl888_short_hostname _pl888_alias_root _pl888_root
 unset _pl888_alias_loader_dir
 unset _pl888_load_pbs_aliases
 unset _pl888_load_slurm_aliases
-unset -f _pl888_load_alias_directory _pl888_source_alias_file
+unset _pl888_site
+unset -f _pl888_detect_site _pl888_load_alias_directory _pl888_lower
+unset -f _pl888_resolve_site_alias _pl888_source_alias_file

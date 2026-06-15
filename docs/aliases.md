@@ -14,7 +14,8 @@ Aliases are loaded in this order:
 
 1. `aliases/common/*.bash`, sorted by filename
 2. `aliases/os/linux.bash` on Linux or `aliases/os/macos.bash` on macOS
-3. `aliases/hpc/${PL888_SITE}.bash` when `PL888_SITE` is set
+3. `aliases/hpc/${PL888_SITE}.bash` when `PL888_SITE` is set, or a supported
+   site is detected from the host
 4. `aliases/scheduler/pbs.bash` on Linux systems where `qsub` is available
 5. `aliases/scheduler/slurm.bash` on Linux systems where `sbatch` or `squeue` is available
 6. `aliases/host/${short_hostname}.bash` when that file exists
@@ -25,15 +26,28 @@ modify shell startup files.
 
 ## Controls
 
-Select site-specific aliases before sourcing `env.sh`:
+Select site-specific aliases before sourcing `Profiles/bash/bashrc` or the
+alias loader:
 
 ```bash
-export PL888_SITE="pete"
-source "$HOME/github/PL888/env.sh"
+export PL888_SITE="osu"
+source "$HOME/github/PL888/Profiles/bash/alias_loader.bash"
 ```
 
-Valid site values are `pete`, `oscer`, `lynnx`, `local`, `polaris`, `crux`,
-and `hpcc`.
+Valid site values are `osu`, `ou`, `polaris`, `crux`, `hpcc`, `lynnx`, and
+`local`. Compatibility values `pete` and `oscer` are accepted and map to `osu`
+and `ou`.
+
+When `PL888_SITE` is unset, the loader automatically selects site aliases from
+the login node hostname or FQDN:
+
+- `osu`: `pete*` or `*.hpc.okstate.edu`
+- `ou`: `schooner*`, `dtn2*`, or `*.oscer.ou.edu`
+- `polaris`: `polaris*` or `polaris.alcf.anl.gov`
+- `crux`: `crux*` or `crux.alcf.anl.gov`
+- `hpcc`: `hpcc*` or `hpcc.brandeis.edu`
+
+Explicit `PL888_SITE` values always take precedence.
 
 Disable repository aliases:
 
@@ -52,6 +66,16 @@ Private aliases belong in:
 ```text
 ~/.config/pl888/aliases.bash
 ```
+
+## Common helpers
+
+Common helper functions are loaded from `aliases/common/` on every interactive
+Bash shell:
+
+- `vchange_shell`: show valid login shells from `/etc/shells`, prompt for a
+  new shell, and run `chsh -s`
+- `vchange_perms [directory]`: set directories to `750` and files to `640`
+  under the target directory, defaulting to the current directory
 
 ## vrsync
 
@@ -128,9 +152,21 @@ The SLURM helper file defines:
 - `vbatch`: wrapper around `sbatch` that defaults the job name to the current
   directory basename unless the user already supplied `-J` or `--job-name`
 
-Pete and HPCC use the shared SLURM helpers from `aliases/scheduler/slurm.bash`.
-Use `aliases/hpc/pete.bash` or `aliases/hpc/hpcc.bash` only for future
-site-specific additions.
+OSU/Pete and HPCC use the shared SLURM helpers from
+`aliases/scheduler/slurm.bash`. Use `aliases/hpc/osu.bash` or
+`aliases/hpc/hpcc.bash` for site-specific
+partition helpers and other cluster-local additions.
+
+OSU/Pete defines:
+
+- `batch`: start an interactive shell on the `batch` partition with 32 tasks,
+  20 GB memory, and a 12 hour limit
+- `bigmem`: start an interactive shell on the `bigmem` partition with 16
+  tasks, 8 GB memory, and a 12 hour limit
+- `bullet`: start an interactive GPU shell on the `bullet` partition with 16
+  tasks, 8 GB memory, and a 12 hour limit
+- `express`: start an interactive shell on the `express` partition with 16
+  tasks, 8 GB memory, and a 1 hour limit
 
 HPCC defines:
 

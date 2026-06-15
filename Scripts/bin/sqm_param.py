@@ -1,1 +1,0 @@
-../python/sqm_param.py

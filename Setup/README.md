@@ -40,9 +40,9 @@ The first command is a dry run. Existing destinations are skipped unless
 `--backup` is supplied. Personal profiles and HPC modulefiles require the
 explicit `--personal-profiles` and `--hpc-modules` flags.
 
-The portable profile links `Profiles/bash/bashrc` as `~/.vbashrc`, leaving an
-existing `~/.bashrc` in place. The environment loader can then be sourced from
-`~/.bashrc` as documented in the top-level README.
+The current documented workflow leaves an existing `~/.bashrc` in place. Add a
+source line for `Profiles/bash/bashrc` for the full interactive profile, or
+source `Profiles/bash/alias_loader.bash` directly for aliases only.
 
 The former `Setup/aliases.sh` compatibility wrapper has been removed. Alias
 loading is handled by `Profiles/bash/alias_loader.bash`.

@@ -8,7 +8,7 @@ proc ModulesHelp { } {
     puts stderr "mpirun -n \$SLURM_NTASKS_PER_NODE sander.MPI"
 }
 
-set base /home/van/Programs/sander24
+set base /home/van/Programs/sander26
 
 setenv PMEMDHOME $base
 prepend-path LD_LIBRARY_PATH [file join $base lib]
