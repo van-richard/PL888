@@ -17,25 +17,22 @@ prepend_path(   "LD_LIBRARY_PATH"   , pathJoin(Base, "opt/intel/oneapi/mkl/2021.
 prepend_path(   "PATH"              , pathJoin(Base, "bin"))
 pushenv(         "PERL5LIB"          , pathJoin(Base, "lib/perl"))
 pushenv(         "MKLROOT"           , "/opt/intel/oneapi/mkl/2021.2.0")
-prepend_path(    "LD_PRELOAD"        , tostring(pathJoin(os.getenv("MKLROOT"), "lib/intel64/libmkl_core.so")))
-prepend_path(    "LD_PRELOAD"         , tostring(pathJoin(os.getenv("MKLROOT"), "lib/intel64/libmkl_sequential.so")))
 pushenv(         "I_MPI_PMI_LIBRARY"  , "/usr/lib64/libpmi.so")
 pushenv(         "I_MPI_THREAD_YIELD" , "3")
 pushenv(         "I_MPI_THREAD_SLEEP" , "200")
 
---- Set threads for QMHub - QChem
-if (os.getenv('MKL_NUM_THREADS') == nil) and (os.getenv('OMP_NUM_THREADS') == nil) then
-    if (os.getenv('SLURM_NTASKS')) then
-        pushenv("MKL_NUM_THREADS", tostring(os.getenv('SLURM_NTASKS')))
-        pushenv("OMP_NUM_THREADS", tostring(os.getenv('SLURM_NTASKS')))
-    elseif (os.getenv('SLURM_NTASKS_PER_NODE')) then
-        pushenv("MKL_NUM_THREADS", tostring(os.getenv('SLURM_NTASKS_PER_NODE')))
-        pushenv("OMP_NUM_THREADS", tostring(os.getenv('SLURM_NTASKS_PER_NODE')))
-    else
-        pushenv("MKL_NUM_THREADS", "4")
-        pushenv("OMP_NUM_THREADS", "4")
-    end
+-- Do not force process-global MKL preloads: they override Torch's own BLAS
+-- symbols and break the GPU MLPUI profile. Sander's native ELF linkage and this
+-- compiler/MPI stack already supply its required MKL runtime libraries.
+--- CPU counts describe work available to one task; MPI ranks are not threads.
+local allocated = os.getenv("SLURM_CPUS_PER_TASK") or "1"
+if not allocated:match("^%d+$") or tonumber(allocated) < 1 then
+    allocated = "1"
 end
+local thread_default = os.getenv("QCTHREADS") or allocated
+-- Always evaluate pushenv so Lmod restores prior values during unload too.
+pushenv("OMP_NUM_THREADS", os.getenv("OMP_NUM_THREADS") or thread_default)
+pushenv("MKL_NUM_THREADS", os.getenv("MKL_NUM_THREADS") or thread_default)
 
 --- unload
 if (mode() == "unload") then
@@ -45,13 +42,9 @@ if (mode() == "unload") then
     remove_path(   "PATH"              , pathJoin(Base, "bin"))
     remove_path(         "PERL5LIB"          , pathJoin(Base, "lib/perl"))
     remove_path(         "MKLROOT"           , "/opt/intel/oneapi/mkl/2021.2.0")
-    remove_path(    "LD_PRELOAD"        , tostring(pathJoin(os.getenv("MKLROOT"), "lib/intel64/libmkl_core.so")))
-    remove_path(    "LD_PRELOAD"         , tostring(pathJoin(os.getenv("MKLROOT"), "lib/intel64/libmkl_sequential.so")))
     remove_path(         "I_MPI_PMI_LIBRARY"  , "/usr/lib64/libpmi.so")
     remove_path(         "I_MPI_THREAD_YIELD" , "3")
     remove_path(         "I_MPI_THREAD_SLEEP" , "200")
-    remove_path("MKL_NUM_THREADS", "4")
-    remove_path("OMP_NUM_THREADS", "4")
 end
 
 --- Description of software (`module whatis [module name]`)
