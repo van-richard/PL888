@@ -2,7 +2,9 @@
 
 module-whatis "Amber24"
 module-whatis "Compiled on CPU"
+# Prevent mixed Amber/Sander prefixes regardless of module load order.
 conflict amber
+conflict sander
 
 proc ModulesHelp { } {
     puts stderr "mpirun -n \$SLURM_NTASKS_PER_NODE sander.MPI"

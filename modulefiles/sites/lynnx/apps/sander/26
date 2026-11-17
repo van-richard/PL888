@@ -10,6 +10,14 @@ proc ModulesHelp { } {
 
 set base /home/van/Programs/sander26
 
-setenv PMEMDHOME $base
+# Sander reads Amber data below AMBERHOME. Restore inherited selections on unload;
+# retain PMEMDHOME as the legacy alias used by existing local scripts.
+pushenv AMBERHOME $base
+pushenv PMEMDHOME $base
+
+# libplumed.so needs libplumedKernel.so indirectly; Sander's own RUNPATH
+# does not resolve that dependency. Expose runtime libraries without adding
+# the full PLUMED module's Python or compiler search paths.
+prepend-path LD_LIBRARY_PATH /home/van/Programs/plumed-2.9.4/lib
 prepend-path LD_LIBRARY_PATH [file join $base lib]
 prepend-path PATH [file join $base bin]
